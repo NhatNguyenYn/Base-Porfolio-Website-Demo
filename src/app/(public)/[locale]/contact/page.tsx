@@ -6,10 +6,12 @@ import { getProfile } from "@/data/profile";
 import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
 import { PageHero } from "@/components/site/page-hero";
-import { ContactForm } from "@/components/site/contact-form";
+import { ContactSection } from "@/components/site/contact-section";
 import { SocialLinks } from "@/components/site/social-links";
 import { Reveal } from "@/components/ui/reveal";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -95,7 +97,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           </Reveal>
 
           <Reveal delay={80} className="lg:col-span-7">
-            <ContactForm dict={dict} />
+            <ContactSection dict={dict} email={email} locale={locale} />
           </Reveal>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getArticleDetail, getRelatedArticles, incrementArticleView } from "@/data/articles";
 import { getArticleLocales } from "@/server/queries/articles";
+import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
 import { canonicalPath, languageAlternates } from "@/lib/seo";
 import { absoluteUrl, formatDate } from "@/lib/utils";
@@ -14,7 +15,19 @@ import { ArticleCard } from "@/components/site/article-card";
 import { ShareBar } from "@/components/site/share-bar";
 import { Reveal } from "@/components/ui/reveal";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate every published article slug
+// so its page can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  const rows = await prisma.article.findMany({
+    where: { status: "published", visibility: "public", publishedAt: { not: null }, deletedAt: null },
+    select: { slug: true },
+  });
+  return rows.map((row) => ({ slug: row.slug }));
+}
 
 export async function generateMetadata({
   params,

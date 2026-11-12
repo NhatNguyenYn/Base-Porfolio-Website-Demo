@@ -4,10 +4,23 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getCollection } from "@/data/artworks";
+import { prisma } from "@/server/db";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate every public collection slug
+// so its page can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  const rows = await prisma.artworkCollection.findMany({
+    where: { visibility: "public", deletedAt: null },
+    select: { slug: true },
+  });
+  return rows.map((row) => ({ slug: row.slug }));
+}
 
 export async function generateMetadata({
   params,

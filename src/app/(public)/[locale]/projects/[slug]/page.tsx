@@ -6,13 +6,26 @@ import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getNextProject, getProjectDetail } from "@/data/projects";
 import { getProjectLocales } from "@/server/queries/projects";
+import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
 import { canonicalPath, languageAlternates } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { Reveal } from "@/components/ui/reveal";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate every public project slug
+// so its page can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  const rows = await prisma.project.findMany({
+    where: { visibility: "public", publishedAt: { not: null }, deletedAt: null },
+    select: { slug: true },
+  });
+  return rows.map((row) => ({ slug: row.slug }));
+}
 
 export async function generateMetadata({
   params,
