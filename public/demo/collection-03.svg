@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img">
+  <defs>
+    <linearGradient id="cbg-collection-03" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F3E7DA" />
+      <stop offset="100%" stop-color="#D9B49B" />
+    </linearGradient>
+    <linearGradient id="band-collection-03" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#A15C46" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#A15C46" stop-opacity="0.1" />
+    </linearGradient>
+    
+    <filter id="grain-collection-03" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono" result="faded">
+        <feFuncA type="linear" slope="0.16" />
+      </feComponentTransfer>
+    </filter>
+    <filter id="blur-collection-03" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="40" />
+    </filter>
+    <radialGradient id="glow-collection-03" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2A1F1A" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#2A1F1A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#cbg-collection-03)" />
+  <g opacity="0.9"><line x1="267" y1="0" x2="267" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /><line x1="533" y1="0" x2="533" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /><line x1="800" y1="0" x2="800" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /><line x1="1067" y1="0" x2="1067" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /><line x1="1333" y1="0" x2="1333" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /><line x1="1600" y1="0" x2="1600" y2="1000" stroke="#2A1F1A" stroke-opacity="0.08" stroke-width="1" /></g>
+
+  <circle cx="480" cy="420" r="435" fill="url(#glow-collection-03)" filter="url(#blur-collection-03)" />
+  <circle cx="480" cy="420" r="300" fill="#A15C46" fill-opacity="0.22" stroke="#2A1F1A" stroke-opacity="0.5" stroke-width="1.5" />
+  <circle cx="480" cy="420" r="165" fill="none" stroke="#2A1F1A" stroke-opacity="0.3" stroke-width="1" />
+
+  <rect x="0" y="620" width="1600" height="160" fill="url(#band-collection-03)" opacity="0.55" />
+  <rect x="160" y="820" width="448" height="2" fill="#2A1F1A" fill-opacity="0.45" />
+  <rect x="160" y="860" width="177" height="2" fill="#2A1F1A" fill-opacity="0.2" />
+  <circle cx="1408" cy="200" r="4" fill="#2A1F1A" fill-opacity="0.9" />
+  <rect width="1600" height="1000" filter="url(#grain-collection-03)" opacity="0.45" style="mix-blend-mode:overlay" />
+</svg>

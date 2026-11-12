@@ -1,0 +1,24 @@
+node_modules
+.next
+out
+build
+dist
+.env
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+
+# Local database (development)
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.db
+
+# Uploaded media (local storage driver)
+storage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local PostgreSQL cluster (scripts/dev-db.mjs)
+.pgdata/

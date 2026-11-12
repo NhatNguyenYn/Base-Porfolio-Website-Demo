@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img">
+  <defs>
+    <linearGradient id="bg-art-06" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#091F2F" />
+      <stop offset="60%" stop-color="#134059" />
+      <stop offset="100%" stop-color="#091F2F" />
+    </linearGradient>
+    
+    <filter id="grain-art-06" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch" result="noise" />
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
+      <feComponentTransfer in="mono" result="faded">
+        <feFuncA type="linear" slope="0.16" />
+      </feComponentTransfer>
+    </filter>
+    <filter id="soft-art-06" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    
+    <radialGradient id="rg-art-06-0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5D9CB7" stop-opacity="0.4929381000460126" />
+      <stop offset="70%" stop-color="#5D9CB7" stop-opacity="0.1725283350161044" />
+      <stop offset="100%" stop-color="#5D9CB7" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="754" cy="755" r="434" fill="url(#rg-art-06-0)" />
+    <radialGradient id="rg-art-06-1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#DBEAF1" stop-opacity="0.4903769875876606" />
+      <stop offset="70%" stop-color="#DBEAF1" stop-opacity="0.17163194565568118" />
+      <stop offset="100%" stop-color="#DBEAF1" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="335" cy="204" r="478" fill="url(#rg-art-06-1)" />
+    <radialGradient id="rg-art-06-2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#134059" stop-opacity="0.6368255647597835" />
+      <stop offset="70%" stop-color="#134059" stop-opacity="0.2228889476659242" />
+      <stop offset="100%" stop-color="#134059" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="197" cy="313" r="331" fill="url(#rg-art-06-2)" />
+    <radialGradient id="rg-art-06-3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5D9CB7" stop-opacity="0.5546205026679673" />
+      <stop offset="70%" stop-color="#5D9CB7" stop-opacity="0.19411717593378852" />
+      <stop offset="100%" stop-color="#5D9CB7" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="359" cy="485" r="562" fill="url(#rg-art-06-3)" />
+  </defs>
+
+  <rect width="900" height="1100" fill="url(#bg-art-06)" />
+  <g filter="url(#soft-art-06)">
+    <radialGradient id="rg-art-06-0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5D9CB7" stop-opacity="0.4929381000460126" />
+      <stop offset="70%" stop-color="#5D9CB7" stop-opacity="0.1725283350161044" />
+      <stop offset="100%" stop-color="#5D9CB7" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="754" cy="755" r="434" fill="url(#rg-art-06-0)" />
+    <radialGradient id="rg-art-06-1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#DBEAF1" stop-opacity="0.4903769875876606" />
+      <stop offset="70%" stop-color="#DBEAF1" stop-opacity="0.17163194565568118" />
+      <stop offset="100%" stop-color="#DBEAF1" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="335" cy="204" r="478" fill="url(#rg-art-06-1)" />
+    <radialGradient id="rg-art-06-2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#134059" stop-opacity="0.6368255647597835" />
+      <stop offset="70%" stop-color="#134059" stop-opacity="0.2228889476659242" />
+      <stop offset="100%" stop-color="#134059" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="197" cy="313" r="331" fill="url(#rg-art-06-2)" />
+    <radialGradient id="rg-art-06-3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5D9CB7" stop-opacity="0.5546205026679673" />
+      <stop offset="70%" stop-color="#5D9CB7" stop-opacity="0.19411717593378852" />
+      <stop offset="100%" stop-color="#5D9CB7" stop-opacity="0" />
+    </radialGradient>
+    <circle cx="359" cy="485" r="562" fill="url(#rg-art-06-3)" /></g>
+
+  <rect x="567" y="66" width="234" height="572" fill="#DBEAF1" fill-opacity="0.05" />
+  <line x1="162" y1="0" x2="162" y2="1100" stroke="#DBEAF1" stroke-opacity="0.09" stroke-width="1" />
+  <line x1="567" y1="0" x2="567" y2="1100" stroke="#DBEAF1" stroke-opacity="0.12" stroke-width="1" />
+  <line x1="801" y1="0" x2="801" y2="1100" stroke="#DBEAF1" stroke-opacity="0.08" stroke-width="1" />
+  <circle cx="393" cy="553" r="219" fill="none" stroke="#DBEAF1" stroke-opacity="0.42" stroke-width="3" />
+  <circle cx="393" cy="553" r="136" fill="none" stroke="#5D9CB7" stroke-opacity="0.35" stroke-width="1" />
+  <circle cx="684" cy="726" r="7" fill="#DBEAF1" fill-opacity="0.65" />
+  <path d="M0 670 H900" stroke="#DBEAF1" stroke-opacity="0.22" stroke-width="1" />
+  <path d="M648 176 L792 176" stroke="#DBEAF1" stroke-opacity="0.55" stroke-width="5.4" />
+  <circle cx="135" cy="858" r="13" fill="#DBEAF1" fill-opacity="0.8" />
+  <rect width="900" height="1100" filter="url(#grain-art-06)" opacity="0.5" style="mix-blend-mode:overlay" />
+</svg>
