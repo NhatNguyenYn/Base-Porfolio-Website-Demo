@@ -5,6 +5,13 @@ import { notFound } from "next/navigation";
  * is called during metadata resolution so the HTTP status is 404 rather than a
  * soft 404 from the streamed shell.
  */
+
+// Static-export build (GitHub Pages demo): nothing to prerender here —
+// unknown paths fall through to the hosting 404 page. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata() {
   notFound();
 }

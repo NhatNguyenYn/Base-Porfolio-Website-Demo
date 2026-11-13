@@ -4,9 +4,15 @@ out
 build
 dist
 .env
-.env*.local
+.env*
+!.env.example
 *.tsbuildinfo
 next-env.d.ts
+
+# Logs
+*.log
+.next-server.log
+logs/
 
 # Local database (development)
 prisma/dev.db
@@ -32,3 +38,8 @@ Thumbs.db
 
 # Local database backups
 backups/
+
+# Deploy / tooling
+.vercel
+.turbo
+coverage/

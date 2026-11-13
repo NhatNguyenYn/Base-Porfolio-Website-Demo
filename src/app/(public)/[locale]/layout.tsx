@@ -9,6 +9,7 @@ import {
   isLocale,
   localeHtmlLang,
   localeOgLocale,
+  locales,
   type Locale,
 } from "@/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
@@ -23,7 +24,15 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { ThemeScript } from "@/components/site/theme-script";
 import { BackToTop } from "@/components/site/back-to-top";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate the locales so every
+// public page under this layout can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;

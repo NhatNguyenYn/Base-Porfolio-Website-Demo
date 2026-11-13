@@ -6,6 +6,8 @@ import { languageAlternates } from "@/lib/seo";
 
 // Regenerated per request: publishing must appear without a redeploy. The query
 // set is small and crawlers are infrequent.
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
 
 const isLocale = (value: string): value is Locale => value === "vi" || value === "en";

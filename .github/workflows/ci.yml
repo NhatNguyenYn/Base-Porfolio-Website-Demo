@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      # Build-only placeholder: all pages are force-dynamic, so `next build`
+      # does not query the database. Migrations are NOT run here.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio?schema=public
+      APP_URL: http://localhost:3000
+      AUTH_SECRET: ci-placeholder-secret-at-least-32-chars-long
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npx prisma generate && npx next build

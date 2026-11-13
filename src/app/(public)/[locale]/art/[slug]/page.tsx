@@ -13,11 +13,24 @@ import { absoluteUrl, formatDate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { prisma } from "@/server/db";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { ArtGallery } from "@/components/site/art-gallery";
 import { Reveal } from "@/components/ui/reveal";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate every public artwork slug
+// so its page can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  const rows = await prisma.artwork.findMany({
+    where: { visibility: "public", deletedAt: null },
+    select: { slug: true },
+  });
+  return rows.map((row) => ({ slug: row.slug }));
+}
 
 export async function generateMetadata({
   params,

@@ -1,0 +1,123 @@
+# Demo tĩnh của trang công khai (home, about, projects, art, blog, contact) trên
+# GitHub Pages, với dữ liệu demo từ seed. Chạy mỗi khi push lên main.
+#
+# Đây KHÔNG phải bản full-stack: CMS (/admin), API routes, preview và /media
+# cần server + database nên không có trong bản này. App đầy đủ vẫn deploy
+# trên Vercel theo hướng dẫn trong README.md.
+#
+# Tách biệt hoàn toàn với web hidaniel.io.vn: repo khác, hosting khác
+# (nhatnguyenyn.github.io), không dùng chung domain, thương hiệu hay dịch vụ nào.
+
+name: Deploy demo to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: portfolio
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio
+      APP_URL: https://nhatnguyenyn.github.io/Base-Porfolio-Website-Demo
+      PAGES_EXPORT: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate build-only secrets
+        # Secrets chỉ dùng trong database tạm của CI (bị xóa sau mỗi lần chạy),
+        # không commit giá trị nào vào repo.
+        run: |
+          echo "AUTH_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          echo "SEED_ADMIN_PASSWORD=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
+
+      - name: Prepare demo database
+        run: |
+          npx prisma migrate deploy
+          SEED_ADMIN_EMAIL=admin@example.com npm run db:seed
+
+      - name: Stage the static build (server-only routes out)
+        # `output: "export"` không build được các route cần server (API, admin,
+        # preview, /media) nên tạm dời chúng ra khỏi cây app rồi build.
+        # [...rest] cũng dời ra: nó chỉ là trang 404 cho đường dẫn lạ, Pages
+        # đã có trang 404 riêng; giữ lại thì build export đòi generateStaticParams.
+        run: |
+          mkdir -p /tmp/pages-staging
+          mv src/app/api /tmp/pages-staging/api
+          mv "src/app/(admin)" /tmp/pages-staging/admin
+          mv src/app/preview /tmp/pages-staging/preview
+          mv src/app/media /tmp/pages-staging/media
+          mv "src/app/(public)/[locale]/[...rest]" /tmp/pages-staging/rest
+          # The contact form posts to a Server Action, which cannot exist in a
+          # static export — swap in the mailto variant for this build.
+          mv src/components/site/contact-section.tsx /tmp/pages-staging/contact-section.tsx
+          cp src/components/site/contact-section.static.tsx src/components/site/contact-section.tsx
+
+      - name: Rewrite public routes to static
+        # Next.js chỉ chấp nhận giá trị literal cho `export const dynamic`
+        # (không dùng được ternary với biến môi trường), nên bước này đổi
+        # "force-dynamic" thành "force-static" trong các file còn lại
+        # (chỉ còn trang công khai + sitemap sau bước staging). Source trong
+        # repo giữ nguyên "force-dynamic" cho bản full-stack.
+        run: |
+          grep -rlF 'export const dynamic = "force-dynamic";' src/app \
+            | xargs sed -i 's/export const dynamic = "force-dynamic";/export const dynamic = "force-static";/'
+          grep -rn 'export const dynamic' src/app | sed 's/^/  /'
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Restore server-only routes
+        if: always()
+        run: |
+          mv /tmp/pages-staging/api src/app/api || true
+          mv /tmp/pages-staging/admin "src/app/(admin)" || true
+          mv /tmp/pages-staging/preview src/app/preview || true
+          mv /tmp/pages-staging/media src/app/media || true
+          mv /tmp/pages-staging/rest "src/app/(public)/[locale]/[...rest]" || true
+          mv /tmp/pages-staging/contact-section.tsx src/components/site/contact-section.tsx || true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

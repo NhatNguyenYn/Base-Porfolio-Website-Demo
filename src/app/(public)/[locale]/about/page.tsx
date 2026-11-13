@@ -17,6 +17,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { SocialLinks } from "@/components/site/social-links";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
