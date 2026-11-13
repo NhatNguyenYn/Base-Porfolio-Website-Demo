@@ -9,9 +9,25 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: portfolio
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
-      # Build-only placeholder: all pages are force-dynamic, so `next build`
-      # does not query the database. Migrations are NOT run here.
+      # The build queries the database at build time (the sitemap is
+      # force-static and [slug] pages list their params via Prisma), so CI
+      # runs a real Postgres service and migrates it before building.
+      # No seed data: the build only needs the schema to exist.
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio?schema=public
       APP_URL: http://localhost:3000
       AUTH_SECRET: ci-placeholder-secret-at-least-32-chars-long
@@ -25,4 +41,5 @@ jobs:
       - run: npx prisma validate
       - run: npm run typecheck
       - run: npm run lint
+      - run: npx prisma migrate deploy
       - run: npx prisma generate && npx next build
