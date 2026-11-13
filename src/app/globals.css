@@ -1,3 +1,4 @@
+@import "./fonts.css";
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
@@ -382,7 +383,7 @@
   .field:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 14%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 30%, transparent);
   }
 
   .field-label {
@@ -825,5 +826,60 @@
   .underline-sweep:hover::after,
   .underline-sweep[data-active="true"]::after {
     width: 100%;
+  }
+
+  /* Card hover affordances, hover-capable pointers only: on touch devices a
+     tap must not leave an image zoomed or an overlay stuck visible, and the
+     title underline must not stick after a tap either. The classes below do
+     nothing on their own — the rules inside `@media (hover: hover)` turn
+     them on. */
+  @media (hover: hover) {
+    .group:hover .card-zoom {
+      transform: scale(1.035);
+    }
+
+    .group:hover .card-zoom-art {
+      transform: scale(1.03);
+    }
+
+    .group:hover .card-overlay-fade {
+      opacity: 1;
+    }
+
+    .group:hover .card-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* The card title is a plain span now (one stretched link per card); the
+       sweep still fires when the card itself is hovered. */
+    .group:hover .underline-sweep::after {
+      width: 100%;
+    }
+
+    /* Same for the read-more / view-project label, which is a span now: keep
+       its arrow-gap and underline affordance on card hover. */
+    .group:hover .link-arrow {
+      gap: 0.875rem;
+      border-color: var(--accent);
+    }
+  }
+
+  /* One link per card: the stretched link covers the whole card so the
+     cover, title and read-more are a single tab stop and a single
+     announcement. The visible title/read-more stay plain text/spans. */
+  .stretched-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* Long card lists: skip rendering off-screen cards (with an intrinsic-size
+     estimate so the scrollbar does not jump). Applied to the article/project
+     card roots; NOT to artwork cards — their masonry (multi-column) layout
+     must not have its column balancing estimated from placeholder sizes. */
+  .card-cv {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
   }
 }
