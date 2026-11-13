@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
     const isProduction = process.env.NODE_ENV === "production";
+    // includeSubDomains is opt-in: it must not be sent until every subdomain
+    // is known to be HTTPS-only. Preload is never set from application code.
+    const hsts = ["max-age=63072000"];
+    if (process.env.HSTS_INCLUDE_SUBDOMAINS === "true") hsts.push("includeSubDomains");
     return [
       {
         source: "/:path*",
@@ -36,7 +40,7 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
           ...(isProduction
-            ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]
+            ? [{ key: "Strict-Transport-Security", value: hsts.join("; ") }]
             : []),
         ],
       },

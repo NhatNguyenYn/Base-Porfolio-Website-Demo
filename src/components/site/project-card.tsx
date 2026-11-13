@@ -91,7 +91,8 @@ export function ProjectCard({
 
         <div className="mt-auto pt-5">
           <Link href={href} className="link-arrow text-muted group-hover:text-ink">
-            {dict.common.viewProject}
+            <span aria-hidden="true">{dict.common.viewProject}</span>
+            <span className="sr-only">: {project.name}</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>

@@ -12,7 +12,10 @@ import { getFeaturedArticle, listArticles } from "@/data/articles";
 import { DEFAULT_SETTINGS } from "@/data/settings";
 import { loadSection } from "@/lib/services/safe-data";
 import { markdownExcerpt } from "@/lib/utils";
+import { buildPageMetadata, socialImage } from "@/lib/seo";
 import { Reveal } from "@/components/ui/reveal";
+import { AnimatedHeadline } from "@/components/ui/animated-headline";
+import { Parallax } from "@/components/ui/parallax";
 import { SectionHeader } from "@/components/site/section-header";
 import { ProjectCard } from "@/components/site/project-card";
 import { ArticleCard } from "@/components/site/article-card";
@@ -28,16 +31,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const locale: Locale = raw;
   const [profile, settings] = await Promise.all([getProfile(), getSettings()]);
   const content = profile?.translations.find((item) => item.locale === locale);
-  return {
-    title: {
-      absolute: content ? `${content.fullName} — ${content.title}` : settings.seoTitle,
-    },
+  return buildPageMetadata({
+    locale,
+    path: "/",
+    title: content ? `${content.fullName} — ${content.title}` : settings.seoTitle,
     description: content?.shortBio || settings.seoDescription,
-    alternates: {
-      canonical: `/${locale}`,
-      languages: { vi: "/vi", en: "/en", "x-default": "/vi" },
-    },
-  };
+    siteName: settings.siteName,
+    absoluteTitle: true,
+    image: profile?.avatar
+      ? socialImage(profile.avatar.url, profile.avatar.alt || content?.fullName || settings.siteName, profile.avatar.width, profile.avatar.height)
+      : null,
+  });
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -94,7 +98,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="container-page relative pt-8 pb-16 lg:pt-14 lg:pb-24">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7 lg:pt-6">
-            <Reveal>
+            <Reveal priority>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <span className="label">{dict.home.eyebrow}</span>
                 <span className="h-px w-6 bg-line-strong" aria-hidden="true" />
@@ -108,16 +112,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </div>
             </Reveal>
 
-            <Reveal delay={80}>
-              <h1 className="display mt-8 text-[clamp(2.9rem,7.4vw,6.1rem)] text-balance">
-                {name}
-              </h1>
+            <Reveal delay={80} priority>
+              <AnimatedHeadline
+                text={name}
+                className="display mt-8 text-[clamp(2.9rem,7.4vw,6.1rem)] text-balance"
+              />
               <p className="serif-accent mt-4 max-w-2xl text-[clamp(1.35rem,2.6vw,2.1rem)] leading-[1.25] text-slateblue">
                 {title}
               </p>
             </Reveal>
 
-            <Reveal delay={160}>
+            <Reveal delay={160} priority>
               <p className="mt-8 max-w-lg text-[0.975rem] leading-[1.8] text-muted">{intro}</p>
 
               <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -133,7 +138,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </div>
             </Reveal>
 
-            <Reveal delay={220}>
+            <Reveal delay={220} priority>
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-line pt-6">
                 <SocialLinks links={socials} />
                 <span className="hidden h-4 w-px bg-line sm:block" aria-hidden="true" />
@@ -149,7 +154,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
           {/* Portrait column */}
           <div className="lg:col-span-5 lg:pt-5">
-            <Reveal delay={120} className="lg:pl-6">
+            <Reveal delay={120} variant="mask" priority className="lg:pl-6">
+              <Parallax strength={10}>
               <figure className="relative">
                 <div className="relative aspect-[4/5] overflow-hidden border border-line bg-surface-muted">
                   {profile?.avatar ? (
@@ -181,6 +187,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </p>
                 </figcaption>
               </figure>
+              </Parallax>
             </Reveal>
           </div>
         </div>
@@ -264,7 +271,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     dict={dict}
                     index={index}
                     size={index % 4 === 0 ? "large" : "default"}
-                    priority={index === 0}
                   />
                 </Reveal>
               );
@@ -278,8 +284,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       {/* ---------------------------------------------------------- Art gallery */}
-      <section className="bg-[#0e131a] py-16 text-white lg:py-24">
-        <div className="container-page">
+      <section className="relative overflow-hidden bg-[#0e131a] py-16 text-white lg:py-24">
+        <span
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(65%_55%_at_88%_-5%,var(--ruby-tint),transparent_72%)]"
+          aria-hidden="true"
+        />
+        <div className="container-page relative">
           <SectionHeader
             index="03"
             label={dict.home.artLabel}
@@ -340,7 +350,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 locale={locale}
                 dict={dict}
                 variant="feature"
-                priority
               />
             </Reveal>
             <div className="lg:col-span-6 lg:pl-4">

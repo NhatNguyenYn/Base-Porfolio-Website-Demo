@@ -33,6 +33,7 @@ export default async function LoginPage({
           </div>
         </div>
 
+        <span className="mb-5 block h-px w-10 bg-ruby" aria-hidden="true" />
         <h1 className="text-[26px] leading-tight tracking-[-0.02em]">Đăng nhập</h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted">
           Khu vực quản trị chỉ dành cho chủ sở hữu website.

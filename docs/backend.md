@@ -176,10 +176,56 @@ production) and need their own backup/sync. Take a `pg_dump` before every
 `prisma migrate deploy` in production; Prisma migrations are forward-only, so a
 rollback is a restore.
 
-## 11. Not done yet
+## 11. Deployment security
+
+### Reverse proxy trust
+
+The rate limiter never trusts the left-hand side of `X-Forwarded-For`, because
+a client can send anything there. Set `TRUSTED_PROXY_HOPS` to the number of
+proxies you actually operate:
+
+| Topology | Value | Effect |
+|---|---|---|
+| App listens on a public port, no proxy | `0` | Forwarding headers ignored; all traffic shares one bucket |
+| One proxy (nginx, Caddy, Vercel, single LB) | `1` | Uses the right-most address the proxy appended |
+| Two chained proxies (CDN + nginx) | `2` | Uses the second address from the right |
+
+Never set it higher than the number of proxies you control, and make sure every
+proxy **overwrites/appends** `X-Forwarded-For` instead of passing a client value
+through unchanged. `X-Real-IP` is only read while at least one hop is trusted.
+
+### First-run setup
+
+`/admin/setup` is development-only unless `SETUP_TOKEN` is set. In production
+the page and action refuse to run without it, even from localhost: the `Host`
+header is client controlled and cannot be used as a trust signal. Generate a
+long random token, keep it in the environment, create the account, then remove
+the variable.
+
+### CSP and headers
+
+The app sends `Content-Security-Policy-Report-Only` with a per-request nonce
+from middleware; the inline theme bootstrap and JSON-LD blocks carry the same
+nonce. Violations appear in the browser console without breaking the page.
+Enforcement is a separate, evidence-based step — see the Phase 2 security
+report. `next.config.ts` still sends `X-Frame-Options`, `nosniff`,
+`Referrer-Policy`, `Permissions-Policy`, and HSTS in production. HSTS is only
+correct when the site is reachable over HTTPS.
+
+### API failures
+
+Public and admin API routes share `withApi()`: an unreachable database returns
+`503 { success: false, error: { code: "SERVICE_UNAVAILABLE" } }` and unexpected
+errors return a generic `500 INTERNAL_ERROR`. Neither response includes stack
+traces, SQL, connection strings or file paths. Public pages keep rendering the
+"temporarily unavailable" shell with HTTP 200, because a Next.js layout cannot
+set a 503 status for a page that streams.
+
+## 12. Not done yet
 
 - Media library has no automatic variant generation or orphan cleanup job.
 - Rich text is a Markdown editor with toolbar + preview (no WYSIWYG/Tiptap).
-- Login rate limiting is per-process; use Redis for multi-instance deployments.
+- Rate limiting is per-process and resets on restart; use Redis for multi-instance deployments.
+- CSP is Report-Only until violations are collected from the production domain.
 - Contact submissions are stored, not emailed.
 - S3 driver is implemented but unverified (no bucket credentials).

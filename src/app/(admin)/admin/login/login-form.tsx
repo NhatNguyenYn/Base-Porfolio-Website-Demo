@@ -12,7 +12,7 @@ export function LoginForm({ nextPath }: { nextPath: string }) {
   return (
     <form action={action} className="space-y-4">
       {state.message && (
-        <p role="alert" className="border-l-2 border-[#c0392b] bg-[#c0392b]/5 px-3 py-2 text-[12px] text-[#b03a2e]">
+        <p role="alert" className="border-l-2 border-danger bg-danger-soft px-3 py-2 text-[12px] text-danger">
           {state.message}
         </p>
       )}

@@ -36,7 +36,7 @@ export function SiteFooter({
   );
 
   return (
-    <footer className="mt-24 border-t border-line bg-surface-muted/60">
+    <footer className="mt-24 border-t border-t-ruby bg-surface-muted/60">
       <div className="container-page py-14 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_0.9fr_1.05fr_0.95fr]">
           <div className="max-w-sm">
@@ -55,7 +55,7 @@ export function SiteFooter({
             <ul className="mt-4 space-y-2.5">
               {explore.map((item) => (
                 <li key={item.key}>
-                  <Link href={item.href} className="underline-sweep text-sm text-muted hover:text-ink">
+                  <Link href={item.href} className="underline-sweep text-sm text-muted hover:text-accent">
                     {item.label}
                   </Link>
                 </li>
@@ -67,13 +67,13 @@ export function SiteFooter({
             <p className="label">{dict.footer.contact}</p>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               <li>
-                <a href={`mailto:${email}`} className="underline-sweep hover:text-ink">
+                <a href={`mailto:${email}`} className="underline-sweep hover:text-accent">
                   {email}
                 </a>
               </li>
               {location && <li>{location}</li>}
               <li>
-                <Link href={localeHref(locale, "/contact")} className="underline-sweep hover:text-ink">
+                <Link href={localeHref(locale, "/contact")} className="underline-sweep hover:text-accent">
                   {dict.contact.formTitle}
                 </Link>
               </li>

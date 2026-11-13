@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
@@ -10,14 +11,17 @@ import {
   localeOgLocale,
   type Locale,
 } from "@/i18n/config";
-import { getSettings } from "@/data/settings";
-import { getProfile } from "@/data/profile";
-import { getSocialLinks } from "@/data/social";
 import { absoluteUrl } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { safeSocialImage, socialImage } from "@/lib/seo";
+import { buildSiteGraph } from "@/lib/structured-data";
+import { loadSiteContext } from "@/lib/services/site-context";
+import { ServiceUnavailable } from "@/components/site/service-unavailable";
 import { PageTransition } from "@/components/site/page-transition";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { ThemeScript } from "@/components/site/theme-script";
+import { BackToTop } from "@/components/site/back-to-top";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +29,26 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const locale: Locale = raw;
-  const [settings, profile] = await Promise.all([getSettings(), getProfile()]);
+  const site = await loadSiteContext();
+  if (site.status === "unavailable") {
+    // Never advertise an outage page; the layout renders an explicit state.
+    return {
+      title: locale === "vi" ? "Tạm thời gián đoạn" : "Temporarily unavailable",
+      robots: { index: false, follow: false },
+    };
+  }
+  const { settings, profile } = site;
   const content = profile?.translations.find((item) => item.locale === locale);
 
   const title = content?.seoTitle || (content ? `${content.fullName} — ${content.title}` : settings.seoTitle);
   const description = content?.seoDescription || content?.shortBio || settings.seoDescription;
+  const social = safeSocialImage(
+    profile?.avatar
+      ? socialImage(profile.avatar.url, profile.avatar.alt || content?.fullName || settings.siteName, profile.avatar.width, profile.avatar.height)
+      : null,
+    settings.siteName,
+  );
+  const canonical = absoluteUrl(`/${locale}`);
 
   return {
     metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
@@ -38,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     keywords: settings.seoKeywords.split(",").map((item) => item.trim()).filter(Boolean),
     applicationName: settings.siteName,
     alternates: {
-      canonical: absoluteUrl(`/${locale}`),
+      canonical,
       languages: {
         vi: absoluteUrl("/vi"),
         en: absoluteUrl("/en"),
@@ -51,14 +70,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       alternateLocale: localeOgLocale[alternateLocale(locale)],
       title,
       description,
-      url: absoluteUrl(`/${locale}`),
+      url: canonical,
       siteName: settings.siteName,
-      images: profile?.avatar ? [{ url: profile.avatar.url, alt: content?.fullName ?? settings.siteName }] : undefined,
+      images: [social],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [{ url: social.url, alt: social.alt }],
     },
     icons: settings.favicon ? { icon: settings.favicon.url } : undefined,
     robots: { index: true, follow: true },
@@ -76,45 +96,60 @@ export default async function LocaleLayout({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
+  // Set by middleware; used to allow our own inline scripts under the CSP.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
-  const [settings, profile, socials] = await Promise.all([getSettings(), getProfile(), getSocialLinks()]);
+  const site = await loadSiteContext();
+  if (site.status === "unavailable") {
+    return (
+      <html lang={localeHtmlLang[locale]} className={fontVariables} suppressHydrationWarning>
+        <head>
+          {/* Explicit head tags: the outage shell must never be indexed, even
+              when a child page's data query fails during streaming. */}
+          <title>{locale === "vi" ? "Tạm thời gián đoạn" : "Temporarily unavailable"}</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </head>
+        <body className="min-h-screen bg-background text-ink">
+          <ServiceUnavailable locale={locale} />
+        </body>
+      </html>
+    );
+  }
+
+  const { settings, profile, socials, degraded } = site;
+  if (degraded) console.warn(`[site-context] rendering /${locale} in degraded mode`);
   const content = profile?.translations.find((item) => item.locale === locale) ?? null;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        name: settings.siteName,
-        url: absoluteUrl(`/${locale}`),
-        inLanguage: localeHtmlLang[locale],
-        description: content?.shortBio || settings.seoDescription,
-      },
-      ...(profile
-        ? [
-            {
-              "@type": "Person",
-              name: content?.fullName || profile.email,
-              jobTitle: content?.title,
-              description: content?.shortBio,
-              image: profile.avatar ? absoluteUrl(profile.avatar.url) : undefined,
-              email: profile.email,
-              address: profile.location || undefined,
-              url: absoluteUrl(`/${locale}/about`),
-              sameAs: socials.filter((link) => link.url.startsWith("http")).map((link) => link.url),
-            },
-          ]
-        : []),
-    ],
-  };
+  const jsonLd = buildSiteGraph({
+    locale,
+    siteName: settings.siteName,
+    description: content?.shortBio || settings.seoDescription,
+    person: profile
+      ? {
+          name: content?.fullName || settings.siteName,
+          jobTitle: content?.title,
+          description: content?.shortBio,
+          // Demo avatars are SVG; structured-data consumers expect a raster image.
+          imageUrl: profile.avatar && !/\.svg(?:[?#]|$)/i.test(profile.avatar.url) ? profile.avatar.url : null,
+          location: profile.location || undefined,
+          aboutUrl: `/${locale}/about`,
+          sameAs: socials.filter((link) => link.url.startsWith("http")).map((link) => link.url),
+        }
+      : null,
+  });
 
   return (
     <html lang={localeHtmlLang[locale]} className={fontVariables} suppressHydrationWarning>
       <head>
-        <ThemeScript defaultTheme={settings.defaultTheme} />
+        <ThemeScript defaultTheme={settings.defaultTheme} nonce={nonce} />
       </head>
       <body className="min-h-screen bg-background text-ink">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-fg"
@@ -131,6 +166,7 @@ export default async function LocaleLayout({
           email={settings.contactEmail}
         />
         <PageTransition>{children}</PageTransition>
+        <BackToTop label={dict.common.backToTop} />
         <SiteFooter
           locale={locale}
           dict={dict}

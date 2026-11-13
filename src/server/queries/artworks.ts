@@ -196,8 +196,21 @@ export async function getArtworkDetail(
   };
 }
 
+/** Locales with a translation of a public collection (hreflang/sitemap). */
+export async function getCollectionLocales(slug: string): Promise<Locale[]> {
+  const row = await prisma.artworkCollection.findUnique({
+    where: { slug },
+    select: { visibility: true, deletedAt: true, translations: { select: { locale: true } } },
+  });
+  if (!row || row.deletedAt || row.visibility !== "public") return [];
+  return row.translations
+    .map((item) => item.locale)
+    .filter((locale): locale is Locale => locale === "vi" || locale === "en");
+}
+
 export async function incrementArtworkView(id: string): Promise<void> {
-  await prisma.artwork.update({ where: { id }, data: { viewCount: { increment: 1 } } }).catch(() => undefined);
+  // Keep updatedAt tied to content edits, not gallery traffic.
+  await prisma.$executeRaw`UPDATE "Artwork" SET "viewCount" = "viewCount" + 1 WHERE "id" = ${id}`.catch(() => undefined);
 }
 
 export async function getArtworkCategories(locale: Locale) {

@@ -55,6 +55,9 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
   }, [pathname]);
 
   const items = siteNav(locale, nav);
+  // The primary CTA repeats Contact; keep it in sync with the visibility map
+  // so hiding Contact later does not leave a stray link behind.
+  const contactVisible = items.some((item) => item.key === "contact");
 
   const monogram = siteName
     .split(/\s+/)
@@ -73,12 +76,13 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
       )}
     >
       <div className="container-page flex h-[70px] items-center justify-between gap-6">
-        <Link href={localeHref(locale)} className="group flex items-center gap-3" aria-label={siteName}>
+        <Link href={localeHref(locale)} className="group flex items-center gap-3">
           <span className="relative grid h-8 w-8 place-items-center border border-line-strong text-[11px] font-semibold tracking-tight transition-colors group-hover:border-ink">
             {monogram || "PS"}
-            <span className="absolute -right-[3px] -top-[3px] h-1.5 w-1.5 bg-accent" aria-hidden="true" />
+            <span className="absolute -right-[3px] -top-[3px] h-1.5 w-1.5 bg-ruby-bright" aria-hidden="true" />
           </span>
           <span className="hidden text-[13px] font-medium tracking-[0.01em] sm:block">{siteName}</span>
+          <span className="sr-only sm:hidden">{siteName}</span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label={nav.menu}>
@@ -90,7 +94,7 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
                 href={item.href}
                 className={cn(
                   "underline-sweep text-[13px] transition-colors",
-                  active ? "text-ink" : "text-muted hover:text-ink",
+                  active ? "text-accent" : "text-muted hover:text-ink",
                 )}
                 data-active={active ? "true" : undefined}
                 aria-current={active ? "page" : undefined}
@@ -106,9 +110,11 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
             <LanguageSwitcher locale={locale} label={languageLabel} />
           </div>
           <ThemeSwitcher labels={themeLabels} />
-          <Link href={localeHref(locale, "/contact")} className="btn btn-primary btn-sm ml-1 hidden lg:inline-flex">
-            {nav.contact}
-          </Link>
+          {contactVisible && (
+            <Link href={localeHref(locale, "/contact")} className="btn btn-primary btn-sm ml-1 hidden lg:inline-flex">
+              {nav.contact}
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
@@ -130,7 +136,7 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
       </div>
 
       {open && mounted && createPortal(
-        <div className="fixed inset-x-0 top-[70px] bottom-0 z-40 overflow-y-auto border-t border-line bg-background lg:hidden">
+        <div className="mobile-panel fixed inset-x-0 top-[70px] bottom-0 z-40 overflow-y-auto border-t border-line bg-background lg:hidden">
           <div className="container-page flex min-h-full flex-col justify-between py-8">
             <nav className="flex flex-col" aria-label={nav.menu}>
               {items.map((item, index) => {
@@ -141,7 +147,7 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
                     href={item.href}
                     className={cn(
                       "flex items-baseline justify-between border-b border-line py-4 text-2xl tracking-tight transition-colors",
-                      active ? "text-ink" : "text-muted",
+                      active ? "text-accent" : "text-muted",
                     )}
                   >
                     <span>{item.label}</span>
@@ -159,9 +165,11 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
               <a href={`mailto:${email}`} className="block text-sm text-muted underline underline-offset-4">
                 {email}
               </a>
-              <Link href={localeHref(locale, "/contact")} className="btn btn-primary w-full">
-                {nav.contact}
-              </Link>
+              {contactVisible && (
+                <Link href={localeHref(locale, "/contact")} className="btn btn-primary w-full">
+                  {nav.contact}
+                </Link>
+              )}
             </div>
           </div>
         </div>,

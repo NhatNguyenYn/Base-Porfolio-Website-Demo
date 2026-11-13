@@ -1,19 +1,19 @@
 import { cn } from "@/lib/utils";
 
 const STYLES: Record<string, string> = {
-  published: "border-[#2f7d5b]/30 bg-[#2f7d5b]/8 text-[#256b4d]",
+  published: "border-success/30 bg-success-soft text-success",
   draft: "border-line bg-surface-muted text-muted",
   scheduled: "border-accent/30 bg-accent-soft text-accent",
   archived: "border-line bg-surface-muted text-muted line-through",
-  public: "border-[#2f7d5b]/30 bg-[#2f7d5b]/8 text-[#256b4d]",
+  public: "border-success/30 bg-success-soft text-success",
   private: "border-line bg-surface-muted text-muted",
-  completed: "border-[#2f7d5b]/30 bg-[#2f7d5b]/8 text-[#256b4d]",
+  completed: "border-success/30 bg-success-soft text-success",
   in_progress: "border-accent/30 bg-accent-soft text-accent",
   unread: "border-accent/30 bg-accent-soft text-accent",
   read: "border-line bg-surface-muted text-muted",
-  featured: "border-[#a6791f]/30 bg-[#a6791f]/8 text-[#8a6416]",
-  active: "border-[#2f7d5b]/30 bg-[#2f7d5b]/8 text-[#256b4d]",
-  inactive: "border-[#c0392b]/30 bg-[#c0392b]/8 text-[#b03a2e]",
+  featured: "border-warning/30 bg-warning-soft text-warning",
+  active: "border-success/30 bg-success-soft text-success",
+  inactive: "border-danger/30 bg-danger-soft text-danger",
   SUPER_ADMIN: "border-accent/30 bg-accent-soft text-accent",
   ADMIN: "border-line bg-surface-muted text-muted",
 };

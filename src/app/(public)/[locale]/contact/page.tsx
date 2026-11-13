@@ -5,6 +5,7 @@ import { isLocale, type Locale } from "@/i18n/config";
 import { getProfile } from "@/data/profile";
 import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
+import { buildPageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/site/page-hero";
 import { ContactForm } from "@/components/site/contact-form";
 import { SocialLinks } from "@/components/site/social-links";
@@ -16,14 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
-  return {
+  const settings = await getSettings();
+  return buildPageMetadata({
+    locale: raw,
+    path: "/contact",
     title: dict.contact.label,
     description: dict.contact.description,
-    alternates: {
-      canonical: `/${raw}/contact`,
-      languages: { vi: "/vi/contact", en: "/en/contact", "x-default": "/vi/contact" },
-    },
-  };
+    siteName: settings.siteName,
+  });
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -95,7 +96,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           </Reveal>
 
           <Reveal delay={80} className="lg:col-span-7">
-            <ContactForm dict={dict} />
+            <ContactForm dict={dict} startedAt={Date.now()} />
           </Reveal>
         </div>
       </section>

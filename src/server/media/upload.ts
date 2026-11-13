@@ -47,7 +47,9 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
   let width: number | null = null;
   let height: number | null = null;
   try {
-    const metadata = await sharp(buffer).metadata();
+    // Cap decoded pixels so a small file cannot expand into a huge bitmap
+    // (decompression bomb) during metadata reads and later variant generation.
+    const metadata = await sharp(buffer, { limitInputPixels: 100_000_000 }).metadata();
     // The bytes must actually decode to the declared format; a .png full of
     // HTML is rejected here rather than stored and served.
     if (metadata.format !== declared.format) {

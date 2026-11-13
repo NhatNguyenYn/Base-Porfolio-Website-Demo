@@ -11,6 +11,7 @@ export type ArticleFormInitial = {
   id?: string;
   slug: string;
   status: string;
+  template: string;
   visibility: string;
   featured: boolean;
   scheduledFor: string;
@@ -24,6 +25,7 @@ export type ArticleFormInitial = {
 export const emptyArticle: ArticleFormInitial = {
   slug: "",
   status: "draft",
+  template: "default",
   visibility: "public",
   featured: false,
   scheduledFor: "",
@@ -165,6 +167,18 @@ export function ArticleForm({
                   <option value="published">Xuất bản</option>
                   <option value="archived">Lưu trữ</option>
                 </select>
+              </div>
+              <div>
+                <label className="field-label" htmlFor="template">
+                  Bố cục bài viết
+                </label>
+                <select id="template" name="template" defaultValue={initial.template} className="field">
+                  <option value="default">Default — bài viết hiện tại</option>
+                  <option value="editorial">Editorial — tạp chí / phỏng vấn</option>
+                </select>
+                <p className="mt-1 text-[10px] text-muted">
+                  Chỉ đổi cách trình bày. Nội dung, URL và dữ liệu bài viết không thay đổi.
+                </p>
               </div>
               <div>
                 <label className="field-label" htmlFor="scheduledFor">

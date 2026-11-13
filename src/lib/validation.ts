@@ -121,6 +121,7 @@ export const articleSchema = z.object({
   categoryId: idField,
   coverMediaId: idField,
   status: z.enum(["draft", "published", "archived"]).default("draft"),
+  template: z.enum(["default", "editorial"]).default("default"),
   visibility: z.enum(["public", "private"]).default("public"),
   featured: z.boolean().default(false),
   scheduledFor: optionalDate,

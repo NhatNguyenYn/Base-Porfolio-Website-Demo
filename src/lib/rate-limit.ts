@@ -40,10 +40,42 @@ export function hashedKey(input: string): string {
     .slice(0, 32);
 }
 
-export function clientIp(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]!.trim();
-  return headers.get("x-real-ip") ?? "unknown";
+/**
+ * Number of reverse proxies in front of the app, from env `TRUSTED_PROXY_HOPS`.
+ *
+ * `0` means the app is exposed directly: forwarding headers are ignored
+ * completely, because a client can send any `X-Forwarded-For` it likes. The
+ * default of `1` matches the usual single-proxy deployment, where the proxy
+ * appends the real peer address to the right of the chain.
+ */
+export function trustedProxyHops(): number {
+  const parsed = Number.parseInt(process.env.TRUSTED_PROXY_HOPS ?? "1", 10);
+  if (!Number.isFinite(parsed) || parsed < 0) return 1;
+  return Math.min(parsed, 10);
+}
+
+/**
+ * Visitor identity used for rate limiting.
+ *
+ * Only the address appended by a trusted proxy is used; entries a client can
+ * seed on the left of the chain are never trusted. When no proxy is
+ * configured the identity is "unknown" so every caller shares one bucket
+ * rather than being able to rotate headers for fresh quota.
+ */
+export function clientIp(headers: Headers, hops: number = trustedProxyHops()): string {
+  if (hops <= 0) return "unknown";
+
+  const chain = (headers.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  if (chain.length === 0) {
+    // `x-real-ip` is only meaningful when a proxy is present.
+    return headers.get("x-real-ip")?.trim() || "unknown";
+  }
+
+  return chain[Math.max(0, chain.length - hops)] ?? "unknown";
 }
 
 // Opportunistic cleanup so the map cannot grow without bound.

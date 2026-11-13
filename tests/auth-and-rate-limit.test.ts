@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { hashPassword, verifyPassword } from "@/server/auth";
-import { clientIp, hashedKey, rateLimit } from "@/lib/rate-limit";
+import { clientIp, hashedKey, rateLimit, trustedProxyHops } from "@/lib/rate-limit";
 
 describe("password hashing", () => {
   it("never stores the plaintext password", async () => {
@@ -46,9 +46,43 @@ describe("rate limiting", () => {
     expect(hashedKey("203.0.113.9")).toBe(key);
   });
 
-  it("reads the first forwarded address", () => {
+  it("only trusts the address appended by the configured proxy", () => {
     const headers = new Headers({ "x-forwarded-for": "203.0.113.9, 10.0.0.1" });
-    expect(clientIp(headers)).toBe("203.0.113.9");
+    // One proxy: the right-most entry is the peer address it appended.
+    expect(clientIp(headers, 1)).toBe("10.0.0.1");
+    // Two proxies: the entry appended by the outermost trusted proxy.
+    expect(clientIp(headers, 2)).toBe("203.0.113.9");
+    // No trusted proxy: forwarding headers are ignored, so they cannot be rotated.
+    expect(clientIp(headers, 0)).toBe("unknown");
     expect(clientIp(new Headers())).toBe("unknown");
+  });
+
+  it("uses x-real-ip only while a proxy is trusted", () => {
+    const headers = new Headers({ "x-real-ip": "198.51.100.7" });
+    expect(clientIp(headers, 1)).toBe("198.51.100.7");
+    expect(clientIp(headers, 0)).toBe("unknown");
+  });
+
+  it("never returns undefined when the chain is shorter than configured", () => {
+    expect(clientIp(new Headers({ "x-forwarded-for": "203.0.113.9" }), 3)).toBe("203.0.113.9");
+  });
+
+  it("reads and clamps TRUSTED_PROXY_HOPS", () => {
+    const previous = process.env.TRUSTED_PROXY_HOPS;
+    try {
+      process.env.TRUSTED_PROXY_HOPS = "2";
+      expect(trustedProxyHops()).toBe(2);
+      process.env.TRUSTED_PROXY_HOPS = "-1";
+      expect(trustedProxyHops()).toBe(1);
+      process.env.TRUSTED_PROXY_HOPS = "abc";
+      expect(trustedProxyHops()).toBe(1);
+      process.env.TRUSTED_PROXY_HOPS = "99";
+      expect(trustedProxyHops()).toBe(10);
+      delete process.env.TRUSTED_PROXY_HOPS;
+      expect(trustedProxyHops()).toBe(1);
+    } finally {
+      if (previous === undefined) delete process.env.TRUSTED_PROXY_HOPS;
+      else process.env.TRUSTED_PROXY_HOPS = previous;
+    }
   });
 });

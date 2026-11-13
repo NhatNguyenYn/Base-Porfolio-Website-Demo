@@ -100,7 +100,7 @@ export function MarkdownEditor({
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <label htmlFor={`md-${name}`} className="field-label mb-0">
           {label}
-          {required && <span className="ml-1 text-[#b03a2e]">*</span>}
+          {required && <span className="ml-1 text-danger">*</span>}
         </label>
         <div className="flex items-center gap-1">
           {(["write", "preview"] as const).map((item) => (

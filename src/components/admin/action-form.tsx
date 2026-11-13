@@ -67,10 +67,10 @@ export function ActionForm({
       }}
     >
       {!state.ok && state.message && (
-        <div role="alert" className="mb-6 border-l-2 border-[#c0392b] bg-[#c0392b]/5 px-4 py-3">
-          <p className="text-[13px] font-medium text-[#b03a2e]">{state.message}</p>
+        <div role="alert" className="mb-6 border-l-2 border-danger bg-danger-soft px-4 py-3">
+          <p className="text-[13px] font-medium text-danger">{state.message}</p>
           {errorEntries.length > 0 && (
-            <ul className="mt-2 space-y-1 text-[12px] text-[#b03a2e]">
+            <ul className="mt-2 space-y-1 text-[12px] text-danger">
               {errorEntries.map(([field, messages]) => (
                 <li key={field}>
                   <span className="font-medium">{field}</span>: {messages.join(", ")}
@@ -82,11 +82,11 @@ export function ActionForm({
       )}
 
       {state.ok && state.message && (
-        <div role="status" className="mb-6 flex items-center gap-2 border-l-2 border-[#2f7d5b] bg-[#2f7d5b]/5 px-4 py-3">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2f7d5b" strokeWidth="2" aria-hidden="true">
+        <div role="status" className="mb-6 flex items-center gap-2 border-l-2 border-success bg-success-soft px-4 py-3 text-success">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M20 6 9 17l-5-5" />
           </svg>
-          <p className="text-[13px] text-[#256b4d]">{state.message}</p>
+          <p className="text-[13px] text-success">{state.message}</p>
         </div>
       )}
 

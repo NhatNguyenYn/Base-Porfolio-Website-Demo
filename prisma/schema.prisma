@@ -391,6 +391,8 @@ model Article {
   authorId      String
   // draft | published | archived
   status        String    @default("draft")
+  // default | editorial — public presentation, never changes the content
+  template      String    @default("default")
   publishedAt   DateTime?
   scheduledFor  DateTime?
   featured      Boolean   @default(false)

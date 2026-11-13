@@ -1,5 +1,6 @@
 import "server-only";
 import type { Locale } from "@/i18n/config";
+import { normalizeArticleTemplate, type ArticleTemplate } from "@/lib/article-template";
 import { prisma } from "../db";
 import { toMediaView } from "./media";
 import { pickTranslation, type MediaView, type PublicStatus } from "./types";
@@ -20,6 +21,7 @@ export type ArticleCardData = {
 };
 
 export type ArticleDetailData = ArticleCardData & {
+  template: ArticleTemplate;
   content: string;
   authorName: string;
   updatedAt: Date;
@@ -220,6 +222,7 @@ export async function getArticleDetail(
     article: {
       id: article.id,
       slug: article.slug,
+      template: normalizeArticleTemplate(article.template),
       title: row.title,
       subtitle: row.subtitle ?? "",
       excerpt: row.excerpt,
@@ -241,7 +244,9 @@ export async function getArticleDetail(
 }
 
 export async function incrementArticleView(id: string): Promise<void> {
-  await prisma.article.update({ where: { id }, data: { viewCount: { increment: 1 } } }).catch(() => undefined);
+  // Raw increment: Prisma's @updatedAt would otherwise mark the article as
+  // modified on every public view, corrupting dateModified and sitemap lastmod.
+  await prisma.$executeRaw`UPDATE "Article" SET "viewCount" = "viewCount" + 1 WHERE "id" = ${id}`.catch(() => undefined);
 }
 
 export async function getRelatedArticles(

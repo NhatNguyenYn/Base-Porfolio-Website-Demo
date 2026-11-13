@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { userCount } from "@/server/auth";
+import { isSetupLocked } from "@/lib/setup-guard";
 import { SetupForm } from "./setup-form";
 
 export const metadata: Metadata = {
@@ -15,20 +16,22 @@ export default async function SetupPage() {
   if (count > 0) redirect("/admin/login");
 
   const requestHeaders = await headers();
-  const host = requestHeaders.get("host") ?? "";
-  const hostname = host.split(":")[0]?.toLowerCase();
-  const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
-  const setupToken = process.env.SETUP_TOKEN ?? "";
+  const setupToken = (process.env.SETUP_TOKEN ?? "").trim();
+  const locked = isSetupLocked({
+    isProduction: process.env.NODE_ENV === "production",
+    host: requestHeaders.get("host"),
+    configuredToken: setupToken,
+  });
 
-  if (!setupToken && !isLocal) {
+  if (locked) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="max-w-md border border-line bg-surface p-8">
           <h1 className="text-xl tracking-tight">Thiết lập bị khoá</h1>
           <p className="mt-3 text-[13px] leading-relaxed text-muted">
-            Trang thiết lập đầu tiên chỉ mở từ localhost. Để thiết lập từ xa, hãy đặt biến môi trường{" "}
-            <code className="bg-surface-muted px-1">SETUP_TOKEN</code> và tải lại trang này. Sau khi tạo tài khoản,
-            hãy xoá biến đó.
+            Trang thiết lập đầu tiên chỉ mở ở môi trường phát triển hoặc khi server có biến môi trường{" "}
+            <code className="bg-surface-muted px-1">SETUP_TOKEN</code>. Trên production bắt buộc phải đặt token
+            này. Sau khi tạo tài khoản, hãy xoá biến đó.
           </p>
           <Link href="/admin/login" className="btn btn-outline mt-6">
             Về trang đăng nhập

@@ -133,7 +133,6 @@ export function ArtGallery({
             key={artwork.id}
             artwork={artwork}
             label={labels.viewFullscreen}
-            priority={index < 3}
             onOpen={() => setOpenIndex(index)}
           />
         ))}

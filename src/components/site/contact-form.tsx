@@ -1,19 +1,14 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { submitContactMessage, type ContactState } from "@/server/actions/contact";
 import type { Dictionary } from "@/i18n";
 
 const initialState: ContactState = { ok: false, message: "" };
 
-export function ContactForm({ dict }: { dict: Dictionary }) {
+export function ContactForm({ dict, startedAt }: { dict: Dictionary; startedAt: number }) {
   const [state, action, pending] = useActionState(submitContactMessage, initialState);
-  const [startedAt, setStartedAt] = useState("");
   const formRef = useRef<HTMLFormElement | null>(null);
-
-  useEffect(() => {
-    setStartedAt(String(Date.now()));
-  }, []);
 
   useEffect(() => {
     if (state.success) formRef.current?.reset();
@@ -22,7 +17,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
   if (state.success) {
     return (
       <div className="border border-line bg-surface p-8">
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-accent-soft text-accent">
+        <span className="grid h-11 w-11 place-items-center rounded-full bg-success-soft text-success">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
             <path d="M20 6 9 17l-5-5" />
           </svg>
@@ -56,7 +51,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
       {globalError && (
         <p
           role="alert"
-          className="mt-5 border-l-2 border-[#c0392b] bg-[#c0392b]/5 px-3 py-2 text-[13px] text-[#c0392b]"
+          className="mt-5 border-l-2 border-danger bg-danger-soft px-3 py-2 text-[13px] text-danger"
         >
           {globalError}
         </p>
@@ -81,7 +76,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             aria-describedby={errorFor("name") ? "contact-name-error" : undefined}
           />
           {errorFor("name") && (
-            <p id="contact-name-error" className="mt-1.5 text-[11px] text-[#c0392b]">
+            <p id="contact-name-error" className="mt-1.5 text-[11px] text-danger">
               {errorFor("name")}
             </p>
           )}
@@ -104,7 +99,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             aria-describedby={errorFor("email") ? "contact-email-error" : undefined}
           />
           {errorFor("email") && (
-            <p id="contact-email-error" className="mt-1.5 text-[11px] text-[#c0392b]">
+            <p id="contact-email-error" className="mt-1.5 text-[11px] text-danger">
               {errorFor("email")}
             </p>
           )}
@@ -127,7 +122,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             aria-describedby={errorFor("subject") ? "contact-subject-error" : undefined}
           />
           {errorFor("subject") && (
-            <p id="contact-subject-error" className="mt-1.5 text-[11px] text-[#c0392b]">
+            <p id="contact-subject-error" className="mt-1.5 text-[11px] text-danger">
               {errorFor("subject")}
             </p>
           )}
@@ -150,7 +145,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             aria-describedby={errorFor("message") ? "contact-message-error" : undefined}
           />
           {errorFor("message") && (
-            <p id="contact-message-error" className="mt-1.5 text-[11px] text-[#c0392b]">
+            <p id="contact-message-error" className="mt-1.5 text-[11px] text-danger">
               {errorFor("message")}
             </p>
           )}
@@ -162,6 +157,8 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         <label htmlFor="contact-website">Website</label>
         <input id="contact-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
+      {/* Server timestamp: a client clock offset must not look like a bot or a
+          real message would be silently dropped. */}
       <input type="hidden" name="startedAt" value={startedAt} />
 
       <div className="mt-7 flex flex-wrap items-center justify-between gap-4">

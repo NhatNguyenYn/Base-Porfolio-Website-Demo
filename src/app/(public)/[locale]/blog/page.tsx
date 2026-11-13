@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getFeaturedArticle, listArticles } from "@/data/articles";
+import { getSettings } from "@/data/settings";
+import { buildPageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/site/page-hero";
 import { ArticleCard } from "@/components/site/article-card";
 import { Pagination } from "@/components/site/pagination";
@@ -21,14 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
-  return {
+  const settings = await getSettings();
+  return buildPageMetadata({
+    locale: raw,
+    path: "/blog",
     title: dict.blog.label,
     description: dict.blog.description,
-    alternates: {
-      canonical: `/${raw}/blog`,
-      languages: { vi: "/vi/blog", en: "/en/blog", "x-default": "/vi/blog" },
-    },
-  };
+    siteName: settings.siteName,
+  });
 }
 
 export default async function BlogPage({
@@ -185,7 +187,7 @@ export default async function BlogPage({
                   href={`${blogHref}/${article.slug}`}
                   locale={locale}
                   dict={dict}
-                  priority={index < 3 && !featured}
+                  priority={index === 0 && !featured}
                 />
               </Reveal>
             ))}

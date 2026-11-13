@@ -2,7 +2,8 @@ import { Be_Vietnam_Pro, Lora } from "next/font/google";
 
 export const sans = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700"],
+  // Only weights that the UI actually uses; fewer files, less blocking CSS.
+  weight: ["400", "500", "600"],
   variable: "--font-be-vietnam",
   display: "swap",
   fallback: ["Segoe UI", "system-ui", "sans-serif"],

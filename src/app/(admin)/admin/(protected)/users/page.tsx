@@ -48,7 +48,7 @@ export default async function UsersPage({
 
       {query.updated && <Flash message="Đã cập nhật người dùng." />}
       {query.error && (
-        <div role="alert" className="mb-6 border-l-2 border-[#c0392b] bg-[#c0392b]/5 px-4 py-3 text-[12.5px] text-[#b03a2e]">
+        <div role="alert" className="mb-6 border-l-2 border-danger bg-danger-soft px-4 py-3 text-[12.5px] text-danger">
           {ERROR_TEXT[query.error] ?? "Không thể hoàn tất thao tác."}
         </div>
       )}

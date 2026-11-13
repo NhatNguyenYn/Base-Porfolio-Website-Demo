@@ -1,18 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getArticleDetail, getRelatedArticles, incrementArticleView } from "@/data/articles";
+import { getSettings } from "@/data/settings";
 import { getArticleLocales } from "@/server/queries/articles";
 import { renderMarkdown } from "@/lib/markdown";
-import { canonicalPath, languageAlternates } from "@/lib/seo";
+import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
 import { absoluteUrl, formatDate } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildArticleSchema, buildBreadcrumbSchema } from "@/lib/structured-data";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { ArticleCard } from "@/components/site/article-card";
 import { ShareBar } from "@/components/site/share-bar";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { Reveal } from "@/components/ui/reveal";
+import { EditorialArticle } from "@/components/blog/editorial-article";
 
 export const dynamic = "force-dynamic";
 
@@ -23,38 +29,39 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: raw, slug } = await params;
   if (!isLocale(raw)) return {};
+  const settings = await getSettings();
   const { article } = await getArticleDetail(slug, raw);
   // No translation in this locale (or not published): keep it out of the index.
   if (!article) {
-    return {
+    return buildPageMetadata({
+      locale: raw,
+      path: `/blog/${slug}`,
       title: raw === "vi" ? "Bài viết chưa có bản dịch" : "Article not available in English",
-      robots: { index: false, follow: false },
-      alternates: { canonical: canonicalPath(raw, `/blog/${slug}`) },
-    };
+      description: raw === "vi" ? "Bài viết này chưa có bản dịch." : "This article is not available in this language.",
+      siteName: settings.siteName,
+      noindex: true,
+    });
   }
 
   const title = article.seoTitle || article.title;
   const description = article.seoDescription || article.excerpt;
   const available = await getArticleLocales(slug);
 
-  return {
+  return buildPageMetadata({
+    locale: raw,
+    path: `/blog/${slug}`,
     title,
     description,
-    alternates: {
-      canonical: canonicalPath(raw, `/blog/${slug}`),
-      languages: languageAlternates(`/blog/${slug}`, available),
-    },
-    openGraph: {
-      type: "article",
-      title,
-      description,
-      publishedTime: article.publishedAt?.toISOString(),
-      modifiedTime: article.updatedAt.toISOString(),
-      authors: [article.authorName],
-      images: article.cover ? [{ url: article.cover.url }] : undefined,
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
+    siteName: settings.siteName,
+    availableLocales: available,
+    type: "article",
+    image: article.cover
+      ? socialImage(article.cover.url, article.cover.alt || title, article.cover.width, article.cover.height)
+      : null,
+    publishedTime: article.publishedAt?.toISOString(),
+    modifiedTime: article.updatedAt.toISOString(),
+    authors: [article.authorName],
+  });
 }
 
 export default async function ArticlePage({
@@ -66,6 +73,8 @@ export default async function ArticlePage({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const settings = await getSettings();
 
   const { status, article } = await getArticleDetail(slug, locale);
 
@@ -87,41 +96,81 @@ export default async function ArticlePage({
   await incrementArticleView(article.id);
 
   const [body, related] = await Promise.all([
-    renderMarkdown(article.content),
+    renderMarkdown(article.content, { editorial: article.template === "editorial" }),
     getRelatedArticles(locale, article.id, article.categorySlug, 3),
   ]);
 
   const blogHref = localeHref(locale, "/blog");
+  const homeHref = localeHref(locale, "/");
+  const canonicalUrl = absoluteUrl(`/${locale}/blog/${article.slug}`);
+  const schemaImage = article.cover
+    ? safeSocialImage(
+        socialImage(article.cover.url, article.cover.alt || article.title, article.cover.width, article.cover.height),
+        settings.siteName,
+      )
+    : null;
+  const crumbs = [
+    { name: dict.nav.home, href: homeHref },
+    { name: dict.blog.label, href: blogHref },
+    { name: article.title, href: `${blogHref}/${article.slug}` },
+  ];
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title,
-    description: article.seoDescription || article.excerpt,
-    datePublished: article.publishedAt?.toISOString(),
-    dateModified: article.updatedAt.toISOString(),
-    author: { "@type": "Person", name: article.authorName },
-    image: article.cover ? absoluteUrl(article.cover.url) : undefined,
-    inLanguage: locale,
-    mainEntityOfPage: absoluteUrl(`/${locale}/blog/${article.slug}`),
-    wordCount: article.content.split(/\s+/).filter(Boolean).length,
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildArticleSchema({
+        locale,
+        siteName: settings.siteName,
+        siteLogoUrl: settings.logo?.url,
+        canonicalUrl,
+        headline: article.title,
+        description: article.seoDescription || article.excerpt,
+        imageUrl: schemaImage?.url,
+        datePublished: article.publishedAt?.toISOString(),
+        dateModified: article.updatedAt.toISOString(),
+        authorName: article.authorName,
+        categoryName: article.categoryName,
+        keywords: article.tags.map((tag) => tag.name),
+        wordCount: article.content.split(/\s+/).filter(Boolean).length,
+        blogUrl: blogHref,
+      }),
+    ],
   };
 
   return (
     <article>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
 
       <div className="container-page pt-8">
-        <Link href={blogHref} className="link-arrow text-muted hover:text-ink">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-            <path d="M19 12H5M11 6l-6 6 6 6" />
-          </svg>
-          {dict.common.backToBlog}
-        </Link>
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
       </div>
 
+      {article.template === "editorial" ? (
+        <EditorialArticle
+          article={article}
+          body={body}
+          related={related}
+          dict={dict}
+          locale={locale}
+          blogHref={blogHref}
+        />
+      ) : (
+      <>
       <header className="container-page mt-10 max-w-4xl">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] uppercase tracking-[0.16em] text-muted">
-          {article.categoryName && <span className="text-accent">{article.categoryName}</span>}
+          {article.categoryName &&
+            (article.categorySlug ? (
+              <Link href={`${blogHref}?category=${article.categorySlug}`} className="text-accent hover:underline">
+                {article.categoryName}
+              </Link>
+            ) : (
+              <span className="text-accent">{article.categoryName}</span>
+            ))}
           <span>·</span>
           <time dateTime={article.publishedAt?.toISOString()}>
             {formatDate(article.publishedAt, locale)}
@@ -224,6 +273,8 @@ export default async function ArticlePage({
             ))}
           </div>
         </section>
+      )}
+      </>
       )}
     </article>
   );

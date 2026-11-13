@@ -15,7 +15,13 @@ export async function submitContactMessage(_prev: ContactState, formData: FormDa
   // Honeypot + submit-timing checks. Bots get a silent success so they do not learn.
   const honeypot = formData.get("website");
   const startedAt = Number.parseInt(String(formData.get("startedAt") ?? "0"), 10);
-  const tooFast = Number.isFinite(startedAt) && Date.now() - startedAt < 1800;
+  const elapsed = Number.isFinite(startedAt) && startedAt > 0 ? Date.now() - startedAt : null;
+  // A negative elapsed means client/server clocks disagree; never treat that as
+  // a bot signal, otherwise a skewed clock silently discards real messages.
+  const tooFast = elapsed !== null && elapsed >= 0 && elapsed < 1800;
+  if (elapsed !== null && elapsed < 0) {
+    console.warn("[contact] submit timestamp is in the future; ignoring timing check", { skewMs: elapsed });
+  }
   if ((typeof honeypot === "string" && honeypot.length > 0) || tooFast) {
     return { ok: true, success: true, message: "ok" };
   }

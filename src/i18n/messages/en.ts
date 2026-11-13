@@ -25,6 +25,7 @@ export const en: Dictionary = {
     viewProject: "View project",
     viewArtwork: "View artwork",
     back: "Back",
+    backToTop: "Back to top",
     search: "Search",
     searchPlaceholder: "Search by name or description…",
     filter: "Filter",
@@ -75,6 +76,7 @@ export const en: Dictionary = {
     archived: "Archived",
     showMore: "Show more",
     results: "results",
+    breadcrumb: "Breadcrumb",
   },
   home: {
     eyebrow: "Personal portfolio",

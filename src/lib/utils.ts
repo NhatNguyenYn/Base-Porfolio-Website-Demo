@@ -46,6 +46,8 @@ export function readingMinutes(markdown: string): number {
 }
 
 export function absoluteUrl(path = "/"): string {
+  // CMS media may already be stored on an absolute CDN/S3 origin.
+  if (/^https?:\/\//i.test(path)) return path;
   const base = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }

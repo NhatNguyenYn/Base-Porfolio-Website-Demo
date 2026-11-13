@@ -30,6 +30,7 @@ export async function getPreviewData(kind: PreviewKind, id: string, locale: Loca
     return {
       kind,
       status: row.status,
+      template: row.template,
       publishedAt: row.publishedAt,
       updatedAt: row.updatedAt,
       cover: row.coverMedia?.url ?? null,

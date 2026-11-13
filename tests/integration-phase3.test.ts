@@ -66,7 +66,7 @@ describe("translation-aware locale lookups", () => {
     expect(await getProjectLocales("project-unpublished")).toEqual([]);
     expect(await getProjectLocales("project-private")).toEqual([]);
     expect(await getArtworkLocales("art-private")).toEqual([]);
-    expect(await getProjectLocales("project-public")).toEqual(["vi", "en"]);
+    expect((await getProjectLocales("project-public")).sort()).toEqual(["en", "vi"]);
     expect(await getArtworkLocales("art-vi-only")).toEqual(["vi"]);
   });
 });

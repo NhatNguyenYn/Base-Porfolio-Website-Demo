@@ -12,7 +12,7 @@ export function SetupForm({ requiresToken }: { requiresToken: boolean }) {
   return (
     <form action={action} className="space-y-4">
       {state.message && (
-        <div role="alert" className="border-l-2 border-[#c0392b] bg-[#c0392b]/5 px-3 py-2 text-[12px] text-[#b03a2e]">
+        <div role="alert" className="border-l-2 border-danger bg-danger-soft px-3 py-2 text-[12px] text-danger">
           <p>{state.message}</p>
           {state.fieldErrors && (
             <ul className="mt-1.5 space-y-0.5">

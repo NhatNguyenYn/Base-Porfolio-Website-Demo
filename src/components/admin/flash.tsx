@@ -18,8 +18,8 @@ export function Flash({
       role={tone === "error" ? "alert" : "status"}
       className={`mb-6 flex items-start gap-2 border-l-2 px-4 py-2.5 ${
         tone === "error"
-          ? "border-[#c0392b] bg-[#c0392b]/5 text-[#b03a2e]"
-          : "border-[#2f7d5b] bg-[#2f7d5b]/5 text-[#256b4d]"
+          ? "border-danger bg-danger-soft text-danger"
+          : "border-success bg-success-soft text-success"
       }`}
     >
       <p className="flex-1 text-[12.5px] leading-relaxed">{message}</p>

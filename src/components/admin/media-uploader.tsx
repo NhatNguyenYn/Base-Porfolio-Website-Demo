@@ -76,7 +76,7 @@ export function MediaUploader() {
       )}
 
       {state.message && (
-        <p className={`mt-3 text-[11.5px] ${state.ok ? "text-[#256b4d]" : "text-[#b03a2e]"}`} role="status">
+        <p className={`mt-3 text-[11.5px] ${state.ok ? "text-success" : "text-danger"}`} role="status">
           {state.message}
         </p>
       )}

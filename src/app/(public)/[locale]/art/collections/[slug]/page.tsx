@@ -1,9 +1,15 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getCollection } from "@/data/artworks";
+import { getSettings } from "@/data/settings";
+import { getCollectionLocales } from "@/server/queries/artworks";
+import { buildPageMetadata, socialImage } from "@/lib/seo";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
 
@@ -16,20 +22,31 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: raw, slug } = await params;
   if (!isLocale(raw)) return {};
+  const dict = getDictionary(raw);
+  const settings = await getSettings();
   const { collection } = await getCollection(slug, raw);
-  if (!collection) return { title: "404" };
-  return {
+  if (!collection) {
+    return buildPageMetadata({
+      locale: raw,
+      path: `/art/collections/${slug}`,
+      title: dict.notFound.title,
+      description: dict.notFound.text,
+      siteName: settings.siteName,
+      noindex: true,
+    });
+  }
+  const available = await getCollectionLocales(slug);
+  return buildPageMetadata({
+    locale: raw,
+    path: `/art/collections/${slug}`,
     title: collection.name,
     description: collection.description,
-    alternates: {
-      canonical: `/${raw}/art/collections/${slug}`,
-      languages: {
-        vi: `/vi/art/collections/${slug}`,
-        en: `/en/art/collections/${slug}`,
-        "x-default": `/vi/art/collections/${slug}`,
-      },
-    },
-  };
+    siteName: settings.siteName,
+    availableLocales: available,
+    image: collection.cover
+      ? socialImage(collection.cover.url, collection.cover.alt || collection.name, collection.cover.width, collection.cover.height)
+      : null,
+  });
 }
 
 export default async function CollectionPage({
@@ -41,19 +58,32 @@ export default async function CollectionPage({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   const { collection, artworks } = await getCollection(slug, locale);
   if (!collection) notFound();
+  const artHref = localeHref(locale, "/art");
+  const collectionHref = `${artHref}/collections/${collection.slug}`;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.art.label, href: artHref },
+    { name: collection.name, href: collectionHref },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [buildBreadcrumbSchema(crumbs)],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <div className="container-page pt-10">
-        <Link href={localeHref(locale, "/art")} className="link-arrow text-muted hover:text-ink">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-            <path d="M19 12H5M11 6l-6 6 6 6" />
-          </svg>
-          {dict.common.backToGallery}
-        </Link>
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
       </div>
 
       <PageHero

@@ -23,6 +23,7 @@ export const vi = {
     viewProject: "Xem dự án",
     viewArtwork: "Xem tác phẩm",
     back: "Quay lại",
+    backToTop: "Lên đầu trang",
     search: "Tìm kiếm",
     searchPlaceholder: "Tìm theo tên, mô tả…",
     filter: "Bộ lọc",
@@ -73,6 +74,7 @@ export const vi = {
     archived: "Đã lưu trữ",
     showMore: "Xem thêm",
     results: "kết quả",
+    breadcrumb: "Đường dẫn",
   },
   home: {
     eyebrow: "Portfolio cá nhân",

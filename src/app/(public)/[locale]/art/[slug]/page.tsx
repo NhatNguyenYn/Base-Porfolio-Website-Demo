@@ -1,13 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getArtworkDetail, incrementArtworkView, listArtworks } from "@/data/artworks";
+import { getSettings } from "@/data/settings";
 import { getArtworkLocales } from "@/server/queries/artworks";
-import { canonicalPath, languageAlternates } from "@/lib/seo";
-import { formatDate } from "@/lib/utils";
+import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
+import { absoluteUrl, formatDate } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { ArtGallery } from "@/components/site/art-gallery";
 import { Reveal } from "@/components/ui/reveal";
@@ -21,30 +26,31 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: raw, slug } = await params;
   if (!isLocale(raw)) return {};
+  const settings = await getSettings();
   const { artwork } = await getArtworkDetail(slug, raw);
   if (!artwork) {
-    return {
+    return buildPageMetadata({
+      locale: raw,
+      path: `/art/${slug}`,
       title: raw === "vi" ? "Tác phẩm chưa có bản dịch" : "Artwork not available in English",
-      robots: { index: false, follow: false },
-      alternates: { canonical: canonicalPath(raw, `/art/${slug}`) },
-    };
+      description: raw === "vi" ? "Tác phẩm này chưa có bản dịch." : "This artwork is not available in this language.",
+      siteName: settings.siteName,
+      noindex: true,
+    });
   }
   const available = await getArtworkLocales(slug);
 
-  return {
+  return buildPageMetadata({
+    locale: raw,
+    path: `/art/${slug}`,
     title: artwork.title,
     description: artwork.description.slice(0, 180),
-    alternates: {
-      canonical: canonicalPath(raw, `/art/${slug}`),
-      languages: languageAlternates(`/art/${slug}`, available),
-    },
-    openGraph: {
-      title: artwork.title,
-      description: artwork.description.slice(0, 180),
-      images: artwork.image ? [{ url: artwork.image.url }] : undefined,
-      type: "article",
-    },
-  };
+    siteName: settings.siteName,
+    availableLocales: available,
+    image: artwork.image
+      ? socialImage(artwork.image.url, artwork.image.alt || artwork.title, artwork.image.width, artwork.image.height)
+      : null,
+  });
 }
 
 export default async function ArtworkPage({
@@ -56,6 +62,8 @@ export default async function ArtworkPage({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
+  const settings = await getSettings();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   const { status, artwork } = await getArtworkDetail(slug, locale);
 
@@ -82,16 +90,45 @@ export default async function ArtworkPage({
 
   const width = artwork.image?.width ?? 1200;
   const height = artwork.image?.height ?? 1500;
+  const artHref = localeHref(locale, "/art");
+  const canonicalUrl = absoluteUrl(`/${locale}/art/${artwork.slug}`);
+  const schemaImage = artwork.image
+    ? safeSocialImage(
+        socialImage(artwork.image.url, artwork.image.alt || artwork.title, artwork.image.width, artwork.image.height),
+        settings.siteName,
+      )
+    : null;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.art.label, href: artHref },
+    { name: artwork.title, href: `${artHref}/${artwork.slug}` },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildCreativeWorkSchema({
+        canonicalUrl,
+        name: artwork.title,
+        description: artwork.description,
+        imageUrl: schemaImage?.url,
+        datePublished: artwork.createdDate?.toISOString(),
+        type: "VisualArtwork",
+        medium: artwork.medium,
+      }),
+    ],
+  };
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <div className="container-page pt-8">
-        <Link href={localeHref(locale, "/art")} className="link-arrow text-muted hover:text-ink">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-            <path d="M19 12H5M11 6l-6 6 6 6" />
-          </svg>
-          {dict.common.backToGallery}
-        </Link>
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
       </div>
 
       <div className="container-page mt-8 grid gap-10 lg:grid-cols-12 lg:gap-14">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/ui/reveal";
 
 export function SectionHeader({
   index,
@@ -19,6 +20,7 @@ export function SectionHeader({
   tone?: "default" | "inverse";
 }) {
   return (
+    <Reveal variant="fade">
     <div className={cn("border-t border-line pt-6", className)}>
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
@@ -67,5 +69,6 @@ export function SectionHeader({
         )}
       </div>
     </div>
+    </Reveal>
   );
 }

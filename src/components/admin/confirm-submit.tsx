@@ -47,7 +47,7 @@ export function ConfirmSubmit({
         onClick={open}
         className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] transition-colors ${
           tone === "danger"
-            ? "border-[#c0392b]/30 text-[#b03a2e] hover:border-[#c0392b] hover:bg-[#c0392b]/5"
+            ? "border-danger/30 text-danger hover:border-danger hover:bg-danger-soft"
             : "border-line text-muted hover:border-ink hover:text-ink"
         }`}
       >
@@ -72,7 +72,7 @@ export function ConfirmSubmit({
             <button
               type="button"
               onClick={confirm}
-              className={`btn btn-sm ${tone === "danger" ? "bg-[#b03a2e] text-white hover:bg-[#932f25]" : "btn-primary"}`}
+              className={`btn btn-sm ${tone === "danger" ? "bg-danger text-white hover:bg-danger-hover" : "btn-primary"}`}
             >
               {confirmLabel}
             </button>

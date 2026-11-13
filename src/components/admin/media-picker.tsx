@@ -84,7 +84,7 @@ export function MediaPicker({
       <div className="mb-2 flex items-center justify-between gap-2">
         <span className="field-label mb-0">
           {label}
-          {required && <span className="ml-1 text-[#b03a2e]">*</span>}
+          {required && <span className="ml-1 text-danger">*</span>}
         </span>
         {selected.length > 0 && (
           <button
@@ -230,7 +230,7 @@ export function MediaPicker({
                 </button>
               </form>
               {uploadState.message && (
-                <p className={`mt-2 text-[11px] ${uploadState.ok ? "text-[#256b4d]" : "text-[#b03a2e]"}`}>
+                <p className={`mt-2 text-[11px] ${uploadState.ok ? "text-success" : "text-danger"}`}>
                   {uploadState.message}
                 </p>
               )}

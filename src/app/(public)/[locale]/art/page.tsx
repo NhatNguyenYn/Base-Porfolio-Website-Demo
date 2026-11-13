@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { listArtworks, listCollections } from "@/data/artworks";
+import { getSettings } from "@/data/settings";
+import { buildPageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
 import { Reveal } from "@/components/ui/reveal";
@@ -15,14 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
-  return {
+  const settings = await getSettings();
+  return buildPageMetadata({
+    locale: raw,
+    path: "/art",
     title: dict.art.title,
     description: dict.art.description,
-    alternates: {
-      canonical: `/${raw}/art`,
-      languages: { vi: "/vi/art", en: "/en/art", "x-default": "/vi/art" },
-    },
-  };
+    siteName: settings.siteName,
+  });
 }
 
 export default async function ArtPage({ params }: { params: Promise<{ locale: string }> }) {

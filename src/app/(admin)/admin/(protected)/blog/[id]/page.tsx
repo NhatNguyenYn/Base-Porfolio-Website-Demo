@@ -6,6 +6,7 @@ import { toMediaView } from "@/server/queries/media";
 import { PageHeader } from "@/components/admin/page-header";
 import { ArticleForm, type ArticleFormInitial } from "@/components/admin/article-form";
 import { Flash } from "@/components/admin/flash";
+import { normalizeArticleTemplate } from "@/lib/article-template";
 
 function toLocalDateTimeInput(value: Date | null): string {
   if (!value) return "";
@@ -35,6 +36,7 @@ export default async function EditArticlePage({
     id: article.id,
     slug: article.slug,
     status: article.status,
+    template: normalizeArticleTemplate(article.template),
     visibility: article.visibility,
     featured: article.featured,
     scheduledFor: toLocalDateTimeInput(article.scheduledFor),

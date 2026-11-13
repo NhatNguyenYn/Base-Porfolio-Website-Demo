@@ -1,14 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getNextProject, getProjectDetail } from "@/data/projects";
+import { getSettings } from "@/data/settings";
 import { getProjectLocales } from "@/server/queries/projects";
 import { renderMarkdown } from "@/lib/markdown";
-import { canonicalPath, languageAlternates } from "@/lib/seo";
-import { formatDate } from "@/lib/utils";
+import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
+import { absoluteUrl, formatDate } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -21,31 +26,32 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: raw, slug } = await params;
   if (!isLocale(raw)) return {};
+  const settings = await getSettings();
   const { project } = await getProjectDetail(slug, raw);
   if (!project) {
-    return {
+    return buildPageMetadata({
+      locale: raw,
+      path: `/projects/${slug}`,
       title: raw === "vi" ? "Dự án chưa có bản dịch" : "Project not available in English",
-      robots: { index: false, follow: false },
-      alternates: { canonical: canonicalPath(raw, `/projects/${slug}`) },
-    };
+      description: raw === "vi" ? "Dự án này chưa có bản dịch." : "This project is not available in this language.",
+      siteName: settings.siteName,
+      noindex: true,
+    });
   }
 
   const available = await getProjectLocales(slug);
 
-  return {
+  return buildPageMetadata({
+    locale: raw,
+    path: `/projects/${slug}`,
     title: project.name,
     description: project.shortDescription,
-    alternates: {
-      canonical: canonicalPath(raw, `/projects/${slug}`),
-      languages: languageAlternates(`/projects/${slug}`, available),
-    },
-    openGraph: {
-      title: project.name,
-      description: project.shortDescription,
-      images: project.thumbnail ? [{ url: project.thumbnail.url }] : undefined,
-      type: "article",
-    },
-  };
+    siteName: settings.siteName,
+    availableLocales: available,
+    image: project.thumbnail
+      ? socialImage(project.thumbnail.url, project.thumbnail.alt || project.name, project.thumbnail.width, project.thumbnail.height)
+      : null,
+  });
 }
 
 export default async function ProjectDetailPage({
@@ -57,6 +63,8 @@ export default async function ProjectDetailPage({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
+  const settings = await getSettings();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   const { status, project } = await getProjectDetail(slug, locale);
 
@@ -77,16 +85,44 @@ export default async function ProjectDetailPage({
 
   const [body, next] = await Promise.all([renderMarkdown(project.fullDescription), getNextProject(slug, locale)]);
   const statusLabel = (dict.projects.statuses as Record<string, string>)[project.status] ?? project.status;
+  const projectsHref = localeHref(locale, "/projects");
+  const canonicalUrl = absoluteUrl(`/${locale}/projects/${project.slug}`);
+  const schemaImage = project.thumbnail
+    ? safeSocialImage(
+        socialImage(project.thumbnail.url, project.thumbnail.alt || project.name, project.thumbnail.width, project.thumbnail.height),
+        settings.siteName,
+      )
+    : null;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.projects.label, href: projectsHref },
+    { name: project.name, href: `${projectsHref}/${project.slug}` },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildCreativeWorkSchema({
+        canonicalUrl,
+        name: project.name,
+        description: project.shortDescription,
+        imageUrl: schemaImage?.url,
+        datePublished: project.startDate?.toISOString(),
+        dateModified: project.updatedAt.toISOString(),
+      }),
+    ],
+  };
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <header className="container-page pt-10 lg:pt-14">
-        <Link href={localeHref(locale, "/projects")} className="link-arrow text-muted hover:text-ink">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-            <path d="M19 12H5M11 6l-6 6 6 6" />
-          </svg>
-          {dict.projects.label}
-        </Link>
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
 
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">

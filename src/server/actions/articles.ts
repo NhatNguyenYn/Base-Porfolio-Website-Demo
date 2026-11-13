@@ -7,6 +7,7 @@ import { prisma } from "../db";
 import { requireUser } from "../auth";
 import { logActivity } from "../audit";
 import { articleSchema, categorySchema, zodFieldErrors } from "@/lib/validation";
+import { normalizeArticleTemplate } from "@/lib/article-template";
 import { readingMinutes, slugify } from "@/lib/utils";
 import { getBool, getString, parseDateValue, readLocaleBlock, uniqueSlug } from "./helpers";
 import type { ActionState } from "@/lib/action-state";
@@ -44,6 +45,7 @@ export async function saveArticleAction(_prev: ActionState, formData: FormData):
     categoryId: getString(formData, "categoryId") || undefined,
     coverMediaId: getString(formData, "coverMediaId") || undefined,
     status: getString(formData, "status") || "draft",
+    template: normalizeArticleTemplate(getString(formData, "template")),
     visibility: getString(formData, "visibility") || "public",
     featured: getBool(formData, "featured"),
     scheduledFor: getString(formData, "scheduledFor") || undefined,
@@ -97,6 +99,7 @@ export async function saveArticleAction(_prev: ActionState, formData: FormData):
         categoryId: data.categoryId ?? null,
         coverMediaId: data.coverMediaId ?? null,
         status: data.status,
+        template: data.template,
         visibility: data.visibility,
         featured: data.featured,
         scheduledFor,

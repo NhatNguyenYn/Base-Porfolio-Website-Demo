@@ -13,8 +13,8 @@ prisma/dev.db
 prisma/dev.db-journal
 prisma/*.db
 
-# Uploaded media (local storage driver)
-storage/
+# Uploaded media (local storage driver) — root only; src/server/storage is source.
+/storage/
 
 # OS
 .DS_Store
@@ -22,3 +22,13 @@ Thumbs.db
 
 # Local PostgreSQL cluster (scripts/dev-db.mjs)
 .pgdata/
+
+# Runtime logs
+*.log
+.next-server.log
+
+# Local verification output (screenshots, logs, throwaway scripts)
+/.artifacts/
+
+# Local database backups
+backups/

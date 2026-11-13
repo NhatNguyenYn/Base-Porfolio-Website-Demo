@@ -18,10 +18,43 @@ export const navPaths: Record<NavKey, string> = {
 
 const NAV_ORDER: NavKey[] = ["home", "about", "projects", "art", "blog", "contact"];
 
+/**
+ * Which navigation entries a visitor can see. Labels live in the dictionaries
+ * and paths in `navPaths`, so this map never depends on language or URL and is
+ * safe to move to the database later (an admin Navigation Management screen can
+ * load the same shape without touching the components).
+ *
+ * Hidden entries keep their page, data, API and CMS screen; only the menu link
+ * is omitted. Direct visits and `matchesNav` are unaffected.
+ */
+export type NavVisibility = Record<NavKey, boolean>;
+
+export const navVisibility: NavVisibility = {
+  home: true,
+  about: true,
+  projects: false,
+  art: true,
+  blog: true,
+  contact: true,
+};
+
 export type NavItem = { key: NavKey; href: string; label: string };
 
-export function siteNav(locale: Locale, nav: Pick<Dictionary["nav"], NavKey>): NavItem[] {
-  return NAV_ORDER.map((key) => ({
+/** Visible keys in menu order, derived from the single visibility map. */
+export function visibleNavKeys(visibility: NavVisibility = navVisibility): NavKey[] {
+  return NAV_ORDER.filter((key) => visibility[key]);
+}
+
+/**
+ * Header, mobile drawer and footer all call this function, so a hidden entry
+ * disappears everywhere at once and the order stays shared.
+ */
+export function siteNav(
+  locale: Locale,
+  nav: Pick<Dictionary["nav"], NavKey>,
+  visibility: NavVisibility = navVisibility,
+): NavItem[] {
+  return visibleNavKeys(visibility).map((key) => ({
     key,
     href: localeHref(locale, navPaths[key] === "/" ? "" : navPaths[key]),
     label: nav[key],

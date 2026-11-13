@@ -6,6 +6,8 @@ import { getPreviewData, isPreviewKind, type PreviewData } from "@/lib/services/
 import { renderMarkdown } from "@/lib/markdown";
 import { formatDate } from "@/lib/utils";
 import { resolveLocale, type Locale } from "@/i18n/config";
+import { normalizeArticleTemplate } from "@/lib/article-template";
+import { ArticleBody as ArticleBodyContent } from "@/components/blog/article-body";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +29,8 @@ type ArtworkPreview = Extract<PreviewData, { kind: "artwork" }>;
 async function ArticleBody({ data, locale }: { data: ArticlePreview; locale: Locale }) {
   const translation = data.translation;
   if (!translation) return null;
-  const { html } = await renderMarkdown(translation.content);
+  const template = normalizeArticleTemplate(data.template);
+  const { html } = await renderMarkdown(translation.content, { editorial: template === "editorial" });
   const minutes = Math.max(1, Math.round((translation.content.split(/\s+/).length || 0) / 200));
 
   return (
@@ -45,7 +48,7 @@ async function ArticleBody({ data, locale }: { data: ArticlePreview; locale: Loc
           <Image src={data.cover} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
         </div>
       )}
-      <div className="prose-editorial mt-10" dangerouslySetInnerHTML={{ __html: html }} />
+      <ArticleBodyContent html={html} template={template} className="mt-10" />
     </article>
   );
 }
@@ -180,6 +183,11 @@ export default async function PreviewPage({
           <span className="rounded-full border border-white/25 px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] opacity-90">
             {data.status}
           </span>
+          {data.kind === "article" && (
+            <span className="rounded-full border border-white/25 px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] opacity-90">
+              {normalizeArticleTemplate(data.template)}
+            </span>
+          )}
           <span className="ml-auto flex items-center gap-3">
             <Link href={editorHref} className="underline underline-offset-2 opacity-80 hover:opacity-100">
               Quay lại chỉnh sửa

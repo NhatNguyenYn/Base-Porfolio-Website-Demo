@@ -8,7 +8,13 @@ const THEME_KEY = "ps-theme";
  * Applies the stored theme before paint to avoid a flash of the wrong palette.
  * Falls back to the CMS default theme when the visitor has no preference.
  */
-export function ThemeScript({ defaultTheme }: { defaultTheme: "light" | "dark" | "system" }) {
+export function ThemeScript({
+  defaultTheme,
+  nonce,
+}: {
+  defaultTheme: "light" | "dark" | "system";
+  nonce?: string;
+}) {
   const script = `
 (function() {
   document.documentElement.classList.add("js");
@@ -24,7 +30,10 @@ export function ThemeScript({ defaultTheme }: { defaultTheme: "light" | "dark" |
   }
 })();
 `;
-  return <script dangerouslySetInnerHTML={{ __html: script }} />;
+  // Browsers hide the nonce content attribute after parsing (`getAttribute`
+  // returns ""), so React would report a hydration mismatch. The nonce is
+  // still enforced by CSP; only the attribute diff is suppressed.
+  return <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: script }} />;
 }
 
 export function useThemeSync() {

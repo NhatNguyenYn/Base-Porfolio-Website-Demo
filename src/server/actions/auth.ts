@@ -21,13 +21,8 @@ import {
   zodFieldErrors,
 } from "@/lib/validation";
 import { clientIp, hashedKey, rateLimit } from "@/lib/rate-limit";
+import { evaluateSetupAccess } from "@/lib/setup-guard";
 import type { ActionState } from "@/lib/action-state";
-
-function looksLocal(host: string | null): boolean {
-  if (!host) return false;
-  const hostname = host.split(":")[0]?.toLowerCase() ?? "";
-  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
-}
 
 export async function loginAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = loginSchema.safeParse({
@@ -45,9 +40,14 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
   }
 
   const requestHeaders = await headers();
-  const limit = rateLimit(`login:${hashedKey(clientIp(requestHeaders))}:${parsed.data.email}`, 6, 10 * 60 * 1000);
-  if (!limit.ok) {
-    return { ok: false, message: `Too many attempts. Try again in ${Math.ceil(limit.retryAfterSeconds / 60)} minutes.` };
+  const ip = clientIp(requestHeaders);
+  // Two buckets: one per account (stops targeted guessing) and one per address
+  // (stops spraying one password across many accounts).
+  const perAccount = rateLimit(`login:${hashedKey(ip)}:${parsed.data.email}`, 6, 10 * 60 * 1000);
+  const perAddress = rateLimit(`login-ip:${hashedKey(ip)}`, 25, 10 * 60 * 1000);
+  if (!perAccount.ok || !perAddress.ok) {
+    const retry = Math.max(perAccount.retryAfterSeconds, perAddress.retryAfterSeconds);
+    return { ok: false, message: `Too many attempts. Try again in ${Math.ceil(retry / 60)} minutes.` };
   }
 
   const user = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
@@ -87,13 +87,22 @@ export async function logoutAction(): Promise<void> {
 
 export async function setupAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const requestHeaders = await headers();
-  const token = process.env.SETUP_TOKEN ?? "";
+  const providedToken = formData.get("setupToken");
+  const access = evaluateSetupAccess({
+    isProduction: process.env.NODE_ENV === "production",
+    host: requestHeaders.get("host"),
+    configuredToken: process.env.SETUP_TOKEN ?? "",
+    providedToken: typeof providedToken === "string" ? providedToken : null,
+  });
 
-  if (token) {
-    if (formData.get("setupToken") !== token) {
-      return { ok: false, message: "Setup token is incorrect." };
+  if (!access.allowed) {
+    if (access.reason === "token") return { ok: false, message: "Setup token is incorrect." };
+    if (access.reason === "disabled") {
+      return {
+        ok: false,
+        message: "First-run setup is disabled on this server. Set SETUP_TOKEN to enable it.",
+      };
     }
-  } else if (!looksLocal(requestHeaders.get("host"))) {
     return {
       ok: false,
       message: "First-run setup is localhost-only. Set SETUP_TOKEN to enable remote setup.",

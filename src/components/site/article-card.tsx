@@ -99,7 +99,8 @@ export function ArticleCard({
         <div className="mt-auto flex items-center gap-4 pt-5 text-[11px] text-muted">
           <span>{article.readingMinutes} {dict.common.minRead}</span>
           <Link href={href} className="link-arrow ml-auto text-muted group-hover:text-ink">
-            {dict.common.readMore}
+            <span aria-hidden="true">{dict.common.readMore}</span>
+            <span className="sr-only">: {article.title}</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>

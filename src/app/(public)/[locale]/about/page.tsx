@@ -9,6 +9,7 @@ import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
 import { renderMarkdown } from "@/lib/markdown";
 import { formatMonthYear } from "@/lib/utils";
+import { buildPageMetadata, socialImage } from "@/lib/seo";
 import { parseInterests } from "@/lib/interests";
 import { PageHero } from "@/components/site/page-hero";
 import { SectionHeader } from "@/components/site/section-header";
@@ -22,16 +23,18 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
-  const profile = await getProfile();
+  const [profile, settings] = await Promise.all([getProfile(), getSettings()]);
   const content = profile?.translations.find((item) => item.locale === raw);
-  return {
+  return buildPageMetadata({
+    locale: raw,
+    path: "/about",
     title: dict.about.label,
-    description: content?.shortBio,
-    alternates: {
-      canonical: `/${raw}/about`,
-      languages: { vi: "/vi/about", en: "/en/about", "x-default": "/vi/about" },
-    },
-  };
+    description: content?.shortBio || settings.seoDescription,
+    siteName: settings.siteName,
+    image: profile?.avatar
+      ? socialImage(profile.avatar.url, profile.avatar.alt || content?.fullName || settings.siteName, profile.avatar.width, profile.avatar.height)
+      : null,
+  });
 }
 
 function LevelDots({ level }: { level: number }) {
@@ -361,11 +364,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
       {/* Philosophy */}
       {philosophy.html && (
-        <section className="bg-primary py-20 text-primary-fg lg:py-28">
+        <section className="border-t-2 border-t-ruby bg-primary py-20 text-primary-fg lg:py-28">
           <div className="container-page">
             <div className="grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-3">
-                <p className="text-[10px] uppercase tracking-[0.18em] opacity-50">{dict.about.philosophyLabel}</p>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-ruby-on-dark">{dict.about.philosophyLabel}</p>
                 <p className="mt-3 text-xl tracking-tight">{dict.about.philosophyTitle}</p>
               </div>
               <div className="lg:col-span-9">
