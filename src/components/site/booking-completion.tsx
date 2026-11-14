@@ -12,6 +12,10 @@ export type BookingConfirmation = {
   service: string;
   startsAt: string;
   endsAt: string;
+  /** True when the confirmation email was actually sent for this booking. */
+  confirmationEmailSent?: boolean;
+  /** The address the confirmation email went to (when sent). */
+  email?: string;
 };
 
 /**
@@ -51,6 +55,12 @@ export function BookingCompletion({
         {messages.thankYouTitle}
       </h2>
       <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted">{messages.thankYouText}</p>
+
+      {confirmation.confirmationEmailSent && confirmation.email && (
+        <p className="mx-auto mt-4 max-w-md border-l-2 border-line bg-surface px-3 py-2 text-left text-[13px] leading-relaxed">
+          {messages.confirmEmailNotice.replace("{email}", confirmation.email)}
+        </p>
+      )}
 
       <div className="mt-8 flex justify-center">
         <GradientBadge text={confirmation.flowerName} fromColor={badgeFromColor} toColor={badgeToColor} />

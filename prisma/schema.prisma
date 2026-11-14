@@ -790,6 +790,14 @@ model Booking {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   cancelledAt      DateTime?
+  // Email confirmation (anti-ghost): SHA-256 of the opaque token emailed to
+  // the visitor; NULL = no confirmation email was ever sent for this booking
+  // (email not configured at creation time, or a legacy row). A pending
+  // booking with a past confirmationExpiresAt is released by
+  // releaseExpiredConfirmations() and becomes status "expired".
+  confirmationTokenHash String?   @unique
+  confirmationExpiresAt DateTime?
+  confirmedAt           DateTime?
 
   service        BookingService  @relation(fields: [serviceId], references: [id], onDelete: Restrict)
   slot           BookingSlot     @relation(fields: [slotId], references: [id], onDelete: Restrict)

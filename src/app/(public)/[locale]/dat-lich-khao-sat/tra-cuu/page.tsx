@@ -9,7 +9,7 @@ import { getSettings } from "@/data/settings";
 import { buildPageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/site/page-hero";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
-import { BookingCancelForm } from "@/components/site/booking-cancel-form";
+import { BookingLookupForm } from "@/components/site/booking-lookup-form";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +50,7 @@ export default async function BookingCancelPage({ params }: { params: Promise<{ 
 
       <section className="container-page pb-24">
         <div className="max-w-2xl">
-          <BookingCancelForm messages={booking} locale={locale} />
+          <BookingLookupForm messages={booking} locale={locale} />
         </div>
       </section>
     </>

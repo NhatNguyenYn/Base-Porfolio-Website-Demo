@@ -276,16 +276,20 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
     expect((await db().booking.findUniqueOrThrow({ where: { id: booking.id } })).status).toBe("confirmed");
   });
 
-  test("visitor cancels with code + email; slot is free again with no flower", async ({ browser }) => {
+  test("visitor looks up the booking first (info card + status), then cancels; slot is free again with no flower", async ({ browser }) => {
     const anon = await anonContext(browser);
     const visitor = await anon.newPage();
     await visitor.goto("/vi/dat-lich-khao-sat/tra-cuu", { waitUntil: "domcontentloaded" });
-    await waitForHydration(visitor, "#cancel-code");
-    await visitor.locator("#cancel-code").fill(referenceCode);
-    await visitor.locator("#cancel-email").fill(VISITOR_EMAIL);
-    await clickUntilVisible(visitor, "Tìm lịch hẹn", 'text=Huỷ lịch hẹn này');
-    await expect(visitor.locator("body")).toContainText(referenceCode, { timeout: 10_000 });
-    await clickUntilVisible(visitor, "Huỷ lịch hẹn này", 'text=Lịch hẹn đã được huỷ');
+    await waitForHydration(visitor, "#lookup-code");
+    await visitor.locator("#lookup-code").fill(referenceCode);
+    await visitor.locator("#lookup-email").fill(VISITOR_EMAIL);
+    await clickUntilVisible(visitor, "Tìm lịch hẹn", "text=Huỷ lịch hẹn này");
+    // The lookup shows the booking's own info card before any cancel.
+    await expect(visitor.locator("body")).toContainText(VISITOR_NAME, { timeout: 10_000 });
+    await expect(visitor.locator("body")).toContainText("Đã xác nhận");
+    await expect(visitor.locator("body")).toContainText(referenceCode);
+    await expect(visitor.locator("body")).toContainText(flowerName);
+    await clickUntilVisible(visitor, "Huỷ lịch hẹn này", "text=Lịch hẹn đã được huỷ");
     const booking = await db().booking.findUniqueOrThrow({ where: { referenceCode } });
     expect(booking.status).toBe("cancelled");
 
@@ -294,6 +298,16 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
     await expect(slotButton).toBeEnabled();
     await expect(visitor.locator("body")).toContainText("Còn trống");
     await expect(visitor.locator("body")).not.toContainText("đã đặt lịch này rồi");
+    await anon.close();
+  });
+
+  test("confirmation link with an unknown token shows the invalid state", async ({ browser }) => {
+    const anon = await anonContext(browser);
+    const visitor = await anon.newPage();
+    await visitor.goto("/vi/dat-lich-khao-sat/xac-nhan?token=does-not-exist", {
+      waitUntil: "domcontentloaded",
+    });
+    await expect(visitor.locator("body")).toContainText("không hợp lệ", { timeout: 10_000 });
     await anon.close();
   });
 });

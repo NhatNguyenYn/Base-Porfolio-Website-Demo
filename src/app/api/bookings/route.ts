@@ -17,6 +17,13 @@ import type { SurveyQuestionType } from "@/lib/survey-response-validation";
 import { fail, ok, readJson, requireSameOrigin, resolveLocale, withApi } from "@/lib/api";
 import { getDictionary } from "@/i18n";
 import { clientIp, hashedKey, rateLimit } from "@/lib/rate-limit";
+import { formatVnDateTime } from "@/lib/booking-time";
+import {
+  CONFIRMATION_TTL_MS,
+  issueConfirmationToken,
+  releaseExpiredConfirmations,
+} from "@/lib/booking-confirmation";
+import { confirmationEmailConfigured, sendBookingConfirmationEmail } from "@/lib/email";
 import type { Locale } from "@/i18n/config";
 
 export const dynamic = "force-dynamic";
@@ -127,7 +134,14 @@ export async function POST(request: Request) {
       const referenceCode = generateReferenceCode();
       try {
         const created = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-          const service = await tx.bookingService.findUnique({ where: { slug: data.serviceSlug } });
+          // Lazy expiry: a ghost booking whose confirmation lapsed must not
+          // hold this slot (or its flower) against a new visitor.
+          await releaseExpiredConfirmations(tx);
+
+          const service = await tx.bookingService.findUnique({
+            where: { slug: data.serviceSlug },
+            include: { translations: { where: { locale }, select: { name: true } } },
+          });
           if (!service || !service.active) {
             throw new BookingError("SERVICE_NOT_FOUND", "Service not found.");
           }
@@ -248,15 +262,37 @@ export async function POST(request: Request) {
           });
 
           return {
+            id: booking.id,
             referenceCode: booking.referenceCode,
             flowerCode: flower.code,
             flowerName: flowerNameFor(flower.code, locale),
             service: service.slug,
+            serviceName: service.translations[0]?.name ?? service.slug,
             startsAt: slot.startsAt.toISOString(),
             endsAt: slot.endsAt.toISOString(),
           };
         });
-        return ok(created);
+
+        // Email confirmation (anti-ghost), only when mail is configured. The
+        // booking already exists as `pending`; the token + expiry are
+        // attached here so a mail failure never rolls the booking back.
+        let confirmationEmailSent = false;
+        if (confirmationEmailConfigured()) {
+          const { token } = await issueConfirmationToken(prisma, created.id);
+          const baseUrl = (process.env.APP_URL ?? new URL(request.url).origin).replace(/\/$/, "");
+          confirmationEmailSent = await sendBookingConfirmationEmail({
+            to: (data.email ?? "").toLowerCase(),
+            locale,
+            name: data.name ?? "",
+            serviceName: created.serviceName,
+            startsAtLabel: formatVnDateTime(created.startsAt, locale),
+            referenceCode: created.referenceCode,
+            confirmUrl: `${baseUrl}${locale === "en" ? "/en" : "/vi"}/dat-lich-khao-sat/xac-nhan?token=${token}`,
+            lookupUrl: `${baseUrl}${locale === "en" ? "/en" : "/vi"}/dat-lich-khao-sat/tra-cuu`,
+            expiresHours: CONFIRMATION_TTL_MS / 3_600_000,
+          });
+        }
+        return ok({ ...created, confirmationEmailSent, email: (data.email ?? "").toLowerCase() });
       } catch (error) {
         if (error instanceof BookingError) {
           if (error.code === "SLOT_TAKEN") return fail("SLOT_TAKEN", error.message, 409);

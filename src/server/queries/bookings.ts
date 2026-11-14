@@ -1,6 +1,10 @@
 import "server-only";
 import type { Locale } from "@/i18n/config";
 import { FLOWERS, flowerNameFor } from "@/lib/flowers";
+import {
+  ACTIVE_BOOKING_STATUSES,
+  releaseExpiredConfirmations,
+} from "@/lib/booking-confirmation";
 import { prisma } from "../db";
 import { pickTranslation } from "./types";
 import type { PublicSurveyQuestion } from "@/data/surveys";
@@ -20,7 +24,7 @@ function isQuestionType(value: string): value is SurveyQuestionType {
   );
 }
 
-export const ACTIVE_BOOKING_STATUSES = ["pending", "confirmed"] as const;
+export { ACTIVE_BOOKING_STATUSES };
 
 /**
  * Theme + brand data for the public booking intro (15:14 photo reference).
@@ -234,6 +238,11 @@ export async function listAvailableSlots(
   to: Date,
   locale: Locale,
 ): Promise<PublicSlotDto[]> {
+  // Lazy expiry (no cron): a ghost booking whose confirmation lapsed must
+  // not keep its slot looking taken. This write is the documented exception
+  // to this query being read-only.
+  await releaseExpiredConfirmations(prisma);
+
   const service = await prisma.bookingService.findUnique({
     where: { slug: serviceSlug },
     select: { id: true, active: true },
