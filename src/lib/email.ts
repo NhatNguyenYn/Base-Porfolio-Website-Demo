@@ -67,21 +67,53 @@ export function bookingConfirmationMailContent(
         ``,
         `Thank you!`,
       ].join("\n");
+  // Email-safe layout: single-column tables + inline styles only (no
+  // external CSS, no webfonts). Same look as the site: cream background,
+  // dark ink text, editorial serif title, crimson accent button.
+  const accent = "#a4133c";
+  const ink = "#1c1c1e";
+  const muted = "#6b6b70";
+  const line = "#e6e2dc";
+  const card = "#ffffff";
+  const page = "#f7f4ef";
+  const esc = escapeHtml;
   const html = vi
-    ? `<p>Chào ${escapeHtml(mail.name)},</p>
-<p>Bạn đã đặt lịch <strong>${escapeHtml(mail.serviceName)}</strong> lúc <strong>${escapeHtml(mail.startsAtLabel)}</strong> (mã <strong>${escapeHtml(mail.referenceCode)}</strong>).</p>
-<p>Vui lòng bấm nút dưới đây để xác nhận bạn sẽ tham gia buổi tư vấn:</p>
-<p><a href="${escapeHtml(mail.confirmUrl)}" style="display:inline-block;padding:12px 24px;background:#a4133c;color:#fff;text-decoration:none;border-radius:8px;">Xác nhận tham gia</a></p>
-<p>Liên kết này hết hạn sau ${mail.expiresHours} giờ. Nếu bạn không xác nhận, lịch hẹn sẽ tự động huỷ để nhường khung giờ cho người khác.</p>
-<p>Bạn có thể tra cứu hoặc huỷ lịch tại: <a href="${escapeHtml(mail.lookupUrl)}">${escapeHtml(mail.lookupUrl)}</a></p>
-<p>Cảm ơn bạn!</p>`
-    : `<p>Hi ${escapeHtml(mail.name)},</p>
-<p>You booked <strong>${escapeHtml(mail.serviceName)}</strong> at <strong>${escapeHtml(mail.startsAtLabel)}</strong> (code <strong>${escapeHtml(mail.referenceCode)}</strong>).</p>
-<p>Please click the button below to confirm you will attend the session:</p>
-<p><a href="${escapeHtml(mail.confirmUrl)}" style="display:inline-block;padding:12px 24px;background:#a4133c;color:#fff;text-decoration:none;border-radius:8px;">Confirm attendance</a></p>
-<p>This link expires in ${mail.expiresHours} hours. If you do not confirm, the booking will be released automatically so someone else can take the slot.</p>
-<p>You can look up or cancel your booking at: <a href="${escapeHtml(mail.lookupUrl)}">${escapeHtml(mail.lookupUrl)}</a></p>
-<p>Thank you!</p>`;
+    ? `<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(subject)}</title></head><body style="margin:0;padding:0;background:${page};color:${ink};font-family:Georgia,'Times New Roman',serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${page};"><tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:${card};border:1px solid ${line};border-radius:12px;overflow:hidden;">
+<tr><td style="padding:28px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${muted};">Thu Hà Ruby &middot; Xác nhận lịch hẹn</td></tr>
+<tr><td style="padding:12px 32px 0;font-size:28px;line-height:1.25;font-weight:bold;">Xác nhận buổi tư vấn của bạn</td></tr>
+<tr><td style="padding:16px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;">Chào ${esc(mail.name)},<br><br>Bạn đã đặt lịch <strong>${esc(mail.serviceName)}</strong>. Vui lòng bấm nút dưới đây để xác nhận bạn sẽ tham gia buổi tư vấn.</td></tr>
+<tr><td style="padding:20px 32px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${page};border:1px solid ${line};border-radius:8px;"><tr><td style="padding:16px 20px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.9;">
+<strong>Dịch vụ:</strong> ${esc(mail.serviceName)}<br>
+<strong>Thời gian:</strong> ${esc(mail.startsAtLabel)}<br>
+<strong>Mã đặt lịch:</strong> ${esc(mail.referenceCode)}
+</td></tr></table></td></tr>
+<tr><td align="center" style="padding:28px 32px 0;"><a href="${esc(mail.confirmUrl)}" style="display:inline-block;padding:14px 32px;background:${accent};color:#ffffff;text-decoration:none;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;">Xác nhận tham gia</a></td></tr>
+<tr><td style="padding:20px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:${muted};">Liên kết này hết hạn sau ${mail.expiresHours} giờ. Nếu bạn không xác nhận, lịch hẹn sẽ tự động huỷ để nhường khung giờ cho người khác.</td></tr>
+<tr><td style="padding:12px 32px 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:${muted};">Bạn có thể tra cứu hoặc huỷ lịch tại: <a href="${esc(mail.lookupUrl)}" style="color:${accent};">${esc(mail.lookupUrl)}</a><br><br>Email này được gửi tự động, vui lòng không trả lời.</td></tr>
+</table>
+<p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:${muted};">Thu Hà Ruby</p>
+</td></tr></table>
+</body></html>`
+    : `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(subject)}</title></head><body style="margin:0;padding:0;background:${page};color:${ink};font-family:Georgia,'Times New Roman',serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${page};"><tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:${card};border:1px solid ${line};border-radius:12px;overflow:hidden;">
+<tr><td style="padding:28px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${muted};">Thu Hà Ruby &middot; Booking confirmation</td></tr>
+<tr><td style="padding:12px 32px 0;font-size:28px;line-height:1.25;font-weight:bold;">Confirm your consultation</td></tr>
+<tr><td style="padding:16px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;">Hi ${esc(mail.name)},<br><br>You booked <strong>${esc(mail.serviceName)}</strong>. Please click the button below to confirm you will attend the session.</td></tr>
+<tr><td style="padding:20px 32px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${page};border:1px solid ${line};border-radius:8px;"><tr><td style="padding:16px 20px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.9;">
+<strong>Service:</strong> ${esc(mail.serviceName)}<br>
+<strong>Time:</strong> ${esc(mail.startsAtLabel)}<br>
+<strong>Booking code:</strong> ${esc(mail.referenceCode)}
+</td></tr></table></td></tr>
+<tr><td align="center" style="padding:28px 32px 0;"><a href="${esc(mail.confirmUrl)}" style="display:inline-block;padding:14px 32px;background:${accent};color:#ffffff;text-decoration:none;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;">Confirm attendance</a></td></tr>
+<tr><td style="padding:20px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:${muted};">This link expires in ${mail.expiresHours} hours. If you do not confirm, the booking will be released automatically so someone else can take the slot.</td></tr>
+<tr><td style="padding:12px 32px 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:${muted};">You can look up or cancel your booking at: <a href="${esc(mail.lookupUrl)}" style="color:${accent};">${esc(mail.lookupUrl)}</a><br><br>This email was sent automatically, please do not reply.</td></tr>
+</table>
+<p style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:${muted};">Thu Hà Ruby</p>
+</td></tr></table>
+</body></html>`;
   return { subject, text, html };
 }
 
