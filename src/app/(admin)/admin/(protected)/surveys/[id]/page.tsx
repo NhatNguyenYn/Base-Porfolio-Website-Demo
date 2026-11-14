@@ -89,7 +89,7 @@ export default async function EditSurveyPage({
               Xem trước
             </Link>
             {survey.status === "published" && (
-              <Link href={`/vi/survey/${survey.slug}`} target="_blank" className="btn btn-outline btn-sm">
+              <Link href={`/vi/dat-lich-khao-sat`} target="_blank" className="btn btn-outline btn-sm">
                 Xem trang công khai
               </Link>
             )}

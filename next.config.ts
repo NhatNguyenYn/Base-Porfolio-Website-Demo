@@ -53,6 +53,42 @@ const nextConfig: NextConfig = {
     },
   },
   poweredByHeader: false,
+  // Old booking/survey routes redirect to the merged page (2026-11-14).
+  // Full-stack only: `output: "export"` does not support redirects, and the
+  // static demo stages these routes out instead (see pages.yml).
+  ...(isPagesExport
+    ? {}
+    : {
+        async redirects() {
+          return [
+            // Order matters: /booking/cancel must match before
+            // /booking/:serviceSlug, or "cancel" would be treated as a slug.
+            // The locale is constrained to vi|en: an open `:locale` would
+            // also match /api/booking/slots (locale="api") and break the
+            // slots API.
+            {
+              source: "/:locale(vi|en)/booking/cancel",
+              destination: "/:locale/dat-lich-khao-sat/tra-cuu",
+              permanent: true,
+            },
+            {
+              source: "/:locale(vi|en)/booking/:serviceSlug",
+              destination: "/:locale/dat-lich-khao-sat",
+              permanent: true,
+            },
+            {
+              source: "/:locale(vi|en)/booking",
+              destination: "/:locale/dat-lich-khao-sat",
+              permanent: true,
+            },
+            {
+              source: "/:locale(vi|en)/survey/:slug",
+              destination: "/:locale/dat-lich-khao-sat",
+              permanent: true,
+            },
+          ];
+        },
+      }),
   ...(isPagesExport
     ? {}
     : {

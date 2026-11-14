@@ -73,10 +73,10 @@ export function BookingCompletion({
       </dl>
 
       <div className="mt-8 flex flex-wrap justify-center gap-2">
-        <Link href={localeHref(locale, "/booking/cancel")} className="btn btn-outline btn-sm">
+        <Link href={localeHref(locale, "/dat-lich-khao-sat/tra-cuu")} className="btn btn-outline btn-sm">
           {messages.viewCancel}
         </Link>
-        <Link href={localeHref(locale, "/booking")} className="btn btn-primary btn-sm">
+        <Link href={localeHref(locale, "/dat-lich-khao-sat")} className="btn btn-primary btn-sm">
           {messages.bookAgain}
         </Link>
       </div>

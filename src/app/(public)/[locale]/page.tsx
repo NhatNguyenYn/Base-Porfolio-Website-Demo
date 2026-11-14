@@ -93,7 +93,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const projectsHref = localeHref(locale, "/projects");
   const artHref = localeHref(locale, "/art");
   const blogHref = localeHref(locale, "/blog");
-  const bookingHref = localeHref(locale, "/booking");
+  const bookingHref = localeHref(locale, "/dat-lich-khao-sat");
   const contactHref = localeHref(locale, "/contact");
 
   return (

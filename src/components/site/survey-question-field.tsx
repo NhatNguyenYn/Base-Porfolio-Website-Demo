@@ -245,7 +245,6 @@ export function SurveyQuestionField({
                   type="button"
                   disabled={disabled}
                   aria-pressed={selected}
-                  aria-invalid={Boolean(error)}
                   onClick={() => onChange({ value: choice, optionValues: [] })}
                   className={`min-h-11 flex-1 border px-4 py-2.5 text-[14px] font-medium sm:flex-none sm:px-6 ${
                     selected
@@ -304,7 +303,6 @@ function RatingScale({
               type="button"
               disabled={disabled}
               aria-pressed={selected}
-              aria-invalid={error}
               aria-label={String(n)}
               onClick={() => onChange({ value: String(n), optionValues: [] })}
               className={`grid h-11 min-w-11 shrink-0 place-items-center border px-2 text-[14px] font-medium tabular-nums ${

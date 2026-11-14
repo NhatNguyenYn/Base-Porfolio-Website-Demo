@@ -2,11 +2,13 @@
 //
 // Admin (reused storage-state login from e2e/admin.setup.ts — never logs in
 // per test) creates a survey in the UI, adds questions, sets the editorial-vn
-// theme, previews, publishes; an anonymous visitor submits on desktop and on
-// mobile 390px; admin sees the response and exports CSV; the survey is then
-// closed and new submissions are rejected. A second, Prisma-seeded survey
-// with two sections exercises the multi-step wizard (Next/Back keeps
-// answers). Fixtures are cleaned up afterwards; the dev DB ends as seeded.
+// theme, previews, publishes; anonymous visitors submit through the public
+// responses API (the standalone survey page was merged into
+// /vi/dat-lich-khao-sat on 2026-11-14, so there is no public wizard page to
+// drive in a browser any more — the wizard UI itself is covered by the
+// booking intake flow in e2e/booking.spec.ts); admin sees the responses and
+// exports CSV; the survey is then closed and new submissions are rejected.
+// Fixtures are cleaned up afterwards; the dev DB ends as seeded.
 import { test, expect, type Browser, type Page } from "@playwright/test";
 import { db } from "./helpers";
 
@@ -16,7 +18,6 @@ const SLUG = `e2e-survey-${RUN}`;
 const TITLE_VI = "Khảo sát E2E — phản hồi dịch vụ";
 const TITLE_EN = "E2E survey — service feedback";
 const ANSWER_TEXT = "Câu trả lời E2E — tiếng Việt có dấu";
-const SECTIONED_SLUG = `e2e-survey-sections-${RUN}`;
 
 // Distinct visitor identities: the public submit endpoint rate-limits at
 // 5 submits / 10 min per client IP, and every anonymous browser context
@@ -88,71 +89,6 @@ async function clickUntilVisible(
   throw new Error(`button ${String(name)} did not reveal ${selector}`);
 }
 
-async function seedSectionedSurvey() {
-  const survey = await db().survey.create({
-    data: {
-      slug: SECTIONED_SLUG,
-      status: "published",
-      publishedAt: new Date(Date.now() - 60_000),
-      themePreset: "minimal",
-      translations: {
-        create: [
-          {
-            locale: "vi",
-            title: "Khảo sát E2E nhiều bước",
-            subtitle: "",
-            description: "",
-            introduction: "",
-            completionMessage: "Cảm ơn bạn đã hoàn thành khảo sát nhiều bước.",
-            privacyNotice: "",
-          },
-          {
-            locale: "en",
-            title: "E2E multi-step survey",
-            subtitle: "",
-            description: "",
-            introduction: "",
-            completionMessage: "Thank you for completing the multi-step survey.",
-            privacyNotice: "",
-          },
-        ],
-      },
-    },
-    select: { id: true },
-  });
-  for (let s = 0; s < 2; s++) {
-    const section = await db().surveySection.create({
-      data: {
-        surveyId: survey.id,
-        order: s,
-        translations: {
-          create: [
-            { locale: "vi", title: `Nhóm ${s + 1}`, description: "" },
-            { locale: "en", title: `Section ${s + 1}`, description: "" },
-          ],
-        },
-      },
-      select: { id: true },
-    });
-    await db().surveyQuestion.create({
-      data: {
-        surveyId: survey.id,
-        sectionId: section.id,
-        type: "short_text",
-        order: 0,
-        required: s === 0,
-        translations: {
-          create: [
-            { locale: "vi", title: `Câu hỏi nhóm ${s + 1}`, description: "", placeholder: "" },
-            { locale: "en", title: `Section ${s + 1} question`, description: "", placeholder: "" },
-          ],
-        },
-      },
-    });
-  }
-  return survey.id;
-}
-
 /** Ordered cleanup: responses first (their answers reference questions with
  * onDelete Restrict, so a plain survey.deleteMany would fail once a survey
  * has answers), then the surveys themselves. */
@@ -172,11 +108,9 @@ test.describe.serial("survey lifecycle (admin UI → public → admin)", () => {
   test.use({ storageState: STATE });
 
   let surveyId = "";
-  let publicUrl = "";
 
   test.beforeAll(async () => {
     await cleanupE2ESurveys();
-    await seedSectionedSurvey();
   });
 
   test.afterAll(async () => {
@@ -240,73 +174,56 @@ test.describe.serial("survey lifecycle (admin UI → public → admin)", () => {
     await previewPage.close();
 
     const href = await page.getByRole("link", { name: "Xem trang công khai" }).getAttribute("href");
-    expect(href).toContain(`/vi/survey/${SLUG}`);
-    publicUrl = href ?? "";
+    // The standalone survey page was merged into /vi/dat-lich-khao-sat on
+    // 2026-11-14: the survey is now answered inside the booking flow there.
+    expect(href).toContain("/vi/dat-lich-khao-sat");
   });
 
-  test("anonymous visitor submits on desktop and sees the completion screen", async ({ browser }) => {
+  // The standalone survey page was merged into /vi/dat-lich-khao-sat on
+  // 2026-11-14, so anonymous submissions are exercised through the public
+  // responses API directly (the wizard UI is covered by the booking intake
+  // flow in e2e/booking.spec.ts). Two distinct visitor identities keep the
+  // per-IP rate limit out of the way and give the CSV test its 2 responses.
+  async function submitResponse(browser: Browser, answerText: string, rating: string) {
+    const questions = await db().surveyQuestion.findMany({
+      where: { surveyId },
+      orderBy: { order: "asc" },
+      select: { id: true, type: true },
+    });
+    expect(questions.length).toBe(2);
     const anon = await anonContext(browser);
-    const visitor = await anon.newPage();
-    await visitor.goto(publicUrl, { waitUntil: "domcontentloaded" });
-    await waitForHydration(visitor, 'button:has-text("Bắt đầu khảo sát")');
-    await expect(visitor.locator("body")).toContainText(TITLE_VI);
-    await expect(visitor.locator("body")).toContainText("Không thu thập thông tin cá nhân");
-    await clickUntilVisible(visitor, "Bắt đầu khảo sát", 'input[type="text"]');
-    await visitor.locator('input[type="text"]').first().fill(ANSWER_TEXT);
-    await visitor.getByRole("button", { name: "4", exact: true }).click();
-    // Anti-bot timing gate (route step 3): the server returns a SILENT fake
-    // 200 and stores NOTHING when a submit lands < 1800 ms after the wizard
-    // mounted. A real human is slower than that; wait so the response is
-    // really stored. (Without this the test passes — the UI shows success —
-    // but the DB count in the CSV test below is short by one.)
-    await visitor.waitForTimeout(2100);
-    await visitor.getByRole("button", { name: "Gửi câu trả lời" }).click();
-    await expect(visitor.locator("body")).toContainText("ĐÃ GHI NHẬN PHIẾU", { timeout: 15_000 });
-    await expect(visitor.locator("body")).toContainText("Cảm ơn bạn đã hoàn thành khảo sát E2E.");
+    const res = await anon.request.post(`/api/surveys/${SLUG}/responses`, {
+      data: {
+        locale: "vi",
+        website: "",
+        // Anti-bot timing gate: the server silently drops submits that land
+        // < 1800 ms after the form mounted. A real human is slower; backdate
+        // startedAt so the response is really stored.
+        startedAt: Date.now() - 5000,
+        answers: [
+          { questionId: questions[0].id, type: questions[0].type, value: answerText, optionValues: [] },
+          { questionId: questions[1].id, type: questions[1].type, value: rating, optionValues: [] },
+        ],
+      },
+    });
+    expect(res.status()).toBe(200);
     await anon.close();
+  }
+
+  test("anonymous visitors submit through the public responses API", async ({ browser }) => {
+    await submitResponse(browser, ANSWER_TEXT, "4");
+    await submitResponse(browser, ANSWER_TEXT + " (mobile)", "5");
+    expect(await db().surveyResponse.count({ where: { surveyId } })).toBe(2);
   });
 
-  test("anonymous visitor submits on mobile 390px without horizontal overflow", async ({
-    browser,
-  }) => {
+  test("merged booking page has no horizontal overflow on mobile 390px", async ({ browser }) => {
     const mobile = await anonContext(browser, { width: 390, height: 844 });
     const visitor = await mobile.newPage();
-    await visitor.goto(publicUrl, { waitUntil: "domcontentloaded" });
-    await waitForHydration(visitor, 'button:has-text("Bắt đầu khảo sát")');
-    await clickUntilVisible(visitor, "Bắt đầu khảo sát", 'input[type="text"]');
-    await visitor.locator('input[type="text"]').first().fill(ANSWER_TEXT + " (mobile)");
-    await visitor.getByRole("button", { name: "5", exact: true }).click();
-    // Anti-bot timing gate (route step 3): the server returns a SILENT fake
-    // 200 and stores NOTHING when a submit lands < 1800 ms after the wizard
-    // mounted. A real human is slower than that; wait so the response is
-    // really stored. (Without this the test passes — the UI shows success —
-    // but the DB count in the CSV test below is short by one.)
-    await visitor.waitForTimeout(2100);
-    await visitor.getByRole("button", { name: "Gửi câu trả lời" }).click();
-    await expect(visitor.locator("body")).toContainText("ĐÃ GHI NHẬN PHIẾU", { timeout: 15_000 });
+    await visitor.goto("/vi/dat-lich-khao-sat", { waitUntil: "domcontentloaded" });
+    await visitor.waitForTimeout(1500);
     const overflow = await visitor.evaluate(() => document.documentElement.scrollWidth - 390);
     expect(overflow).toBeLessThanOrEqual(1);
     await mobile.close();
-  });
-
-  test("multi-step wizard: Next validates, Back keeps the answer", async ({ browser }) => {
-    const anon = await anonContext(browser);
-    const visitor = await anon.newPage();
-    await visitor.goto(`/vi/survey/${SECTIONED_SLUG}`, { waitUntil: "domcontentloaded" });
-    await waitForHydration(visitor, 'button:has-text("Bắt đầu khảo sát")');
-    await clickUntilVisible(visitor, "Bắt đầu khảo sát", 'input[type="text"]');
-    // Step 1 is required: Next without an answer must not advance.
-    await visitor.getByRole("button", { name: "Tiếp theo" }).click();
-    await expect(visitor.locator("body")).toContainText("Câu hỏi nhóm 1");
-    await visitor.locator('input[type="text"]').first().fill("Đáp án bước 1");
-    await visitor.getByRole("button", { name: "Tiếp theo" }).click();
-    await expect(visitor.locator("body")).toContainText("Câu hỏi nhóm 2");
-    await visitor.getByRole("button", { name: "Quay lại" }).click();
-    await expect(visitor.locator('input[type="text"]').first()).toHaveValue("Đáp án bước 1");
-    await visitor.getByRole("button", { name: "Tiếp theo" }).click();
-    await visitor.getByRole("button", { name: "Gửi câu trả lời" }).click();
-    await expect(visitor.locator("body")).toContainText("ĐÃ GHI NHẬN PHIẾU", { timeout: 15_000 });
-    await anon.close();
   });
 
   test("admin sees the responses and exports CSV (BOM + VI + answer)", async ({ page }) => {
@@ -345,7 +262,7 @@ test.describe.serial("survey lifecycle (admin UI → public → admin)", () => {
     await anon.close();
   });
 
-  test("closing the survey rejects new submissions (UI card + API 409)", async ({
+  test("closing the survey rejects new submissions (API 409)", async ({
     page,
     browser,
   }) => {
@@ -357,10 +274,10 @@ test.describe.serial("survey lifecycle (admin UI → public → admin)", () => {
       timeout: 15_000,
     });
 
+    // No public-page check any more: the standalone survey page was merged
+    // into /vi/dat-lich-khao-sat, and this spec's survey is not that page's
+    // intake survey, so closing it does not change the booking page.
     const anon = await anonContext(browser);
-    const visitor = await anon.newPage();
-    await visitor.goto(publicUrl, { waitUntil: "domcontentloaded" });
-    await expect(visitor.locator("body")).toContainText("Khảo sát đã kết thúc", { timeout: 10_000 });
     const apiRes = await anon.request.post(`/api/surveys/${SLUG}/responses`, {
       data: { locale: "vi", answers: [] },
     });

@@ -13,7 +13,7 @@ export const navPaths: Record<NavKey, string> = {
   projects: "/projects",
   art: "/art",
   blog: "/blog",
-  booking: "/booking",
+  booking: "/dat-lich-khao-sat",
   contact: "/contact",
 };
 

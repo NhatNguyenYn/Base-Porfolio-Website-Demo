@@ -113,9 +113,26 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
   let serviceId = "";
   let referenceCode = "";
   let flowerName = "";
+  // Services deactivated for this suite (restored in afterAll).
+  let deactivatedServiceIds: string[] = [];
 
   test.beforeAll(async () => {
     await cleanupE2EBookingFixtures();
+    // The merged page /vi/dat-lich-khao-sat shows the FIRST active service,
+    // so the E2E service must be the only active one while this suite runs.
+    // Deactivate the others (e.g. the seeded demo service) and restore them
+    // afterwards; the dev DB ends as seeded.
+    const others = await db().bookingService.findMany({
+      where: { active: true },
+      select: { id: true },
+    });
+    deactivatedServiceIds = others.map((row) => row.id);
+    if (deactivatedServiceIds.length > 0) {
+      await db().bookingService.updateMany({
+        where: { id: { in: deactivatedServiceIds } },
+        data: { active: false },
+      });
+    }
     const survey = await db().survey.create({
       data: {
         slug: `e2e-intake-${RUN}`,
@@ -166,6 +183,12 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
 
   test.afterAll(async () => {
     await cleanupE2EBookingFixtures();
+    if (deactivatedServiceIds.length > 0) {
+      await db().bookingService.updateMany({
+        where: { id: { in: deactivatedServiceIds } },
+        data: { active: true },
+      });
+    }
     await db().$disconnect();
   });
 
@@ -195,10 +218,10 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
   test("visitor books: slot → contact → intake survey → sees code + flower", async ({ browser }) => {
     const anon = await anonContext(browser);
     const visitor = await anon.newPage();
-    await visitor.goto("/vi/booking", { waitUntil: "domcontentloaded" });
-    // The service card link is labelled "Chọn dịch vụ này", not the service name.
-    await visitor.getByRole("link", { name: "Chọn dịch vụ này" }).click();
-    await expect(visitor).toHaveURL(new RegExp(`/vi/booking/${SERVICE_SLUG}`), { timeout: 10_000 });
+    // The merged page /vi/dat-lich-khao-sat IS the flow for the (single)
+    // service: no service list, no "Chọn dịch vụ này" step — the slot
+    // picker is directly on the page.
+    await visitor.goto("/vi/dat-lich-khao-sat", { waitUntil: "domcontentloaded" });
     await waitForHydration(visitor, 'button:has-text("09:00")');
     // Selecting a slot only marks it (aria-pressed); a separate "Tiếp tục"
     // advances to the contact form.
@@ -228,7 +251,7 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
   test("public calendar shows only the flower for the booked slot", async ({ browser }) => {
     const anon = await anonContext(browser);
     const visitor = await anon.newPage();
-    await visitor.goto(`/vi/booking/${SERVICE_SLUG}`, { waitUntil: "domcontentloaded" });
+    await visitor.goto("/vi/dat-lich-khao-sat", { waitUntil: "domcontentloaded" });
     const slotButton = visitor.getByRole("button", { name: /09:00/ });
     await expect(slotButton).toBeDisabled();
     await expect(visitor.locator("body")).toContainText(
@@ -256,7 +279,7 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
   test("visitor cancels with code + email; slot is free again with no flower", async ({ browser }) => {
     const anon = await anonContext(browser);
     const visitor = await anon.newPage();
-    await visitor.goto("/vi/booking/cancel", { waitUntil: "domcontentloaded" });
+    await visitor.goto("/vi/dat-lich-khao-sat/tra-cuu", { waitUntil: "domcontentloaded" });
     await waitForHydration(visitor, "#cancel-code");
     await visitor.locator("#cancel-code").fill(referenceCode);
     await visitor.locator("#cancel-email").fill(VISITOR_EMAIL);
@@ -266,7 +289,7 @@ test.describe.serial("booking flow (admin UI → visitor → admin → cancel)",
     const booking = await db().booking.findUniqueOrThrow({ where: { referenceCode } });
     expect(booking.status).toBe("cancelled");
 
-    await visitor.goto(`/vi/booking/${SERVICE_SLUG}`, { waitUntil: "domcontentloaded" });
+    await visitor.goto("/vi/dat-lich-khao-sat", { waitUntil: "domcontentloaded" });
     const slotButton = visitor.getByRole("button", { name: /09:00/ });
     await expect(slotButton).toBeEnabled();
     await expect(visitor.locator("body")).toContainText("Còn trống");

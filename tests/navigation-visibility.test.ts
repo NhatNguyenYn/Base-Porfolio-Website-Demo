@@ -36,7 +36,7 @@ describe("navigation visibility", () => {
         localeHref(locale, "/about"),
         localeHref(locale, "/art"),
         localeHref(locale, "/blog"),
-        localeHref(locale, "/booking"),
+        localeHref(locale, "/dat-lich-khao-sat"),
         localeHref(locale, "/contact"),
       ]);
     }
@@ -73,8 +73,8 @@ describe("navigation visibility", () => {
   });
 
   it("marks booking pages active under the booking entry", () => {
-    expect(navPaths.booking).toBe("/booking");
-    expect(matchesNav("booking", "/booking")).toBe(true);
-    expect(matchesNav("booking", "/booking/tu-van-1-1")).toBe(true);
+    expect(navPaths.booking).toBe("/dat-lich-khao-sat");
+    expect(matchesNav("booking", "/dat-lich-khao-sat")).toBe(true);
+    expect(matchesNav("booking", "/dat-lich-khao-sat/tra-cuu")).toBe(true);
   });
 });
