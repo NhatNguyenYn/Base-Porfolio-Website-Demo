@@ -12,21 +12,21 @@ const prisma = new PrismaClient();
 
 const DEMO = {
   profile: {
-    email: "hello@example.com",
-    phone: "+84 000 000 000",
-    location: "Ho Chi Minh City, Vietnam",
+    email: "nguyenthuhaxinchao@gmail.com",
+    phone: "0938.667.617",
+    location: "Hạnh Thông, TP. HCM",
   },
   vi: {
-    fullName: "Tên Của Bạn",
-    title: "Nhà thiết kế sản phẩm & kỹ sư phần mềm",
+    fullName: "NCS. ThS. Nguyễn Thu Hà",
+    title: "Giảng viên · Nghệ sĩ thư pháp",
     shortBio:
-      "Tôi xây dựng sản phẩm số ở giao điểm giữa kỹ thuật, thiết kế và nghệ thuật — nơi một hệ thống tốt cũng có thể là một trải nghiệm đẹp.",
+      "NCS. ThS. Nguyễn Thu Hà — giảng viên cơ hữu Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp với thương hiệu Thu Hà Ruby. Ba bằng thạc sĩ Quản trị kinh doanh, Luật kinh tế và Tâm lý học; thỉnh giảng tại ĐH Kinh tế TP. HCM, ĐH Mở và Hutech.",
   },
   en: {
-    fullName: "Your Name",
-    title: "Product designer & software engineer",
+    fullName: "NCS. ThS. Nguyen Thu Ha",
+    title: "Lecturer · Calligraphy artist",
     shortBio:
-      "I build digital products where engineering, design and art meet — where a well-built system can also be a beautiful experience.",
+      "Nguyen Thu Ha — lecturer at the Ho Chi Minh City Cadre Academy and calligraphy artist behind the Thu Ha Ruby brand. She holds three master's degrees in Business Administration, Economic Law and Psychology, and teaches at UEH, Ho Chi Minh City Open University and HUTECH.",
   },
 };
 
@@ -1033,9 +1033,9 @@ async function main() {
       interests: INTERESTS_VI,
       philosophy: PHILOSOPHY_VI,
       futureGoals: GOALS_VI,
-      seoTitle: "Portfolio của Tên Của Bạn — thiết kế sản phẩm, kỹ thuật & nghệ thuật số",
+      seoTitle: "Thu Hà Ruby — NCS. ThS. Nguyễn Thu Hà | Giảng viên & Nghệ sĩ thư pháp",
       seoDescription:
-        "Portfolio cá nhân: hệ thống thiết kế, sản phẩm dữ liệu, tranh kỹ thuật số và bài viết về nghề làm sản phẩm.",
+        "Trang cá nhân của NCS. ThS. Nguyễn Thu Hà (Thu Hà Ruby) — giảng viên Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp Việt và Anh.",
     },
     {
       locale: "en",
@@ -1046,9 +1046,9 @@ async function main() {
       interests: INTERESTS_EN,
       philosophy: PHILOSOPHY_EN,
       futureGoals: GOALS_EN,
-      seoTitle: "Portfolio of Your Name — product design, engineering & digital art",
+      seoTitle: "Thu Ha Ruby — NCS. ThS. Nguyen Thu Ha | Lecturer & Calligraphy artist",
       seoDescription:
-        "Personal portfolio: design systems, data products, digital art and essays on the craft of building products.",
+        "Personal page of NCS. ThS. Nguyen Thu Ha (Thu Ha Ruby) — lecturer at the Ho Chi Minh City Cadre Academy, Vietnamese and English calligraphy artist.",
     },
   ];
 
@@ -1099,7 +1099,7 @@ async function main() {
     { platform: "facebook", url: "", label: "Facebook", visible: false },
     { platform: "instagram", url: "", label: "Instagram", visible: false },
     { platform: "behance", url: "", label: "Behance", visible: false },
-    { platform: "email", url: "mailto:hello@example.com", label: "Email", visible: true },
+    { platform: "email", url: "mailto:nguyenthuhaxinchao@gmail.com", label: "Email", visible: true },
   ];
 
   for (const [index, link] of socialLinks.entries()) {
@@ -1496,16 +1496,16 @@ async function main() {
 
   // -------------------------------------------------------------- settings
   const settings: Record<string, string> = {
-    siteName: "Portfolio Studio",
-    siteTagline: "Product design, engineering and digital art",
-    seoTitle: "Portfolio Studio — Product designer & software engineer",
+    siteName: "Thu Hà Ruby",
+    siteTagline: "Giảng viên · Nghệ sĩ thư pháp",
+    seoTitle: "Thu Hà Ruby — NCS. ThS. Nguyễn Thu Hà | Giảng viên & Nghệ sĩ thư pháp",
     seoDescription:
-      "A personal portfolio with selected technology work, a digital art gallery and essays on design, engineering and creative practice.",
-    seoKeywords: "portfolio, design system, software engineering, digital art, writing, next.js",
+      "Trang cá nhân của NCS. ThS. Nguyễn Thu Hà (Thu Hà Ruby) — giảng viên Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp Việt và Anh.",
+    seoKeywords: "Thu Hà Ruby, thư pháp, Nguyễn Thu Hà, calligraphy, giảng viên",
     footerText:
-      "Một không gian cá nhân cho công việc thiết kế, kỹ thuật và nghệ thuật. Toàn bộ nội dung có thể thay thế từ trang quản trị.",
+      "Trang cá nhân của Thu Hà Ruby — giảng viên & nghệ sĩ thư pháp.",
     footerTextEn:
-      "A personal space for design, engineering and art work. Every piece of content can be replaced from the admin dashboard.",
+      "Personal page of Thu Ha Ruby — lecturer & calligraphy artist.",
     contactEmail: DEMO.profile.email,
     contactPhone: DEMO.profile.phone,
     contactLocation: DEMO.profile.location,
@@ -1602,7 +1602,7 @@ async function main() {
       themePreset: "editorial-vn",
       layout: "editorial",
       progressStyle: "steps",
-      brandName: "Portfolio Studio",
+      brandName: "Thu Hà Ruby",
       estimatedMinutes: 5,
       isBookingIntake: true,
       publishedAt: existingDemoSurvey?.publishedAt ?? new Date(),
@@ -1613,7 +1613,7 @@ async function main() {
       themePreset: "editorial-vn",
       layout: "editorial",
       progressStyle: "steps",
-      brandName: "Portfolio Studio",
+      brandName: "Thu Hà Ruby",
       estimatedMinutes: 5,
       isBookingIntake: true,
       publishedAt: new Date(),

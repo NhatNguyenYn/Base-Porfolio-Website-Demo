@@ -1,9 +1,9 @@
 export const vi = {
   meta: {
-    homeTitle: "Nhà thiết kế & kỹ sư sản phẩm",
+    homeTitle: "Giảng viên · Nghệ sĩ thư pháp",
     defaultDescription:
-      "Portfolio cá nhân: sản phẩm công nghệ, góc nghệ thuật số và những bài viết về thiết kế, kỹ thuật và sáng tạo.",
-    demoNotice: "Nội dung minh hoạ — có thể thay thế toàn bộ trong trang quản trị.",
+      "Trang cá nhân của Thu Hà Ruby — giảng viên Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp Việt và Anh.",
+    demoNotice: "Trang cá nhân của Thu Hà Ruby — giảng viên & nghệ sĩ thư pháp.",
   },
   nav: {
     home: "Trang chủ",
@@ -84,19 +84,19 @@ export const vi = {
     scroll: "Cuộn xuống",
     focusLabel: "Đang tập trung",
     basedIn: "Đang sống tại",
-    availability: "Sẵn sàng cho dự án mới",
-    unavailable: "Hiện không nhận dự án mới",
+    availability: "Sẵn sàng cho một buổi trò chuyện",
+    unavailable: "Hiện không nhận thêm lịch hẹn mới",
     aboutLabel: "Câu chuyện của tôi",
-    aboutTitle: "Một người làm sản phẩm, và cũng là người vẽ.",
+    aboutTitle: "Một người thầy, và cũng là một nghệ sĩ thư pháp.",
     aboutCta: "Đọc câu chuyện của tôi",
     projectsLabel: "Dự án chọn lọc",
     projectsTitle: "Sản phẩm tôi đã xây dựng",
     projectsCta: "Xem tất cả dự án",
     artLabel: "Góc nghệ thuật số",
-    artTitle: "Nơi những ý tưởng không cần chữ nghĩa",
+    artTitle: "Nơi mỗi nét chữ đều có điều muốn nói",
     artCta: "Mở góc nghệ thuật số",
     blogLabel: "Bài viết mới",
-    blogTitle: "Ghi chép về kỹ thuật, thiết kế và sáng tạo",
+    blogTitle: "Ghi chép về thư pháp, thiền và sống chậm",
     blogCta: "Xem tất cả bài viết",
     bookingLabel: "Đặt lịch tư vấn",
     bookingTitle: "Trò chuyện 1-1, có chuẩn bị trước.",
@@ -106,7 +106,7 @@ export const vi = {
     contactLabel: "Kết nối",
     contactTitle: "Cùng tạo ra một điều gì đó tử tế.",
     contactText:
-      "Tôi nhận tư vấn, thiết kế và phát triển sản phẩm số — từ bản sắc thương hiệu đến hệ thống vận hành phía sau.",
+      "Tôi nhận tư vấn, giảng dạy và đồng hành cùng bạn — từ lớp thư pháp, buổi triển lãm đến những dự án cộng đồng.",
     stats: {
       projects: "dự án đã hoàn thành",
       artworks: "tác phẩm trong góc nghệ thuật số",
@@ -175,9 +175,9 @@ export const vi = {
   },
   art: {
     label: "Góc nghệ thuật số",
-    title: "Triển lãm kỹ thuật số về màu sắc, ánh sáng và hình khối",
+    title: "Mỗi nét chữ, một lời nhắc sống",
     description:
-      "Một không gian yên tĩnh để ngắm nhìn các tác phẩm kỹ thuật số gốc — nghiên cứu trừu tượng, hình học đô thị và những đường cong mềm — được nhóm theo bộ sưu tập. Nhấn vào tác phẩm để xem toàn màn hình, dùng phím mũi tên để chuyển tác phẩm.",
+      "Thư pháp Việt, thư pháp Anh, lời dạy của Thiền sư Thích Nhất Hạnh và những thẻ khẳng định Là Chính Mình — tất cả ở đây, trong một không gian yên tĩnh để ngắm nhìn. Nhấn vào tác phẩm để xem toàn màn hình, dùng phím mũi tên để chuyển tác phẩm.",
     allWorks: "Tất cả tác phẩm",
     collections: "Bộ sưu tập",
     allCollections: "Mọi bộ sưu tập",
@@ -192,9 +192,9 @@ export const vi = {
   },
   blog: {
     label: "Bài viết",
-    title: "Ghi chép & chia sẻ về thiết kế, kỹ thuật và sáng tạo",
+    title: "Ghi chép & chia sẻ về thư pháp, thiền và sống chậm",
     description:
-      "Những bài viết về kỹ thuật phần mềm, trí tuệ nhân tạo, phát triển bản thân và quá trình sáng tạo — những điều tôi học được khi xây dựng sản phẩm, và cách tôi nhìn nhận công việc.",
+      "Những bài viết về thư pháp, thiền, giá trị sống và hành trình học suốt đời — những điều tôi học được khi viết, khi dạy và khi sống chậm lại.",
     featured: "Bài viết nổi bật",
     latest: "Bài viết mới nhất",
     allCategories: "Mọi danh mục",
@@ -210,9 +210,9 @@ export const vi = {
   },
   contact: {
     label: "Liên hệ",
-    title: "Hãy kể tôi nghe về dự án của bạn",
+    title: "Hãy kể tôi nghe câu chuyện của bạn",
     description:
-      "Tôi luôn mở với những cuộc trò chuyện thú vị — một sản phẩm mới, một bộ nhận diện, hay chỉ là một ý tưởng còn dang dở. Bạn có thể viết bằng tiếng Việt hoặc tiếng Anh; mọi tin nhắn đều được tôi đọc và trả lời trực tiếp.",
+      "Tôi luôn mở lòng với những cuộc trò chuyện thú vị — một lớp học mới, một buổi triển lãm, hay chỉ là một tách trà và vài câu chuyện. Bạn có thể viết bằng tiếng Việt hoặc tiếng Anh; mọi tin nhắn đều được tôi đọc và trả lời trực tiếp.",
     emailLabel: "Email",
     locationLabel: "Địa điểm",
     socialLabel: "Mạng xã hội",
@@ -225,7 +225,7 @@ export const vi = {
     subject: "Tiêu đề",
     subjectPlaceholder: "Chúng ta nên nói về điều gì?",
     message: "Nội dung",
-    messagePlaceholder: "Vài dòng về dự án, thời gian và ngân sách dự kiến…",
+    messagePlaceholder: "Vài dòng về lớp học, buổi trò chuyện hay điều bạn muốn hỏi…",
     submit: "Gửi tin nhắn",
     sending: "Đang gửi…",
     success: "Cảm ơn bạn! Tin nhắn đã được lưu lại, tôi sẽ phản hồi sớm nhất có thể.",
@@ -237,7 +237,7 @@ export const vi = {
     privacy: "Thông tin của bạn chỉ được dùng để phản hồi liên hệ này.",
   },
   footer: {
-    tagline: "Nhà thiết kế sản phẩm, kỹ sư phần mềm và người vẽ.",
+    tagline: "Giảng viên · Nghệ sĩ thư pháp — Thu Hà Ruby",
     explore: "Khám phá",
     elsewhere: "Ở nơi khác",
     contact: "Liên hệ",

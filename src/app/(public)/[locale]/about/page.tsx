@@ -248,8 +248,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <div className="grid gap-3 border-t border-line py-7 sm:grid-cols-[9rem_1fr] sm:gap-8">
                   <div>
                     <p className="text-[11px] tabular-nums tracking-[0.06em] text-muted">
-                      {formatMonthYear(item.start, locale)} —{" "}
-                      {item.isCurrent ? dict.about.present : item.end ? formatMonthYear(item.end, locale) : "—"}
+                      {item.isCurrent
+                        ? `${formatMonthYear(item.start, locale)} — ${dict.about.present}`
+                        : item.end && item.start.getFullYear() === item.end.getFullYear()
+                          ? String(item.start.getFullYear())
+                          : `${formatMonthYear(item.start, locale)} — ${item.end ? formatMonthYear(item.end, locale) : "—"}`}
                     </p>
                     <p className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-accent">{item.type}</p>
                   </div>
@@ -277,7 +280,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <article className="flex h-full flex-col border border-line bg-surface p-6">
                   <div className="flex items-baseline justify-between gap-4">
                     <p className="text-[10px] uppercase tracking-[0.16em] text-muted">
-                      {item.startYear} — {item.isCurrent ? dict.about.present : item.endYear ?? "—"}
+                      {item.isCurrent
+                        ? `${item.startYear} — ${dict.about.present}`
+                        : item.endYear && item.startYear === item.endYear
+                          ? String(item.startYear)
+                          : `${item.startYear} — ${item.endYear ?? "—"}`}
                     </p>
                     <span className="text-[10px] tabular-nums text-muted">{String(index + 1).padStart(2, "0")}</span>
                   </div>

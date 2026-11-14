@@ -2,10 +2,10 @@ import type { Dictionary } from "./vi";
 
 export const en: Dictionary = {
   meta: {
-    homeTitle: "Product designer & software engineer",
+    homeTitle: "Lecturer · Calligraphy artist",
     defaultDescription:
-      "A personal portfolio: technology products, a digital art corner and writing about design, engineering and creativity.",
-    demoNotice: "Sample content — replace everything from the admin dashboard.",
+      "Personal page of Thu Ha Ruby — lecturer at the Ho Chi Minh City Cadre Academy, Vietnamese and English calligraphy artist.",
+    demoNotice: "Personal page of Thu Ha Ruby — lecturer & calligraphy artist.",
   },
   nav: {
     home: "Home",
@@ -86,19 +86,19 @@ export const en: Dictionary = {
     scroll: "Scroll",
     focusLabel: "Currently focused on",
     basedIn: "Based in",
-    availability: "Available for new work",
-    unavailable: "Not taking new work",
+    availability: "Ready for a conversation",
+    unavailable: "Not taking new appointments right now",
     aboutLabel: "My Story",
-    aboutTitle: "A product person, and also someone who draws.",
+    aboutTitle: "A teacher, and also a calligraphy artist.",
     aboutCta: "Read my story",
     projectsLabel: "Selected work",
     projectsTitle: "Products I have built",
     projectsCta: "View all projects",
     artLabel: "Digital art corner",
-    artTitle: "Where ideas do not need words",
+    artTitle: "Where every stroke has something to say",
     artCta: "Enter the digital art corner",
     blogLabel: "Latest writing",
-    blogTitle: "Notes on engineering, design and making",
+    blogTitle: "Notes on calligraphy, meditation and slow living",
     blogCta: "View all articles",
     bookingLabel: "Book a consultation",
     bookingTitle: "A 1-on-1 conversation, prepared in advance.",
@@ -108,7 +108,7 @@ export const en: Dictionary = {
     contactLabel: "Get in touch",
     contactTitle: "Let's make something thoughtful.",
     contactText:
-      "I take on consulting, design and product development — from brand identity to the systems running behind it.",
+      "I offer consultations, teaching and companionship — from calligraphy classes and exhibitions to community projects.",
     stats: {
       projects: "projects shipped",
       artworks: "artworks in the digital art corner",
@@ -177,9 +177,9 @@ export const en: Dictionary = {
   },
   art: {
     label: "Digital Art Corner",
-    title: "A digital exhibition of colour, light and form",
+    title: "Every stroke, a reminder to live",
     description:
-      "A quiet space to look at original digital artworks — abstract studies, urban geometry and soft shapes — grouped into collections. Open a work for the fullscreen view, then move through the room with the arrow keys.",
+      "Vietnamese calligraphy, English calligraphy, the teachings of Zen Master Thich Nhat Hanh and the Being Your True Self affirmation cards — all here, in a quiet space to look at. Open a work for the fullscreen view, then move through the room with the arrow keys.",
     allWorks: "All works",
     collections: "Collections",
     allCollections: "All collections",
@@ -194,9 +194,9 @@ export const en: Dictionary = {
   },
   blog: {
     label: "Writing",
-    title: "Notes & essays on design, engineering and making",
+    title: "Notes & sharing on calligraphy, meditation and slow living",
     description:
-      "Essays on software engineering, artificial intelligence, personal growth and the creative process — what I learned building products, and how I think about the work.",
+      "Essays on calligraphy, meditation, values for living and a lifelong learning journey — what I learned writing, teaching and slowing down.",
     featured: "Featured article",
     latest: "Latest articles",
     allCategories: "All categories",
@@ -211,9 +211,9 @@ export const en: Dictionary = {
   },
   contact: {
     label: "Contact",
-    title: "Tell me about what you are building",
+    title: "Tell me your story",
     description:
-      "I am always open to good conversations — a new product, an identity, or an idea that is still half-formed. Write in Vietnamese or English; every message is read and answered personally.",
+      "I am always open to good conversations — a new class, an exhibition, or just a cup of tea and a few stories. Write in Vietnamese or English; every message is read and answered personally.",
     emailLabel: "Email",
     locationLabel: "Location",
     socialLabel: "Social",
@@ -226,7 +226,7 @@ export const en: Dictionary = {
     subject: "Subject",
     subjectPlaceholder: "What should we talk about?",
     message: "Message",
-    messagePlaceholder: "A few lines about the project, timeline and budget…",
+    messagePlaceholder: "A few lines about a class, a conversation, or anything you would like to ask…",
     submit: "Send message",
     sending: "Sending…",
     success: "Thank you. Your message is saved and I will reply as soon as I can.",
@@ -238,7 +238,7 @@ export const en: Dictionary = {
     privacy: "Your details are only used to reply to this message.",
   },
   footer: {
-    tagline: "Product designer, software engineer and artist.",
+    tagline: "Lecturer · Calligraphy artist — Thu Ha Ruby",
     explore: "Explore",
     elsewhere: "Elsewhere",
     contact: "Contact",

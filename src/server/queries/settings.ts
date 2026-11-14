@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS: Omit<SiteSettings, "logo" | "favicon"> = {
   seoTitle: "Thu Hà Ruby — NCS. ThS. Nguyễn Thu Hà | Giảng viên & Nghệ sĩ thư pháp",
   seoDescription:
     "Trang cá nhân của NCS. ThS. Nguyễn Thu Hà (Thu Hà Ruby) — giảng viên Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp Việt và Anh.",
-  seoKeywords: "portfolio, product design, software engineering, digital art, writing",
+  seoKeywords: "Thu Hà Ruby, thư pháp, Nguyễn Thu Hà, calligraphy, giảng viên",
   footerText: "Trang cá nhân của Thu Hà Ruby — giảng viên & nghệ sĩ thư pháp.",
   footerTextEn: "Thu Hà Ruby's personal site — lecturer & calligraphy artist.",
   contactEmail: "nguyenthuhaxinchao@gmail.com",

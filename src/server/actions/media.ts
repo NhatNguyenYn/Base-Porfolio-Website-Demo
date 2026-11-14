@@ -91,29 +91,47 @@ export async function deleteMediaAction(formData: FormData): Promise<void> {
   const id = getString(formData, "id");
   if (!id) return;
 
-  const media = await prisma.media.findUnique({
-    where: { id },
-    include: {
-      _count: {
-        select: {
-          artworkImages: true,
-          artworkThumbnails: true,
-          projectThumbnails: true,
-          projectImages: true,
-          articleCovers: true,
-          collectionCovers: true,
-          profileAvatars: true,
-        },
-      },
-    },
-  });
-
+  const media = await prisma.media.findUnique({ where: { id } });
   if (!media) redirect("/admin/media?error=not_found");
 
-  const inUse = Object.values(media._count).reduce((total, count) => total + count, 0);
+  // The in-use guard counts only references from live rows. References from
+  // soft-deleted rows (deletedAt set) do not block deletion: covers and
+  // thumbnails are cleared by ON DELETE SET NULL and project-image links
+  // cascade. The one exception is Artwork.imageMediaId, which is required
+  // with ON DELETE RESTRICT, so trashed artworks using this file as their
+  // image are purged below (there is no restore path for soft-deleted
+  // artworks, and their translations and tags cascade).
+  const [
+    artworkImages,
+    artworkThumbnails,
+    projectThumbnails,
+    projectImages,
+    articleCovers,
+    collectionCovers,
+    profileAvatars,
+  ] = await prisma.$transaction([
+    prisma.artwork.count({ where: { imageMediaId: id, deletedAt: null } }),
+    prisma.artwork.count({ where: { thumbnailMediaId: id, deletedAt: null } }),
+    prisma.project.count({ where: { thumbnailMediaId: id, deletedAt: null } }),
+    prisma.projectImage.count({ where: { mediaId: id, project: { deletedAt: null } } }),
+    prisma.article.count({ where: { coverMediaId: id, deletedAt: null } }),
+    prisma.artworkCollection.count({ where: { coverMediaId: id, deletedAt: null } }),
+    prisma.profile.count({ where: { avatarMediaId: id } }),
+  ]);
+
+  const inUse =
+    artworkImages +
+    artworkThumbnails +
+    projectThumbnails +
+    projectImages +
+    articleCovers +
+    collectionCovers +
+    profileAvatars;
   if (inUse > 0) {
     redirect("/admin/media?error=in_use");
   }
+
+  await prisma.artwork.deleteMany({ where: { imageMediaId: id, deletedAt: { not: null } } });
 
   await prisma.media.delete({ where: { id } });
   await getStorage().delete(media.storageKey).catch(() => undefined);

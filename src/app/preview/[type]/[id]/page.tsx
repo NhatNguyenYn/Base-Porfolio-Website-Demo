@@ -269,7 +269,7 @@ export default async function PreviewPage({
       <div className="sticky top-0 z-50 border-b border-line bg-primary text-primary-fg">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2.5 text-[11px]">
           <span className="flex items-center gap-2 font-medium">
-            <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1 text-[9px]">PS</span>
+            <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1 text-[9px]">TH</span>
             Bản xem trước
           </span>
           <span className="opacity-60">·</span>
