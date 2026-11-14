@@ -160,7 +160,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <>
             {dict.about.title.split(",")[0]}
             {dict.about.title.includes(",") && (
-              <span className="serif-accent text-slateblue">, {dict.about.title.split(",").slice(1).join(",").trim()}</span>
+              <span className="serif-accent text-accent">, {dict.about.title.split(",").slice(1).join(",").trim()}</span>
             )}
           </>
         }
