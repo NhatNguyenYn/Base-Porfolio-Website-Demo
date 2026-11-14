@@ -82,8 +82,7 @@ jobs:
           mv src/app/preview /tmp/pages-staging/preview
           mv src/app/media /tmp/pages-staging/media
           mv "src/app/(public)/[locale]/[...rest]" /tmp/pages-staging/rest
-          mv "src/app/(public)/[locale]/survey" /tmp/pages-staging/public-survey
-          mv "src/app/(public)/[locale]/booking" /tmp/pages-staging/public-booking
+          mv "src/app/(public)/[locale]/dat-lich-khao-sat" /tmp/pages-staging/public-dat-lich-khao-sat
           # The contact form posts to a Server Action, which cannot exist in a
           # static export — swap in the mailto variant for this build.
           mv src/components/site/contact-section.tsx /tmp/pages-staging/contact-section.tsx
@@ -111,8 +110,7 @@ jobs:
           mv /tmp/pages-staging/preview src/app/preview || true
           mv /tmp/pages-staging/media src/app/media || true
           mv /tmp/pages-staging/rest "src/app/(public)/[locale]/[...rest]" || true
-          mv /tmp/pages-staging/public-survey "src/app/(public)/[locale]/survey" || true
-          mv /tmp/pages-staging/public-booking "src/app/(public)/[locale]/booking" || true
+          mv /tmp/pages-staging/public-dat-lich-khao-sat "src/app/(public)/[locale]/dat-lich-khao-sat" || true
           mv /tmp/pages-staging/contact-section.tsx src/components/site/contact-section.tsx || true
 
       - name: Setup Pages
