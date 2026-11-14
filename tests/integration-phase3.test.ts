@@ -116,7 +116,11 @@ describe("sitemap", () => {
       "x-default": expect.stringContaining("/vi/blog/article-vi-only"),
     });
 
-    const bilingual = entries.filter((entry) => entry.url.endsWith("/projects/project-public"));
+    // Projects are off: no project URL may appear in the sitemap at all.
+    const projectUrls = entries.filter((entry) => entry.url.includes("/projects/"));
+    expect(projectUrls).toHaveLength(0);
+
+    const bilingual = entries.filter((entry) => entry.url.endsWith("/art/art-public"));
     expect(bilingual).toHaveLength(2);
     const languages = bilingual[0].alternates?.languages ?? {};
     expect(Object.keys(languages).sort()).toEqual(["en", "vi", "x-default"]);

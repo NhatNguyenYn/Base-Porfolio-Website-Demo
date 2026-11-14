@@ -6,7 +6,6 @@ import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getSettings } from "@/data/settings";
 import { getProfile } from "@/data/profile";
 import { getSocialLinks } from "@/data/social";
-import { getFeaturedProjects, listProjects } from "@/data/projects";
 import { listArtworks } from "@/data/artworks";
 import { getFeaturedArticle, listArticles } from "@/data/articles";
 import { DEFAULT_SETTINGS } from "@/data/settings";
@@ -18,7 +17,6 @@ import { Reveal } from "@/components/ui/reveal";
 import { AnimatedHeadline } from "@/components/ui/animated-headline";
 import { Parallax } from "@/components/ui/parallax";
 import { SectionHeader } from "@/components/site/section-header";
-import { ProjectCard } from "@/components/site/project-card";
 import { ArticleCard } from "@/components/site/article-card";
 import { ArtGallery } from "@/components/site/art-gallery";
 import { SocialLinks } from "@/components/site/social-links";
@@ -53,20 +51,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(locale);
 
   // Sections load independently: a failing gallery must never blank the page.
-  const [settings, profile, socials, featuredProjects, projectStats, artworks, featuredArticle, latestArticles] =
-    await Promise.all([
+  const [settings, profile, socials, artworks, featuredArticle, latestArticles] = await Promise.all([
       loadSection("settings", getSettings, { ...DEFAULT_SETTINGS, logo: null, favicon: null }),
       loadSection("profile", getProfile, null),
       loadSection("socials", getSocialLinks, []),
-      loadSection("featured-projects", () => getFeaturedProjects(locale, 4), []),
-      loadSection("project-stats", () => listProjects(locale, { perPage: 1 }), {
-        items: [],
-        total: 0,
-        technologies: [],
-        categories: [],
-        page: 1,
-        pages: 1,
-      }),
       loadSection("artworks", () => listArtworks(locale), []),
       loadSection("featured-article", () => getFeaturedArticle(locale), null),
       loadSection("articles", () => listArticles(locale, { perPage: 4 }), {
@@ -90,7 +78,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const interests = parseInterests(content?.interests ?? "").slice(0, 3);
   const listArticlesExcludeFeatured = latestArticles.items.filter((item) => item.id !== featuredArticle?.id).slice(0, 3);
 
-  const projectsHref = localeHref(locale, "/projects");
   const artHref = localeHref(locale, "/art");
   const blogHref = localeHref(locale, "/blog");
   const bookingHref = localeHref(locale, "/dat-lich-khao-sat");
@@ -130,13 +117,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <p className="mt-8 max-w-lg text-[0.975rem] leading-[1.8] text-muted">{intro}</p>
 
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link href={projectsHref} className="btn btn-primary">
-                  {dict.home.exploreWork}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </Link>
-                <Link href={bookingHref} className="btn btn-outline">
+                <Link href={bookingHref} className="btn btn-primary">
                   {dict.home.bookingCta}
                 </Link>
               </div>
@@ -198,9 +179,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
         {/* Editorial stat rail */}
         <Reveal delay={160}>
-          <dl className="mt-16 grid grid-cols-2 gap-y-8 border-y border-line py-7 sm:grid-cols-4">
+          <dl className="mt-16 grid grid-cols-2 gap-y-8 border-y border-line py-7 sm:grid-cols-3">
             {[
-              { label: dict.home.stats.projects, value: projectStats.total },
               { label: dict.home.stats.artworks, value: artworks.length },
               { label: dict.home.stats.articles, value: latestArticles.total },
               { label: dict.home.focusLabel, value: null, text: content?.title ?? title },
@@ -255,38 +235,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      {/* ------------------------------------------------------------ Projects */}
-      <section className="container-page py-16 lg:py-24">
-        <SectionHeader
-          index="02"
-          label={dict.home.projectsLabel}
-          title={dict.home.projectsTitle}
-          action={{ href: projectsHref, label: dict.home.projectsCta }}
-        />
-        {featuredProjects.length > 0 ? (
-          <div className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-12">
-            {featuredProjects.map((project, index) => {
-              const span = index % 4 === 0 || index % 4 === 3 ? "md:col-span-7" : "md:col-span-5";
-              return (
-                <Reveal key={project.id} className={span} delay={(index % 2) * 80}>
-                  <ProjectCard
-                    project={project}
-                    href={`${projectsHref}/${project.slug}`}
-                    dict={dict}
-                    index={index}
-                    size={index % 4 === 0 ? "large" : "default"}
-                  />
-                </Reveal>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-10 border border-dashed border-line p-10 text-center">
-            <p className="text-sm text-muted">{dict.projects.emptyTitle}</p>
-          </div>
-        )}
-      </section>
-
       {/* ---------------------------------------------------------- Art gallery */}
       <section className="relative overflow-hidden bg-[#0e131a] py-16 text-white lg:py-24">
         <span
@@ -295,7 +243,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         />
         <div className="container-page relative">
           <SectionHeader
-            index="03"
+            index="02"
             label={dict.home.artLabel}
             title={dict.home.artTitle}
             action={{ href: artHref, label: dict.home.artCta }}
@@ -339,7 +287,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* --------------------------------------------------------------- Blog */}
       <section className="container-page py-16 lg:py-24">
         <SectionHeader
-          index="04"
+          index="03"
           label={dict.home.blogLabel}
           title={dict.home.blogTitle}
           action={{ href: blogHref, label: dict.home.blogCta }}
@@ -388,7 +336,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* ------------------------------------------------------------ Booking */}
       <section className="container-page py-16 lg:py-24">
         <SectionHeader
-          index="05"
+          index="04"
           label={dict.home.bookingLabel}
           title={dict.home.bookingTitle}
           action={{ href: bookingHref, label: dict.home.bookingCta }}

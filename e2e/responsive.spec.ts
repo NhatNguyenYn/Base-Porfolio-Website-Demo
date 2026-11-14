@@ -19,7 +19,7 @@ const VIEWPORTS = [
   { width: 375, height: 667 },
 ] as const;
 
-const PAGES = ["/vi", `/vi/projects/${SEED.project}`] as const;
+const PAGES = ["/vi", `/vi/art/${SEED.artwork}`] as const;
 
 async function unclippedOffenders(page: any): Promise<string[]> {
   return page.evaluate(() => {

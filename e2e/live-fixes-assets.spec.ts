@@ -46,7 +46,7 @@ async function expectImagesLoaded(page: any, label: string) {
 }
 
 test.describe("export under subpath: images carry the basePath", () => {
-  for (const path of ["/vi", "/vi/blog", "/vi/projects", "/vi/art"]) {
+  for (const path of ["/vi", "/vi/blog", "/vi/art"]) {
     test(`images load on ${path}`, async ({ page }) => {
       const res = await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
       expect(res?.status(), `${path} status`).toBe(200);
@@ -57,7 +57,6 @@ test.describe("export under subpath: images carry the basePath", () => {
 
   for (const path of [
     "/vi/blog/design-systems-start-before-components",
-    "/vi/projects/signal-api",
     "/vi/art/after-the-rain",
   ]) {
     test(`cover image loads on ${path}`, async ({ page }) => {
@@ -127,16 +126,12 @@ test.describe("export under subpath: blog detail category chip + sitemap", () =>
     expect(tagHref).toContain("?tag=");
   });
 
-  test("sitemap lists the projects/category pages with the subpath", async ({ request }) => {
+  test("sitemap excludes Projects pages and lists blog categories with the subpath", async ({ request }) => {
     const res = await request.get(`${BASE}/sitemap.xml`);
     expect(res.status()).toBe(200);
     const xml = await res.text();
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    const projectCats = locs.filter((url) => url.includes("/projects/category/"));
-    expect(projectCats).toHaveLength(6); // 3 categories x 2 locales
-    for (const url of projectCats) {
-      expect(url.startsWith(`https://nhatnguyenyn.github.io${SUBPATH}/`)).toBeTruthy();
-    }
+    expect(locs.some((url) => url.includes("/projects"))).toBe(false);
     expect(locs.some((url) => url.includes("/blog/category/"))).toBeTruthy();
   });
 });

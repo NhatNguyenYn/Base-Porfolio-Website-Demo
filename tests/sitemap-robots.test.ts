@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const db = vi.hoisted(() => ({
-  project: { findMany: vi.fn() },
   artwork: { findMany: vi.fn() },
   article: { findMany: vi.fn() },
   artworkCollection: { findMany: vi.fn() },
@@ -18,21 +17,11 @@ const settingsDate = new Date("2026-02-01T00:00:00.000Z");
 const articleDate = new Date("2026-03-01T00:00:00.000Z");
 const categoryArticleDate = new Date("2026-03-05T00:00:00.000Z");
 const categoryDate = new Date("2026-01-20T00:00:00.000Z");
-const projectDate = new Date("2026-02-15T00:00:00.000Z");
 const artDate = new Date("2026-01-15T00:00:00.000Z");
 
 describe("sitemap", () => {
   beforeEach(() => {
     vi.stubEnv("APP_URL", "https://portfolio.example");
-    db.project.findMany.mockResolvedValue([
-      {
-        slug: "case-study",
-        updatedAt: projectDate,
-        category: "platform",
-        translations: [{ locale: "vi" }],
-        thumbnailMedia: { url: "/media/project.jpg" },
-      },
-    ]);
     db.artwork.findMany.mockResolvedValue([
       {
         slug: "ink-piece",
@@ -74,15 +63,17 @@ describe("sitemap", () => {
 
     expect(urls).toContain("https://portfolio.example/vi");
     expect(urls).toContain("https://portfolio.example/en/blog");
-    expect(urls).toContain("https://portfolio.example/vi/projects");
+    // Projects section is turned off: no /projects URL may be advertised.
+    expect(urls.some((url) => /\/projects/.test(url))).toBe(false);
     expect(urls.some((url) => /\/admin|\/preview|\/api/.test(url))).toBe(false);
   });
 
-  it("keeps hidden Projects pages discoverable", async () => {
+  it("excludes Projects pages now that the section is turned off", async () => {
     const entries = await sitemap();
-    const project = entries.find((entry) => entry.url === "https://portfolio.example/vi/projects/case-study");
-    expect(project).toBeDefined();
-    expect(project?.images).toEqual(["https://portfolio.example/media/project.jpg"]);
+    const urls = entries.map((entry) => entry.url);
+    expect(urls).not.toContain("https://portfolio.example/vi/projects");
+    expect(urls).not.toContain("https://portfolio.example/vi/projects/case-study");
+    expect(urls).not.toContain("https://portfolio.example/vi/projects/category/platform");
   });
 
   it("advertises only translations that exist", async () => {
@@ -100,7 +91,6 @@ describe("sitemap", () => {
     const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
 
     expect(byUrl.get("https://portfolio.example/vi/blog")?.lastModified).toEqual(articleDate);
-    expect(byUrl.get("https://portfolio.example/vi/projects")?.lastModified).toEqual(projectDate);
     expect(byUrl.get("https://portfolio.example/vi/about")?.lastModified).toEqual(settingsDate);
     expect(byUrl.get("https://portfolio.example/vi/blog/bai-viet")?.lastModified).toEqual(articleDate);
   });
@@ -132,9 +122,6 @@ describe("sitemap", () => {
     const artwork = entries.find((entry) => entry.url === "https://portfolio.example/vi/art/svg-piece");
     expect(artwork).toBeDefined();
     expect(artwork).not.toHaveProperty("images");
-    // Raster images are still advertised.
-    const project = entries.find((entry) => entry.url === "https://portfolio.example/vi/projects/case-study");
-    expect(project?.images).toEqual(["https://portfolio.example/media/project.jpg"]);
   });
 
   it("advertises blog category landing pages in both locales", async () => {
@@ -155,21 +142,11 @@ describe("sitemap", () => {
     });
   });
 
-  it("advertises project category landing pages in both locales", async () => {
+  it("excludes project category landing pages now that Projects is off", async () => {
     const entries = await sitemap();
-    const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
-
-    const vi = byUrl.get("https://portfolio.example/vi/projects/category/platform");
-    const en = byUrl.get("https://portfolio.example/en/projects/category/platform");
-    expect(vi).toBeDefined();
-    expect(en).toBeDefined();
-    // Freshness follows the newest project in the category.
-    expect(vi?.lastModified).toEqual(projectDate);
-    expect(vi?.alternates?.languages).toEqual({
-      vi: "https://portfolio.example/vi/projects/category/platform",
-      en: "https://portfolio.example/en/projects/category/platform",
-      "x-default": "https://portfolio.example/vi/projects/category/platform",
-    });
+    const urls = entries.map((entry) => entry.url);
+    expect(urls).not.toContain("https://portfolio.example/vi/projects/category/platform");
+    expect(urls).not.toContain("https://portfolio.example/en/projects/category/platform");
   });
 
   it("emits trailing-slash page URLs on the Pages export", async () => {
@@ -177,7 +154,6 @@ describe("sitemap", () => {
     const entries = await sitemap();
     const urls = entries.map((entry) => entry.url);
     expect(urls).toContain("https://portfolio.example/vi/blog/");
-    expect(urls).toContain("https://portfolio.example/vi/projects/case-study/");
     expect(urls.every((url) => url.endsWith("/"))).toBe(true);
   });
 });

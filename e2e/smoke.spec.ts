@@ -14,8 +14,6 @@ test.describe("public pages render (vi + en)", () => {
   const pages: Array<{ path: string; marker: string }> = [
     { path: "/vi", marker: "" },
     { path: "/vi/about", marker: "" },
-    { path: "/vi/projects", marker: "" },
-    { path: `/vi/projects/${SEED.project}`, marker: "" },
     { path: "/vi/art", marker: "" },
     { path: `/vi/art/${SEED.artwork}`, marker: "" },
     { path: `/vi/art/collections/${SEED.collection}`, marker: "" },
@@ -37,7 +35,7 @@ test.describe("public pages render (vi + en)", () => {
   }
 
   test("en locale renders the same set of pages", async ({ page }) => {
-    for (const p of ["/en", "/en/about", "/en/projects", "/en/blog", "/en/contact"]) {
+    for (const p of ["/en", "/en/about", "/en/blog", "/en/contact"]) {
       const res = await page.goto(p, { waitUntil: "domcontentloaded" });
       expect(res?.status(), `${p} status`).toBe(200);
       await expect(page.locator("main").first()).toBeVisible();
@@ -68,11 +66,20 @@ test.describe("locale switcher", () => {
   });
 
   test("en -> vi keeps the same page", async ({ page }) => {
-    await page.goto("/en/projects", { waitUntil: "domcontentloaded" });
+    await page.goto("/en/blog", { waitUntil: "domcontentloaded" });
     const viLink = page.locator('a[hrefLang="vi"]').first();
-    await expect(viLink).toHaveAttribute("href", "/vi/projects");
+    await expect(viLink).toHaveAttribute("href", "/vi/blog");
     await viLink.click();
-    await expect(page).toHaveURL(`${BASE}/vi/projects`);
+    await expect(page).toHaveURL(`${BASE}/vi/blog`);
+  });
+
+  test("projects URLs redirect to the homepage (section turned off)", async ({ page }) => {
+    await page.goto("/vi/projects", { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(`${BASE}/vi`);
+    await page.goto(`/vi/projects/${SEED.project}`, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(`${BASE}/vi`);
+    await page.goto("/en/projects/category/platform", { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(`${BASE}/en`);
   });
 });
 
@@ -81,7 +88,7 @@ test.describe("sitemap + robots", () => {
     const { html } = await liveHtml(request, "/sitemap.xml");
     expect(html).toContain("<urlset");
     expect(html).toContain(`/vi/blog/${SEED.articleDefault}`);
-    expect(html).toContain(`/vi/projects/${SEED.project}`);
+    expect(html).not.toContain("/projects");
     expect(html).not.toContain("/admin");
   });
 
@@ -117,12 +124,11 @@ test.describe("SEO spot-checks in live HTML", () => {
     expect(html).toContain("BlogPosting");
   });
 
-  test("project page has title, canonical, hreflang, JSON-LD", async ({ request }) => {
-    const { html } = await liveHtml(request, `/vi/projects/${SEED.project}`);
-    expect(html).toMatch(/<title>[^<]+<\/title>/);
-    expect(html).toContain('rel="canonical"');
-    expect(html).toContain('hrefLang="vi"');
-    expect(html).toContain('type="application/ld+json"');
+  test("projects URLs redirect to the homepage (no project JSON-LD)", async ({ request }) => {
+    const res = await request.get(`/vi/projects/${SEED.project}`, { maxRedirects: 0 });
+    expect(res.status()).toBeGreaterThanOrEqual(300);
+    expect(res.status()).toBeLessThan(400);
+    expect(res.headers().location ?? "").toContain("/vi");
   });
 
   test("editorial template article (if one is seeded) renders editorial markup", async ({ request }) => {

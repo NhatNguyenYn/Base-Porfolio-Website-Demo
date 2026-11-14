@@ -17,17 +17,7 @@ function newest(rows: { updatedAt: Date }[], fallback: Date): Date {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [projects, artworks, articles, collections, categories, settings] = await Promise.all([
-    prisma.project.findMany({
-      where: { visibility: "public", deletedAt: null, publishedAt: { not: null } },
-      select: {
-        slug: true,
-        updatedAt: true,
-        category: true,
-        translations: { select: { locale: true } },
-        thumbnailMedia: { select: { url: true } },
-      },
-    }),
+  const [artworks, articles, collections, categories, settings] = await Promise.all([
     prisma.artwork.findMany({
       where: { visibility: "public", deletedAt: null },
       select: {
@@ -72,16 +62,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const settingsUpdatedAt = settings._max.updatedAt ?? new Date(0);
   const blogUpdatedAt = newest(articles, settingsUpdatedAt);
-  const projectsUpdatedAt = newest(projects, settingsUpdatedAt);
   const artUpdatedAt = newest([...artworks, ...collections], settingsUpdatedAt);
   const homeUpdatedAt = new Date(
-    Math.max(blogUpdatedAt.getTime(), projectsUpdatedAt.getTime(), artUpdatedAt.getTime(), settingsUpdatedAt.getTime()),
+    Math.max(blogUpdatedAt.getTime(), artUpdatedAt.getTime(), settingsUpdatedAt.getTime()),
   );
 
   const staticPaths: { path: string; lastModified: Date; changeFrequency: "weekly" | "monthly"; priority: number }[] = [
     { path: "", lastModified: homeUpdatedAt, changeFrequency: "weekly", priority: 1 },
     { path: "/about", lastModified: settingsUpdatedAt, changeFrequency: "monthly", priority: 0.8 },
-    { path: "/projects", lastModified: projectsUpdatedAt, changeFrequency: "monthly", priority: 0.8 },
     { path: "/art", lastModified: artUpdatedAt, changeFrequency: "monthly", priority: 0.8 },
     { path: "/blog", lastModified: blogUpdatedAt, changeFrequency: "weekly", priority: 0.8 },
     { path: "/contact", lastModified: settingsUpdatedAt, changeFrequency: "monthly", priority: 0.7 },
@@ -108,30 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Project categories are a plain string field (no category table): derive
-  // them from the public, published projects already fetched above, instead
-  // of a second query — same set generateStaticParams in
-  // projects/category/[slug]/page.tsx prerenders. Freshness follows the
-  // newest project in the category. Project categories have no translations
-  // table, but the category pages render in both locales (labels come from
-  // the dictionary).
-  const projectCategoryRows = (() => {
-    const newestBySlug = new Map<string, Date>();
-    for (const row of projects) {
-      if (!row.category) continue;
-      const prev = newestBySlug.get(row.category);
-      if (!prev || row.updatedAt > prev) newestBySlug.set(row.category, row.updatedAt);
-    }
-    return [...newestBySlug.entries()].map(([slug, updatedAt]) => ({
-      slug,
-      updatedAt,
-      translations: locales.map((locale) => ({ locale })),
-      imageUrl: null as string | null,
-    }));
-  })();
-
   const detailGroups = [
-    { path: "/projects", rows: projects.map((row) => ({ ...row, imageUrl: row.thumbnailMedia?.url ?? null })) },
     { path: "/art", rows: artworks.map((row) => ({ ...row, imageUrl: row.imageMedia?.url ?? null })) },
     { path: "/blog", rows: articles.map((row) => ({ ...row, imageUrl: row.coverMedia?.url ?? null })) },
     { path: "/art/collections", rows: collections.map((row) => ({ ...row, imageUrl: null })) },
@@ -145,10 +110,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         translations: row.translations,
         imageUrl: null,
       })),
-    },
-    {
-      path: "/projects/category",
-      rows: projectCategoryRows,
     },
   ];
 

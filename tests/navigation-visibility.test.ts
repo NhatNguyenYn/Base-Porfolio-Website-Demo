@@ -23,19 +23,19 @@ describe("navigation visibility", () => {
   it("hides Projects by default and keeps every other entry", () => {
     expect(navVisibility.projects).toBe(false);
     expect(navVisibility.booking).toBe(true);
-    expect(visibleNavKeys()).toEqual(["home", "about", "art", "blog", "booking", "contact"]);
+    expect(visibleNavKeys()).toEqual(["home", "about", "blog", "art", "booking", "contact"]);
   });
 
   it("omits Projects from both locales without changing other entries", () => {
     for (const locale of ["vi", "en"] as const) {
       const items = siteNav(locale, labels);
-      expect(items.map((item) => item.key)).toEqual(["home", "about", "art", "blog", "booking", "contact"]);
+      expect(items.map((item) => item.key)).toEqual(["home", "about", "blog", "art", "booking", "contact"]);
       expect(items.some((item) => item.key === "projects")).toBe(false);
       expect(items.map((item) => item.href)).toEqual([
         localeHref(locale, ""),
         localeHref(locale, "/about"),
-        localeHref(locale, "/art"),
         localeHref(locale, "/blog"),
+        localeHref(locale, "/art"),
         localeHref(locale, "/dat-lich-khao-sat"),
         localeHref(locale, "/contact"),
       ]);
@@ -52,7 +52,7 @@ describe("navigation visibility", () => {
   it("can show a hidden entry again by flipping only the config", () => {
     const visible: NavVisibility = { ...navVisibility, projects: true };
     const keys = siteNav("vi", labels, visible).map((item) => item.key);
-    expect(keys).toEqual(["home", "about", "projects", "art", "blog", "booking", "contact"]);
+    expect(keys).toEqual(["home", "about", "projects", "blog", "art", "booking", "contact"]);
     expect(siteNav("vi", labels, visible)[2].href).toBe("/vi/projects");
   });
 

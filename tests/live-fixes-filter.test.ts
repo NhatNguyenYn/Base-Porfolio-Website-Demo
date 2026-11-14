@@ -54,33 +54,31 @@ describe("category filter — static-export chip contract (source guard)", () =>
     expect(body.indexOf("`${blogHref}/category/${slug}`")).toBeLessThan(body.indexOf("new URLSearchParams"));
   });
 
-  it("projects list chips point at the prerendered category pages in export mode", () => {
+  it("projects list page redirects to the homepage (section turned off)", () => {
     const src = readPage("projects/page.tsx");
-    const fn = src.slice(src.indexOf("const categoryHref"));
-    const body = fn.slice(0, fn.indexOf("};") + 2);
-    expect(body).toContain('if (process.env.PAGES_EXPORT === "1")');
-    expect(body).toContain("`${basePath}/category/${slug}`");
-    expect(body.indexOf("`${basePath}/category/${slug}`")).toBeLessThan(body.indexOf("new URLSearchParams"));
+    expect(src).toContain('redirect(localeHref(locale, "/"))');
+    expect(src).not.toContain("listProjects");
+    expect(src).not.toContain("generateStaticParams");
   });
 
-  it("a projects category page exists, prerenders every category, and filters by slug", () => {
+  it("project detail page redirects to the homepage (section turned off)", () => {
+    const src = readPage("projects/[slug]/page.tsx");
+    expect(src).toContain('redirect(localeHref(locale, "/"))');
+    expect(src).not.toContain("getProjectDetail");
+    expect(src).not.toContain("generateStaticParams");
+  });
+
+  it("project category page redirects to the homepage (section turned off)", () => {
     const src = readPage("projects/category/[slug]/page.tsx");
-    expect(src).toContain("export async function generateStaticParams()");
-    expect(src).toContain("prisma.project.groupBy");
-    expect(src).toContain("listProjects(locale, {");
-    expect(src).toContain("category: slug");
-    // The page must not depend on searchParams for its content (that would
-    // opt it out of static generation in the export build).
-    expect(src).toContain('process.env.PAGES_EXPORT === "1" ? {} : await searchParams');
+    expect(src).toContain('redirect(localeHref(locale, "/"))');
+    expect(src).not.toContain("listProjects");
+    expect(src).not.toContain("generateStaticParams");
+    expect(src).not.toContain("prisma.project.groupBy");
   });
 
-  it("both category pages render the chip row with the current category active", () => {
+  it("blog category page renders the chip row with the current category active", () => {
     const blogCategory = readPage("blog/category/[slug]/page.tsx");
     expect(blogCategory).toContain("`${blogHref}/category/${item.slug}`");
     expect(blogCategory).toContain('item.slug === slug ? "chip-active" : ""');
-
-    const projectsCategory = readPage("projects/category/[slug]/page.tsx");
-    expect(projectsCategory).toContain("`${basePath}/category/${item.slug}`");
-    expect(projectsCategory).toContain('item.slug === slug ? "chip-active" : ""');
   });
 });

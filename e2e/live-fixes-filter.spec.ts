@@ -16,41 +16,23 @@ import { test, expect } from "@playwright/test";
  * Chips are located with `a.chip` (not getByRole link by name) because the
  * breadcrumb also links the current category by the same name.
  *
- * Seed data (prisma/seed.ts): 4 projects — product = Aurora Design System +
- * Lantern Notes, platform = Harbor Analytics, experiment = Signal API;
- * 5 articles, one per category — software-engineering =
- * "Hệ thống thiết kế không bắt đầu từ component".
+ * Seed data (prisma/seed.ts): 5 articles, one per category —
+ * software-engineering = "Hệ thống thiết kế không bắt đầu từ component".
+ *
+ * Projects are turned off: the old projects filter tests are replaced by
+ * redirect assertions — every /projects URL lands on the homepage.
  */
 const BASE = process.env.E2E_BASE_URL || "http://127.0.0.1:3000";
 
 test.describe("category filter on the static export", () => {
-  test("projects: chip 'Sản phẩm' goes to the category page with only product projects", async ({ page }) => {
+  test("projects list redirects to the homepage (section turned off)", async ({ page }) => {
     await page.goto(`${BASE}/vi/projects/`, { waitUntil: "networkidle" });
-    const chip = page.locator("a.chip", { hasText: "Sản phẩm" }).first();
-    await expect(chip).toBeVisible();
-    await expect(chip).toHaveAttribute("href", /\/vi\/projects\/category\/product\/?$/);
-
-    await chip.click();
-    await expect(page).toHaveURL(/\/vi\/projects\/category\/product\/?$/);
-    await expect(page.getByRole("link", { name: /Aurora Design System/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Lantern Notes/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Harbor Analytics/ })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: /Signal API/ })).toHaveCount(0);
-    // The active chip is the product one; the count shows the filtered total.
-    await expect(page.locator("a.chip", { hasText: "Sản phẩm" }).first()).toHaveClass(/chip-active/);
-    await expect(page.locator("main")).toContainText("02");
+    await expect(page).toHaveURL(`${BASE}/vi`);
   });
 
-  test("projects: chip 'Mọi loại dự án' returns to the full list", async ({ page }) => {
+  test("projects category page redirects to the homepage (section turned off)", async ({ page }) => {
     await page.goto(`${BASE}/vi/projects/category/product/`, { waitUntil: "networkidle" });
-    await expect(page.getByRole("link", { name: /Harbor Analytics/ })).toHaveCount(0);
-
-    await page.locator("a.chip", { hasText: "Mọi loại dự án" }).first().click();
-    await expect(page).toHaveURL(/\/vi\/projects\/?$/);
-    await expect(page.getByRole("link", { name: /Aurora Design System/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Harbor Analytics/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Signal API/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Lantern Notes/ }).first()).toBeVisible();
+    await expect(page).toHaveURL(`${BASE}/vi`);
   });
 
   test("blog: chip 'Kỹ thuật phần mềm' goes to the category page with only that article", async ({ page }) => {
@@ -84,12 +66,9 @@ test.describe("category filter on the static export", () => {
     await expect(page.getByRole("link", { name: /Một ngày làm việc sâu/ }).first()).toBeVisible();
   });
 
-  test("projects category page works in EN too", async ({ page }) => {
+  test("projects detail redirects to the homepage in EN too", async ({ page }) => {
     const res = await page.goto(`${BASE}/en/projects/category/product/`, { waitUntil: "networkidle" });
     expect(res?.status()).toBe(200);
-    await expect(page.getByRole("link", { name: /Aurora Design System/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Lantern Notes/ }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /Harbor Analytics/ })).toHaveCount(0);
-    await expect(page.locator("a.chip", { hasText: "Product" }).first()).toHaveClass(/chip-active/);
+    await expect(page).toHaveURL(`${BASE}/en`);
   });
 });
