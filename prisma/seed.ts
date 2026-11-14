@@ -1418,18 +1418,27 @@ async function main() {
   }
 
   // --------------------------------------------------------------- articles
+  // The fallback editor account must be an upsert, not a plain create:
+  // on a database that was seeded before (e.g. production, seeded 13:55
+  // 14/11 without an admin), editor@example.com already exists and a
+  // create() crashes the whole seed with P2002 before the Phase 10 demo
+  // survey/service/slots below are reached. Re-runs reuse the account.
   const admin = await prisma.user.findUnique({ where: { email: adminEmail } });
   const authorId =
     admin?.id ??
-    (await prisma.user.create({
-      data: {
-        email: "editor@example.com",
-        name: "Editor",
-        passwordHash: await bcrypt.hash(`disabled-${Date.now()}-${Math.random()}`, 12),
-        role: "ADMIN",
-        isActive: false,
-      },
-    })).id;
+    (
+      await prisma.user.upsert({
+        where: { email: "editor@example.com" },
+        update: {},
+        create: {
+          email: "editor@example.com",
+          name: "Editor",
+          passwordHash: await bcrypt.hash(`disabled-${Date.now()}-${Math.random()}`, 12),
+          role: "ADMIN",
+          isActive: false,
+        },
+      })
+    ).id;
 
   for (const article of ARTICLES) {
     const existing = await prisma.article.findUnique({ where: { slug: article.slug } });
