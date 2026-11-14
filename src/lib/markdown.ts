@@ -140,7 +140,17 @@ export async function renderMarkdown(
     if (!segment.trim()) return "";
     const raw = await marked.parse(segment, { gfm: true, breaks: false, async: true });
 
-    const withIds = raw.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, level: string, inner: string) => {
+    // 8C-2: content must never create a second H1 — the page template already
+    // renders the article/project title as the only H1. Demote any H1 the
+    // author wrote in Markdown (or embedded as raw HTML) to H2 *before* ids
+    // are assigned, so it still lands in the table of contents as an H2.
+    // Done on the parsed HTML (not the source) so `#` lines inside fenced
+    // code blocks are left untouched.
+    const demoted = raw
+      .replace(/<h1(\s[^>]*)?>/gi, "<h2>")
+      .replace(/<\/h1>/gi, "</h2>");
+
+    const withIds = demoted.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, level: string, inner: string) => {
       const text = stripTags(inner);
       const base = slugify(text) || `section-${toc.length + 1}`;
       const seen = used.get(base) ?? 0;
@@ -156,7 +166,6 @@ export async function renderMarkdown(
         "img",
         "figure",
         "figcaption",
-        "h1",
         "h2",
         "h3",
         "h4",
@@ -168,7 +177,6 @@ export async function renderMarkdown(
       allowedAttributes: {
         a: ["href", "name", "target", "rel", "title"],
         img: ["src", "alt", "title", "width", "height", "loading"],
-        h1: ["id"],
         h2: ["id"],
         h3: ["id"],
         h4: ["id"],

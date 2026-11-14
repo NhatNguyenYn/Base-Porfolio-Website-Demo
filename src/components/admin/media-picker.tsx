@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { ImagePlus, Upload, X } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
+import { useFocusTrap } from "@/lib/focus-trap";
 import type { MediaView } from "@/server/queries/types";
 
 /**
@@ -38,6 +39,10 @@ export function MediaPicker({
   } satisfies UploadState);
   const processedRef = useRef("");
   const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  // Shared focus trap: Tab cycles inside the dialog, Escape closes it, and
+  // focus returns to the trigger that opened it.
+  useFocusTrap(dialogRef, open, { onEscape: () => setOpen(false) });
 
   useEffect(() => {
     const files = uploadState.files;
@@ -188,6 +193,7 @@ export function MediaPicker({
           role="dialog"
           aria-modal="true"
           aria-label={label}
+          tabIndex={-1}
           className="fixed inset-0 z-[90] flex items-center justify-center bg-black/50 p-4"
           onClick={(event) => {
             if (event.target === dialogRef.current) setOpen(false);

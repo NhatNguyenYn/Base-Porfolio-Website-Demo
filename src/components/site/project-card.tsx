@@ -4,6 +4,12 @@ import type { ProjectCardData } from "@/data/projects";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n";
 
+/**
+ * One link per card (stretched-link pattern): the cover, title and
+ * view-project link used to be three separate links to the same URL. Now a
+ * single stretched link covers the card, the title/view label are plain
+ * text, and screen readers announce the destination once.
+ */
 export function ProjectCard({
   project,
   href,
@@ -22,8 +28,8 @@ export function ProjectCard({
   const isLarge = size === "large";
 
   return (
-    <article className="group flex h-full flex-col">
-      <Link href={href} className="block">
+    <article className="card-cv group relative flex h-full flex-col">
+      <div className="block">
         <div
           className={cn(
             "relative overflow-hidden bg-surface-muted border border-line",
@@ -37,7 +43,7 @@ export function ProjectCard({
               fill
               priority={priority}
               sizes={isLarge ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
-              className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+              className="card-zoom object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center bg-surface-muted">
@@ -50,14 +56,12 @@ export function ProjectCard({
             </span>
           )}
         </div>
-      </Link>
+      </div>
 
       <div className="flex flex-1 flex-col pt-5">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className={cn("tracking-tight", isLarge ? "text-2xl lg:text-[1.75rem]" : "text-lg")}>
-            <Link href={href} className="underline-sweep">
-              {project.name}
-            </Link>
+            <span className="underline-sweep">{project.name}</span>
           </h3>
           {typeof index === "number" && (
             <span className="text-[10px] tabular-nums tracking-[0.18em] text-muted">
@@ -90,15 +94,15 @@ export function ProjectCard({
         )}
 
         <div className="mt-auto pt-5">
-          <Link href={href} className="link-arrow text-muted group-hover:text-ink">
+          <span className="link-arrow text-muted group-hover:text-ink">
             <span aria-hidden="true">{dict.common.viewProject}</span>
-            <span className="sr-only">: {project.name}</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </Link>
+          </span>
         </div>
       </div>
+      <Link href={href} className="stretched-link" aria-label={project.name} />
     </article>
   );
 }

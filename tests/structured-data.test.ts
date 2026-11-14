@@ -2,8 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
   buildArticleSchema,
+  buildBlogSchema,
   buildBreadcrumbSchema,
+  buildCollectionPageSchema,
   buildCreativeWorkSchema,
+  buildItemListSchema,
   buildSiteGraph,
 } from "@/lib/structured-data";
 
@@ -134,5 +137,129 @@ describe("structured data", () => {
     });
     expect(schema).toMatchObject({ "@type": "VisualArtwork", artMedium: "Ink" });
     expect(schema).not.toHaveProperty("creator");
+  });
+
+  it("adds a SearchAction and a fallback logo to the WebSite graph", () => {
+    const graph = buildSiteGraph({
+      locale: "vi",
+      siteName: "Portfolio Studio",
+      description: "Portfolio",
+      logoUrl: "/icon.png",
+      searchUrlTemplate: "https://portfolio.example/vi/blog?q={search_term_string}",
+    });
+    const website = graph["@graph"][0] as Record<string, unknown>;
+    expect(website.logo).toEqual({ "@type": "ImageObject", url: "https://portfolio.example/icon.png" });
+    expect(website.potentialAction).toEqual({
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: "https://portfolio.example/vi/blog?q={search_term_string}" },
+      "query-input": "required name=search_term_string",
+    });
+
+    const bare = buildSiteGraph({ locale: "vi", siteName: "Portfolio Studio" });
+    expect((bare["@graph"][0] as Record<string, unknown>)).not.toHaveProperty("logo");
+    expect((bare["@graph"][0] as Record<string, unknown>)).not.toHaveProperty("potentialAction");
+  });
+
+  it("links the article author to the layout Person @id", () => {
+    const schema = buildArticleSchema({
+      locale: "en",
+      siteName: "Portfolio Studio",
+      canonicalUrl: "https://portfolio.example/en/blog/post",
+      headline: "A post",
+      description: "Description",
+      dateModified: "2026-01-03T00:00:00.000Z",
+      authorName: "Alex",
+      authorAboutUrl: "/en/about",
+      blogUrl: "/en/blog",
+    });
+    expect(schema.author).toEqual({
+      "@type": "Person",
+      "@id": "https://portfolio.example/en/about#person",
+      name: "Alex",
+      url: "https://portfolio.example/en/about",
+    });
+
+    const plain = buildArticleSchema({
+      locale: "en",
+      siteName: "Portfolio Studio",
+      canonicalUrl: "https://portfolio.example/en/blog/post",
+      headline: "A post",
+      description: "Description",
+      dateModified: "2026-01-03T00:00:00.000Z",
+      authorName: "Alex",
+      blogUrl: "/en/blog",
+    });
+    expect(plain.author).toEqual({ "@type": "Person", name: "Alex" });
+  });
+
+  it("uses the icon fallback as the publisher logo when settings has none", () => {
+    const schema = buildArticleSchema({
+      locale: "vi",
+      siteName: "Portfolio Studio",
+      siteLogoUrl: "/icon.png",
+      canonicalUrl: "https://portfolio.example/vi/blog/post",
+      headline: "Bài viết",
+      description: "Mô tả",
+      dateModified: "2026-01-03T00:00:00.000Z",
+      authorName: "Alex",
+      blogUrl: "/vi/blog",
+    });
+    expect(schema.publisher.logo).toEqual({ "@type": "ImageObject", url: "https://portfolio.example/icon.png" });
+  });
+
+  it("adds dateModified, technologies and keywords to project work", () => {
+    const schema = buildCreativeWorkSchema({
+      canonicalUrl: "https://portfolio.example/vi/projects/case-study",
+      name: "Case Study",
+      description: "A project",
+      datePublished: "2025-01-01T00:00:00.000Z",
+      dateModified: "2026-02-01T00:00:00.000Z",
+      technologies: ["Next.js", "TypeScript"],
+      keywords: ["design", "Next.js"],
+    });
+    expect(schema).toMatchObject({
+      datePublished: "2025-01-01T00:00:00.000Z",
+      dateModified: "2026-02-01T00:00:00.000Z",
+      keywords: "Next.js, TypeScript, design",
+    });
+    // Artwork keywords come from tags; dateModified stays absent without an updatedAt.
+    const art = buildCreativeWorkSchema({
+      canonicalUrl: "https://portfolio.example/vi/art/piece",
+      name: "Piece",
+      description: "Ink",
+      type: "VisualArtwork",
+      medium: "Ink",
+      datePublished: "2025-03-01T00:00:00.000Z",
+      keywords: ["ink", "paper"],
+    });
+    expect(art).toMatchObject({ keywords: "ink, paper" });
+    expect(art).not.toHaveProperty("dateModified");
+    expect(art).not.toHaveProperty("creator");
+  });
+
+  it("builds ItemList, Blog and CollectionPage nodes for list pages", () => {
+    const list = buildItemListSchema({
+      id: "https://portfolio.example/vi/blog#articles",
+      items: [
+        { name: "First", url: "/vi/blog/first" },
+        { name: "Second", url: "/vi/blog/second" },
+      ],
+    });
+    expect(list).toMatchObject({
+      "@type": "ItemList",
+      "@id": "https://portfolio.example/vi/blog#articles",
+      numberOfItems: 2,
+    });
+    expect(list.itemListElement).toEqual([
+      { "@type": "ListItem", position: 1, name: "First", url: "https://portfolio.example/vi/blog/first" },
+      { "@type": "ListItem", position: 2, name: "Second", url: "https://portfolio.example/vi/blog/second" },
+    ]);
+
+    expect(
+      buildBlogSchema({ blogUrl: "/vi/blog", name: "Blog", description: "Writing" }),
+    ).toMatchObject({ "@type": "Blog", "@id": "https://portfolio.example/vi/blog#blog", name: "Blog" });
+    expect(
+      buildCollectionPageSchema({ pageUrl: "/vi/projects", name: "Projects" }),
+    ).toMatchObject({ "@type": "CollectionPage", "@id": "https://portfolio.example/vi/projects", name: "Projects" });
   });
 });

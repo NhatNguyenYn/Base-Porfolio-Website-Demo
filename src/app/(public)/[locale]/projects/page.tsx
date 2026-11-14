@@ -1,11 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { listProjects } from "@/data/projects";
 import { getSettings } from "@/data/settings";
-import { buildPageMetadata } from "@/lib/seo";
+import { getSocialLinks } from "@/data/social";
+import { buildPageMetadata, listCanonicalQuery, paginationLinks, xHandleFromSocials } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildItemListSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ProjectCard } from "@/components/site/project-card";
 import { Pagination } from "@/components/site/pagination";
@@ -21,17 +27,53 @@ function one(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+}): Promise<Metadata> {
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
   const settings = await getSettings();
+  // Static export (GitHub Pages demo): only the default view is prerendered,
+  // so metadata must not depend on the request's search params — awaiting
+  // them here opts the route out of static generation and the page silently
+  // disappears from the export (no build error). Server mode keeps the
+  // per-view metadata (filtered titles, canonicals, noindex on search).
+  const query: { [key: string]: string | string[] | undefined } =
+    process.env.PAGES_EXPORT === "1" ? {} : await searchParams;
+  const q = one(query.q)?.trim() ?? "";
+  const tech = one(query.tech) ?? "";
+  const category = one(query.category) ?? "";
+  const sort = one(query.sort) ?? "newest";
+  const page = Number.parseInt(one(query.page) ?? "1", 10) || 1;
+  const xHandle = xHandleFromSocials(await getSocialLinks());
+
+  const filterLabel = [q ? `"${q}"` : "", tech, category, sort !== "newest" ? sort : ""].filter(Boolean).join(" · ");
+  const title = [dict.projects.title, filterLabel || undefined, page > 1 ? `${dict.common.page} ${page}` : undefined]
+    .filter(Boolean)
+    .join(" — ");
+
   return buildPageMetadata({
     locale: raw,
     path: "/projects",
-    title: dict.projects.label,
+    title,
     description: dict.projects.description,
     siteName: settings.siteName,
+    canonicalQuery: listCanonicalQuery({
+      q: q || undefined,
+      tech: tech || undefined,
+      category: category || undefined,
+      sort: sort !== "newest" ? sort : undefined,
+      page: page > 1 ? String(page) : undefined,
+    }),
+    ...(q ? { robots: { index: false, follow: true } } : {}),
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -72,6 +114,39 @@ export default async function ProjectsPage({
 
   const basePath = localeHref(locale, "/projects");
   const activeFilters = Boolean(q || tech || category || sort !== "newest");
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.projects.label, href: basePath },
+  ];
+  // React 19 hoists <link> rendered in the tree into <head>.
+  const pageLinks = paginationLinks({
+    locale,
+    path: "/projects",
+    params: {
+      q: q || undefined,
+      tech: tech || undefined,
+      category: category || undefined,
+      sort: sort !== "newest" ? sort : undefined,
+    },
+    page: currentPage,
+    pages,
+  });
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildCollectionPageSchema({
+        pageUrl: basePath,
+        name: dict.projects.title,
+        description: dict.projects.description,
+      }),
+      buildItemListSchema({
+        id: `${absoluteUrl(basePath)}#projects`,
+        items: items.map((project) => ({ name: project.name, url: `${basePath}/${project.slug}` })),
+      }),
+    ],
+  };
   const categoryLabels = dict.projects.categories as Record<string, string>;
   const categoryLabel = (slug: string) => categoryLabels[slug] ?? slug;
 
@@ -87,6 +162,17 @@ export default async function ProjectsPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      {pageLinks.prev && <link rel="prev" href={pageLinks.prev} />}
+      {pageLinks.next && <link rel="next" href={pageLinks.next} />}
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
       <PageHero
         label={dict.projects.label}
         title={dict.projects.title}

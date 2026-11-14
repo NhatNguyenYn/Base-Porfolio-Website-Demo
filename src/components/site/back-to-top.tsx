@@ -7,10 +7,22 @@ export function BackToTop({ label }: { label: string }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 600);
+    // rAF-gated like Parallax: a scroll burst schedules at most one state
+    // update per frame instead of one per scroll event.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setVisible(window.scrollY > 600);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   if (!visible) return null;

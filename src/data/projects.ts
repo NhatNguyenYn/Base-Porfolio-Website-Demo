@@ -3,6 +3,7 @@ export {
   getFeaturedProjects,
   getProjectDetail,
   getNextProject,
+  getRelatedProjects,
 } from "@/server/queries/projects";
 
 export type {

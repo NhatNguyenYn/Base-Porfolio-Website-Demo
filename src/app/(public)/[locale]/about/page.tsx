@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
@@ -9,8 +10,11 @@ import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
 import { renderMarkdown } from "@/lib/markdown";
 import { formatMonthYear } from "@/lib/utils";
-import { buildPageMetadata, socialImage } from "@/lib/seo";
+import { buildPageMetadata, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { parseInterests } from "@/lib/interests";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { SectionHeader } from "@/components/site/section-header";
 import { Reveal } from "@/components/ui/reveal";
@@ -27,6 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(raw);
   const [profile, settings] = await Promise.all([getProfile(), getSettings()]);
   const content = profile?.translations.find((item) => item.locale === raw);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
   return buildPageMetadata({
     locale: raw,
     path: "/about",
@@ -36,12 +41,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     image: profile?.avatar
       ? socialImage(profile.avatar.url, profile.avatar.alt || content?.fullName || settings.siteName, profile.avatar.width, profile.avatar.height)
       : null,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
 function LevelDots({ level }: { level: number }) {
   return (
-    <span className="flex items-center gap-1" aria-label={`${level}/5`}>
+    <span className="flex items-center gap-1" role="img" aria-label={`${level}/5`}>
       {Array.from({ length: 5 }).map((_, index) => (
         <span
           key={index}
@@ -124,8 +132,27 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const groupLabel = (key: string) =>
     (dict.about.skillsGroups as Record<string, string>)[key] ?? key;
 
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.about.label, href: localeHref(locale, "/about") },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [buildBreadcrumbSchema(crumbs)],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
       <PageHero
         label={dict.about.label}
         title={
@@ -226,7 +253,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                     <p className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-accent">{item.type}</p>
                   </div>
                   <div className="max-w-2xl">
-                    <p className="text-lg tracking-tight">{item.title}</p>
+                    <h3 className="text-lg tracking-tight">{item.title}</h3>
                     <p className="mt-1 text-[13px] text-muted">{item.subtitle}</p>
                     {item.summary && (
                       <p className="mt-2 text-[13px] leading-relaxed text-muted">{item.summary}</p>

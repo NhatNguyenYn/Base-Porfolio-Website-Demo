@@ -44,6 +44,18 @@ describe("production preflight", () => {
     expect(result.status).toBe(0);
   });
 
+  it("rejects a localhost APP_URL even over https", () => {
+    const result = runPreflight({ APP_URL: "https://localhost:3000" });
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("APP_URL must not be localhost in production");
+  });
+
+  it("rejects a missing APP_URL instead of falling back to localhost", () => {
+    const result = runPreflight({ APP_URL: undefined });
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("APP_URL is missing");
+  });
+
   it("rejects an https-less APP_URL", () => {
     const result = runPreflight({ APP_URL: "http://portfolio.example" });
     expect(result.status).toBe(1);
@@ -63,10 +75,27 @@ describe("production preflight", () => {
     expect(result.output).toContain("absolute path");
   });
 
-  it("warns without failing on the default seed password", () => {
+  it("fails on the default seed password in production", () => {
     const result = runPreflight({ SEED_ADMIN_PASSWORD: "ChangeMe!2026" });
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("SEED_ADMIN_PASSWORD is still the repository default");
+  });
+
+  it("passes with a non-default seed password (warning only)", () => {
+    const result = runPreflight({ SEED_ADMIN_PASSWORD: "a-different-rotated-value-123" });
     expect(result.status).toBe(0);
-    expect(result.output).toContain("repository default");
+    expect(result.output).toContain("remove it after seeding");
+  });
+
+  it("does not treat the default seed password as an error outside production", () => {
+    // Dev/CI behaviour is unchanged: preflight already fails non-production
+    // runs for NODE_ENV, and the seed check only errors in production.
+    const result = runPreflight({ NODE_ENV: "development", SEED_ADMIN_PASSWORD: "ChangeMe!2026" });
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("NODE_ENV must be production");
+    // The default-seed message still appears as a *warning* outside prod;
+    // it must not appear as an *error* (errors are what fail the deploy).
+    expect(result.output).not.toContain("[error] SEED_ADMIN_PASSWORD is still the repository default");
   });
 
   it("never echoes a secret value", () => {

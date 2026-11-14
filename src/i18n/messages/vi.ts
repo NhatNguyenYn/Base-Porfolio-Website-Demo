@@ -137,7 +137,7 @@ export const vi = {
     label: "Dự án",
     title: "Những sản phẩm tôi đã dành tâm huyết",
     description:
-      "Tuyển tập các dự án kỹ thuật: từ hệ thống thiết kế, sản phẩm dữ liệu đến những công cụ nhỏ nhưng hữu ích.",
+      "Tuyển tập các dự án kỹ thuật đã chọn lọc — hệ thống thiết kế dùng chung, bảng điều khiển dữ liệu và những công cụ nhỏ chạy ngoại tuyến — mỗi dự án đều có vấn đề cần giải quyết, cách thực hiện và bài học rút ra.",
     searchPlaceholder: "Tìm dự án…",
     allTechnologies: "Mọi công nghệ",
     sortNewest: "Mới nhất",
@@ -161,6 +161,7 @@ export const vi = {
       stack: "Công nghệ sử dụng",
       links: "Liên kết",
       next: "Dự án tiếp theo",
+      related: "Dự án liên quan",
       empty: "Chưa có nội dung chi tiết cho dự án này.",
     },
     emptyTitle: "Chưa có dự án công khai",
@@ -168,9 +169,9 @@ export const vi = {
   },
   art: {
     label: "Phòng tranh",
-    title: "Triển lãm kỹ thuật số",
+    title: "Triển lãm kỹ thuật số về màu sắc, ánh sáng và hình khối",
     description:
-      "Một không gian yên tĩnh để ngắm nhìn. Nhấn vào tác phẩm để xem toàn màn hình, dùng phím mũi tên để chuyển tác phẩm.",
+      "Một không gian yên tĩnh để ngắm nhìn các tác phẩm kỹ thuật số gốc — nghiên cứu trừu tượng, hình học đô thị và những đường cong mềm — được nhóm theo bộ sưu tập. Nhấn vào tác phẩm để xem toàn màn hình, dùng phím mũi tên để chuyển tác phẩm.",
     allWorks: "Tất cả tác phẩm",
     collections: "Bộ sưu tập",
     allCollections: "Mọi bộ sưu tập",
@@ -185,9 +186,9 @@ export const vi = {
   },
   blog: {
     label: "Bài viết",
-    title: "Ghi chép & chia sẻ",
+    title: "Ghi chép & chia sẻ về thiết kế, kỹ thuật và sáng tạo",
     description:
-      "Những bài viết về kỹ thuật phần mềm, trí tuệ nhân tạo, phát triển bản thân và quá trình sáng tạo.",
+      "Những bài viết về kỹ thuật phần mềm, trí tuệ nhân tạo, phát triển bản thân và quá trình sáng tạo — những điều tôi học được khi xây dựng sản phẩm, và cách tôi nhìn nhận công việc.",
     featured: "Bài viết nổi bật",
     latest: "Bài viết mới nhất",
     allCategories: "Mọi danh mục",
@@ -205,7 +206,7 @@ export const vi = {
     label: "Liên hệ",
     title: "Hãy kể tôi nghe về dự án của bạn",
     description:
-      "Tôi luôn mở với những cuộc trò chuyện thú vị — một sản phẩm mới, một bộ nhận diện, hay chỉ là một ý tưởng còn dang dở.",
+      "Tôi luôn mở với những cuộc trò chuyện thú vị — một sản phẩm mới, một bộ nhận diện, hay chỉ là một ý tưởng còn dang dở. Bạn có thể viết bằng tiếng Việt hoặc tiếng Anh; mọi tin nhắn đều được tôi đọc và trả lời trực tiếp.",
     emailLabel: "Email",
     locationLabel: "Địa điểm",
     socialLabel: "Mạng xã hội",

@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
-import { isLocale, type Locale } from "@/i18n/config";
+import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getProfile } from "@/data/profile";
 import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ContactSection } from "@/components/site/contact-section";
 import { SocialLinks } from "@/components/site/social-links";
@@ -20,12 +24,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
   const settings = await getSettings();
+  const xHandle = xHandleFromSocials(await getSocialLinks());
   return buildPageMetadata({
     locale: raw,
     path: "/contact",
-    title: dict.contact.label,
+    title: dict.contact.title,
     description: dict.contact.description,
     siteName: settings.siteName,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -39,9 +47,27 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const content = profile?.translations.find((item) => item.locale === locale) ?? null;
   const email = profile?.email || settings.contactEmail;
   const location = settings.contactLocation || profile?.location || "";
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.contact.label, href: localeHref(locale, "/contact") },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [buildBreadcrumbSchema(crumbs)],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
       <PageHero
         label={dict.contact.label}
         title={dict.contact.title}

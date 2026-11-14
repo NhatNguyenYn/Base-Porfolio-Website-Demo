@@ -7,10 +7,11 @@ import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getArticleDetail, getRelatedArticles, incrementArticleView } from "@/data/articles";
 import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
 import { getArticleLocales } from "@/server/queries/articles";
 import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
-import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
+import { buildPageMetadata, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { absoluteUrl, formatDate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildArticleSchema, buildBreadcrumbSchema } from "@/lib/structured-data";
@@ -59,6 +60,7 @@ export async function generateMetadata({
   const title = article.seoTitle || article.title;
   const description = article.seoDescription || article.excerpt;
   const available = await getArticleLocales(slug);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
 
   return buildPageMetadata({
     locale: raw,
@@ -74,6 +76,9 @@ export async function generateMetadata({
     publishedTime: article.publishedAt?.toISOString(),
     modifiedTime: article.updatedAt.toISOString(),
     authors: [article.authorName],
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -114,8 +119,10 @@ export default async function ArticlePage({
   ]);
 
   const blogHref = localeHref(locale, "/blog");
+  const aboutHref = localeHref(locale, "/about");
   const homeHref = localeHref(locale, "/");
-  const canonicalUrl = absoluteUrl(`/${locale}/blog/${article.slug}`);
+  const schemaCanonicalUrl = absoluteUrl(`/${locale}/blog/${article.slug}`);
+  const shareCanonicalUrl = canonicalUrl(locale, `/blog/${article.slug}`);
   const schemaImage = article.cover
     ? safeSocialImage(
         socialImage(article.cover.url, article.cover.alt || article.title, article.cover.width, article.cover.height),
@@ -134,14 +141,16 @@ export default async function ArticlePage({
       buildArticleSchema({
         locale,
         siteName: settings.siteName,
-        siteLogoUrl: settings.logo?.url,
-        canonicalUrl,
+        // Publisher logo falls back to the bundled 512×512 icon when unset.
+        siteLogoUrl: settings.logo?.url ?? "/icon.png",
+        canonicalUrl: schemaCanonicalUrl,
         headline: article.title,
         description: article.seoDescription || article.excerpt,
         imageUrl: schemaImage?.url,
         datePublished: article.publishedAt?.toISOString(),
         dateModified: article.updatedAt.toISOString(),
         authorName: article.authorName,
+        authorAboutUrl: `/${locale}/about`,
         categoryName: article.categoryName,
         keywords: article.tags.map((tag) => tag.name),
         wordCount: article.content.split(/\s+/).filter(Boolean).length,
@@ -171,6 +180,7 @@ export default async function ArticlePage({
           dict={dict}
           locale={locale}
           blogHref={blogHref}
+          canonicalUrl={shareCanonicalUrl}
         />
       ) : (
       <>
@@ -203,10 +213,19 @@ export default async function ArticlePage({
 
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-y border-line py-3">
           <p className="text-[12px] text-muted">
-            {dict.common.by} <span className="text-ink">{article.authorName}</span>
+            {dict.common.by}{" "}
+            <Link href={aboutHref} className="text-ink hover:underline">
+              {article.authorName}
+            </Link>
+            <span aria-hidden="true"> · </span>
+            <span>
+              {dict.common.updated}:{" "}
+              <time dateTime={article.updatedAt.toISOString()}>{formatDate(article.updatedAt, locale)}</time>
+            </span>
           </p>
           <ShareBar
             title={article.title}
+            url={shareCanonicalUrl}
             labels={{ share: dict.common.share, copy: dict.common.copyLink, copied: dict.common.copied }}
           />
         </div>
@@ -228,7 +247,10 @@ export default async function ArticlePage({
       )}
 
       <div className="container-page mt-12 grid gap-12 pb-16 lg:grid-cols-12">
-        <div className="lg:col-span-8">
+        {/* E2E 2026-11-14: min-w-0 — same single-column grid blowout as the
+            project detail page (a <pre> in the prose forces the implicit
+            `auto` track wider than the viewport on phones). */}
+        <div className="min-w-0 lg:col-span-8">
           <div className="prose-editorial" dangerouslySetInnerHTML={{ __html: body.html }} />
 
           {article.tags.length > 0 && (
@@ -243,7 +265,7 @@ export default async function ArticlePage({
           )}
         </div>
 
-        <aside className="lg:col-span-4">
+        <aside className="min-w-0 lg:col-span-4">
           <div className="lg:sticky lg:top-24">
             {body.toc.length > 0 && (
               <div className="border-t border-line pt-5">

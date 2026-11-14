@@ -5,16 +5,22 @@ import { useEffect, useState } from "react";
 export function ShareBar({
   title,
   labels,
+  url: canonicalUrl,
 }: {
   title: string;
   labels: { share: string; copy: string; copied: string };
+  /**
+   * Canonical page URL to share. When given, sharing uses it instead of
+   * window.location.href, so filter/query params never leak into shares.
+   */
+  url?: string;
 }) {
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState(canonicalUrl ?? "");
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setUrl(window.location.href);
-  }, []);
+    if (!canonicalUrl) setUrl(window.location.href);
+  }, [canonicalUrl]);
 
   async function copy() {
     try {

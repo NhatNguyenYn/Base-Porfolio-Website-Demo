@@ -11,6 +11,14 @@ export type RevealVariant = "up" | "fade" | "scale" | "mask";
  *
  * `delay` is for staggering siblings (70ms steps is the house rhythm); the
  * element is observed once and the observer disconnects after it appears.
+ *
+ * Above-fold behaviour: `priority` renders visible on the first render (no
+ * effect wait) — use it for LCP heroes/covers. Otherwise the observer's
+ * initial callback fires immediately for elements already in view, so
+ * above-fold content never waits for a scroll event. No
+ * getBoundingClientRect() is called on mount: the observer path handles the
+ * in-view case without forcing layout for every instance, and the
+ * no-IntersectionObserver fallback reveals unconditionally.
  */
 export function Reveal({
   children,
@@ -36,13 +44,6 @@ export function Reveal({
     const node = ref.current;
     if (!node) return;
     if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
-    }
-    // Content already in view (or above it after scroll restoration) must never
-    // wait for an observer callback: it is revealed immediately, and hidden
-    // tabs or a missed callback can never leave the first screen blank.
-    if (node.getBoundingClientRect().top < window.innerHeight) {
       setVisible(true);
       return;
     }

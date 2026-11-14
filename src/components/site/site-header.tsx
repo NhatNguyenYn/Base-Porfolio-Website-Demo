@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { localeHref, stripLocale, type Locale } from "@/i18n/config";
 import { matchesNav, siteNav } from "@/data/navigation";
@@ -26,6 +26,11 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  // Set when the menu is closed via Escape or the toggle button, so focus
+  // returns to the trigger. Closing by following a link (navigation) must
+  // not steal focus back.
+  const returnFocusRef = useRef(false);
 
   // The mobile panel is portalled to <body>: the header carries a
   // backdrop-filter when scrolled, which would otherwise become the
@@ -35,11 +40,43 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
   const { path } = stripLocale(pathname || "/");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    // rAF-gated like Parallax: a scroll burst schedules at most one state
+    // update per frame instead of one per scroll event.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 8);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
+
+  // Escape closes the mobile menu and returns focus to the menu button.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        returnFocusRef.current = true;
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open ]);
+
+  useEffect(() => {
+    if (!open && returnFocusRef.current) {
+      returnFocusRef.current = false;
+      triggerRef.current?.focus();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -117,7 +154,11 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
           )}
           <button
             type="button"
-            onClick={() => setOpen((value) => !value)}
+            ref={triggerRef}
+            onClick={() => {
+              if (open) returnFocusRef.current = true;
+              setOpen((value) => !value);
+            }}
             aria-expanded={open}
             aria-label={open ? nav.close : nav.menu}
             className="ml-1 grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-line-strong lg:hidden"

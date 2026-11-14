@@ -5,10 +5,11 @@ import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getCollection } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
 import { getCollectionLocales } from "@/server/queries/artworks";
-import { buildPageMetadata, socialImage } from "@/lib/seo";
+import { buildPageMetadata, canonicalUrl, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { buildBreadcrumbSchema } from "@/lib/structured-data";
+import { buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { prisma } from "@/server/db";
 import { PageHero } from "@/components/site/page-hero";
@@ -49,6 +50,7 @@ export async function generateMetadata({
     });
   }
   const available = await getCollectionLocales(slug);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
   return buildPageMetadata({
     locale: raw,
     path: `/art/collections/${slug}`,
@@ -59,6 +61,9 @@ export async function generateMetadata({
     image: collection.cover
       ? socialImage(collection.cover.url, collection.cover.alt || collection.name, collection.cover.width, collection.cover.height)
       : null,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -84,7 +89,16 @@ export default async function CollectionPage({
   ];
   const jsonLd = {
     "@context": "https://schema.org",
-    "@graph": [buildBreadcrumbSchema(crumbs)],
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildItemListSchema({
+        id: `${canonicalUrl(locale, `/art/collections/${collection.slug}`)}#artworks`,
+        items: artworks.map((artwork) => ({
+          name: artwork.title,
+          url: `/${locale}/art/${artwork.slug}`,
+        })),
+      }),
+    ],
   };
 
   return (

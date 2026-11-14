@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import "@/app/globals.css";
@@ -14,7 +14,7 @@ import {
 } from "@/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { safeSocialImage, socialImage } from "@/lib/seo";
+import { canonicalAbsoluteUrl, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { buildSiteGraph } from "@/lib/structured-data";
 import { loadSiteContext } from "@/lib/services/site-context";
 import { ServiceUnavailable } from "@/components/site/service-unavailable";
@@ -34,9 +34,22 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/**
+ * Browser chrome colour, matching the light/dark surfaces in globals.css
+ * (--background #f8f8f6 light, #0d1117 dark).
+ */
+export function generateViewport(): Viewport {
+  return {
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: "#f8f8f6" },
+      { media: "(prefers-color-scheme: dark)", color: "#0d1117" },
+    ],
+  };
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
-  if (!isLocale(raw)) return {};
+  if (!isLocale(raw)) return { robots: { index: false, follow: false } };
   const locale: Locale = raw;
   const site = await loadSiteContext();
   if (site.status === "unavailable") {
@@ -46,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       robots: { index: false, follow: false },
     };
   }
-  const { settings, profile } = site;
+  const { settings, profile, socials } = site;
   const content = profile?.translations.find((item) => item.locale === locale);
 
   const title = content?.seoTitle || (content ? `${content.fullName} — ${content.title}` : settings.seoTitle);
@@ -57,7 +70,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       : null,
     settings.siteName,
   );
-  const canonical = absoluteUrl(`/${locale}`);
+  const canonical = canonicalUrl(locale, "/");
+  const xHandle = xHandleFromSocials(socials);
 
   return {
     metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
@@ -68,9 +82,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical,
       languages: {
-        vi: absoluteUrl("/vi"),
-        en: absoluteUrl("/en"),
-        "x-default": absoluteUrl("/vi"),
+        vi: canonicalAbsoluteUrl(absoluteUrl("/vi")),
+        en: canonicalAbsoluteUrl(absoluteUrl("/en")),
+        "x-default": canonicalAbsoluteUrl(absoluteUrl("/vi")),
       },
     },
     openGraph: {
@@ -87,9 +101,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       card: "summary_large_image",
       title,
       description,
-      images: [{ url: social.url, alt: social.alt }],
+      images: [{ url: social.url, alt: social.alt, width: social.width, height: social.height }],
+      ...(xHandle ? { site: xHandle, creator: xHandle } : {}),
     },
-    icons: settings.favicon ? { icon: settings.favicon.url } : undefined,
+    icons: { icon: settings.favicon?.url || "/icon.png" },
     robots: { index: true, follow: true },
   };
 }
@@ -133,6 +148,9 @@ export default async function LocaleLayout({
     locale,
     siteName: settings.siteName,
     description: content?.shortBio || settings.seoDescription,
+    // Publisher logo falls back to the bundled 512×512 icon when no logo is set.
+    logoUrl: settings.logo?.url ?? "/icon.png",
+    searchUrlTemplate: absoluteUrl(`/${locale}/blog?q={search_term_string}`),
     person: profile
       ? {
           name: content?.fullName || settings.siteName,

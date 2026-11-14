@@ -17,6 +17,7 @@ export type RateLimitResult = { ok: boolean; remaining: number; retryAfterSecond
  */
 export function rateLimit(key: string, limit: number, windowMs: number): RateLimitResult {
   const now = Date.now();
+  maybePruneExpiredBuckets(now);
   const bucket = buckets.get(key);
 
   if (!bucket || bucket.resetAt <= now) {
@@ -30,6 +31,36 @@ export function rateLimit(key: string, limit: number, windowMs: number): RateLim
     return { ok: false, remaining: 0, retryAfterSeconds: Math.ceil((bucket.resetAt - now) / 1000) };
   }
   return { ok: true, remaining, retryAfterSeconds: Math.ceil((bucket.resetAt - now) / 1000) };
+}
+
+/**
+ * Removes expired buckets from the in-memory store. Returns how many were
+ * removed. Exported for tests; production callers go through `rateLimit`.
+ */
+export function pruneExpiredRateLimitBuckets(now: number = Date.now()): number {
+  let removed = 0;
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) {
+      buckets.delete(key);
+      removed += 1;
+    }
+  }
+  return removed;
+}
+
+/** Number of buckets currently held in memory (test helper). */
+export function rateLimitBucketCount(): number {
+  return buckets.size;
+}
+
+// Opportunistic cleanup so the map cannot grow without bound. A sweep only
+// runs once the map is large enough for the scan to be worth it; previously
+// this lived at module top level, where it ran once at import time — when the
+// map was always empty — and never again.
+const RATE_LIMIT_CLEANUP_THRESHOLD = 100;
+
+function maybePruneExpiredBuckets(now: number): void {
+  if (buckets.size > RATE_LIMIT_CLEANUP_THRESHOLD) pruneExpiredRateLimitBuckets(now);
 }
 
 /** Stable, non-reversible key so IPs are not stored in plain text. */
@@ -76,12 +107,4 @@ export function clientIp(headers: Headers, hops: number = trustedProxyHops()): s
   }
 
   return chain[Math.max(0, chain.length - hops)] ?? "unknown";
-}
-
-// Opportunistic cleanup so the map cannot grow without bound.
-if (buckets.size > 5000) {
-  const now = Date.now();
-  for (const [key, bucket] of buckets) {
-    if (bucket.resetAt <= now) buckets.delete(key);
-  }
 }

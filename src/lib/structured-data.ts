@@ -19,11 +19,17 @@ export function buildSiteGraph({
   siteName,
   description,
   person,
+  logoUrl,
+  searchUrlTemplate,
 }: {
   locale: Locale;
   siteName: string;
   description?: string | null;
   person?: PersonInput | null;
+  /** Publisher/WebSite logo URL; callers pass the /icon.png fallback when unset. */
+  logoUrl?: string | null;
+  /** Absolute SearchAction target, e.g. `/vi/blog?q={search_term_string}`. */
+  searchUrlTemplate?: string | null;
 }) {
   return {
     "@context": "https://schema.org",
@@ -35,6 +41,16 @@ export function buildSiteGraph({
         url: absoluteUrl("/"),
         inLanguage: localeHtmlLang[locale],
         ...(description ? { description } : {}),
+        ...(logoUrl ? { logo: { "@type": "ImageObject", url: absoluteUrl(logoUrl) } } : {}),
+        ...(searchUrlTemplate
+          ? {
+              potentialAction: {
+                "@type": "SearchAction",
+                target: { "@type": "EntryPoint", urlTemplate: searchUrlTemplate },
+                "query-input": "required name=search_term_string",
+              },
+            }
+          : {}),
       },
       ...(person
         ? [
@@ -77,6 +93,8 @@ export function buildCreativeWorkSchema({
   dateModified,
   type = "CreativeWork",
   medium,
+  technologies,
+  keywords,
 }: {
   canonicalUrl: string;
   name: string;
@@ -86,7 +104,11 @@ export function buildCreativeWorkSchema({
   dateModified?: string | null;
   type?: "CreativeWork" | "VisualArtwork";
   medium?: string | null;
+  /** Project stack; merged into `keywords` (no schema.org "technologies"). */
+  technologies?: string[];
+  keywords?: string[];
 }) {
+  const allKeywords = Array.from(new Set([...(technologies ?? []), ...(keywords ?? [])].map((item) => item.trim()).filter(Boolean)));
   return {
     "@type": type,
     "@id": `${canonicalUrl}#work`,
@@ -97,6 +119,58 @@ export function buildCreativeWorkSchema({
     ...(datePublished ? { datePublished } : {}),
     ...(dateModified ? { dateModified } : {}),
     ...(type === "VisualArtwork" && medium ? { artMedium: medium } : {}),
+    ...(allKeywords.length ? { keywords: allKeywords.join(", ") } : {}),
+  };
+}
+
+/** Ordered list of named things (articles, artworks, projects) with absolute URLs. */
+export function buildItemListSchema({
+  id,
+  items,
+}: {
+  id?: string;
+  items: { name: string; url: string }[];
+}) {
+  return {
+    "@type": "ItemList",
+    ...(id ? { "@id": id } : {}),
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.url),
+    })),
+  };
+}
+
+/** Blog node for a list page; pair with buildItemListSchema for its entries. */
+export function buildBlogSchema({ blogUrl, name, description }: { blogUrl: string; name: string; description?: string }) {
+  return {
+    "@type": "Blog",
+    "@id": `${absoluteUrl(blogUrl)}#blog`,
+    url: absoluteUrl(blogUrl),
+    name,
+    ...(description ? { description } : {}),
+  };
+}
+
+/** CollectionPage node for a project/art list page; pair with buildItemListSchema. */
+export function buildCollectionPageSchema({
+  pageUrl,
+  name,
+  description,
+}: {
+  pageUrl: string;
+  name: string;
+  description?: string;
+}) {
+  return {
+    "@type": "CollectionPage",
+    "@id": absoluteUrl(pageUrl),
+    url: absoluteUrl(pageUrl),
+    name,
+    ...(description ? { description } : {}),
   };
 }
 
@@ -111,6 +185,8 @@ export type ArticleSchemaInput = {
   datePublished?: string | null;
   dateModified: string;
   authorName: string;
+  /** Locale-less about URL ("/{locale}/about"); links the author to the layout Person @id. */
+  authorAboutUrl?: string | null;
   categoryName?: string | null;
   keywords?: string[];
   wordCount?: number;
@@ -132,6 +208,7 @@ export function buildArticleSchema({
   datePublished,
   dateModified,
   authorName,
+  authorAboutUrl,
   categoryName,
   keywords,
   wordCount,
@@ -148,7 +225,14 @@ export function buildArticleSchema({
     ...(imageUrl ? { image: [absoluteUrl(imageUrl)] } : {}),
     ...(datePublished ? { datePublished } : {}),
     dateModified,
-    author: { "@type": "Person", name: authorName },
+    author: authorAboutUrl
+      ? {
+          "@type": "Person",
+          "@id": `${absoluteUrl(authorAboutUrl)}#person`,
+          name: authorName,
+          url: absoluteUrl(authorAboutUrl),
+        }
+      : { "@type": "Person", name: authorName },
     publisher: {
       "@type": "Organization",
       name: siteName,

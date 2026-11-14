@@ -57,18 +57,18 @@ export function EducationSection({
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="lg:col-span-2 grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="field-label">Tổ chức / trường</label>
-              <input name="institution" defaultValue={editing?.institution ?? ""} required className="field" />
+              <label htmlFor="edu-institution" className="field-label">Tổ chức / trường</label>
+              <input id="edu-institution" name="institution" defaultValue={editing?.institution ?? ""} required className="field" />
             </div>
             <div>
-              <label className="field-label">Địa điểm</label>
-              <input name="location" defaultValue={editing?.location ?? ""} className="field" />
+              <label htmlFor="edu-location" className="field-label">Địa điểm</label>
+              <input id="edu-location" name="location" defaultValue={editing?.location ?? ""} className="field" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="field-label">Từ năm</label>
+                <label htmlFor="edu-startYear" className="field-label">Từ năm</label>
                 <input
-                  name="startYear"
+                  id="edu-startYear" name="startYear"
                   type="number"
                   min={1950}
                   max={2100}
@@ -78,9 +78,9 @@ export function EducationSection({
                 />
               </div>
               <div>
-                <label className="field-label">Đến năm</label>
+                <label htmlFor="edu-endYear" className="field-label">Đến năm</label>
                 <input
-                  name="endYear"
+                  id="edu-endYear" name="endYear"
                   type="number"
                   min={1950}
                   max={2100}
@@ -116,8 +116,8 @@ export function EducationSection({
 
           <div className="lg:col-span-2 grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="field-label">Thứ tự</label>
-              <input name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
+              <label htmlFor="edu-order" className="field-label">Thứ tự</label>
+              <input id="edu-order" name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
             </div>
             {editing && (
               <div className="flex items-end">
@@ -191,20 +191,20 @@ export function ExperienceSection({
         {editing && <input type="hidden" name="id" value={editing.id} />}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="field-label">Công ty</label>
-            <input name="company" defaultValue={editing?.company ?? ""} required className="field" />
+            <label htmlFor="exp-company" className="field-label">Công ty</label>
+            <input id="exp-company" name="company" defaultValue={editing?.company ?? ""} required className="field" />
           </div>
           <div>
-            <label className="field-label">Địa điểm</label>
-            <input name="location" defaultValue={editing?.location ?? ""} className="field" />
+            <label htmlFor="exp-location" className="field-label">Địa điểm</label>
+            <input id="exp-location" name="location" defaultValue={editing?.location ?? ""} className="field" />
           </div>
           <div>
-            <label className="field-label">Bắt đầu</label>
-            <input name="startDate" type="date" defaultValue={toDate(editing?.startDate)} required className="field" />
+            <label htmlFor="exp-startDate" className="field-label">Bắt đầu</label>
+            <input id="exp-startDate" name="startDate" type="date" defaultValue={toDate(editing?.startDate)} required className="field" />
           </div>
           <div>
-            <label className="field-label">Kết thúc</label>
-            <input name="endDate" type="date" defaultValue={toDate(editing?.endDate)} className="field" />
+            <label htmlFor="exp-endDate" className="field-label">Kết thúc</label>
+            <input id="exp-endDate" name="endDate" type="date" defaultValue={toDate(editing?.endDate)} className="field" />
           </div>
         </div>
 
@@ -245,8 +245,8 @@ export function ExperienceSection({
             Hiển thị công khai
           </label>
           <div className="w-24">
-            <label className="field-label">Thứ tự</label>
-            <input name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
+            <label htmlFor="exp-order" className="field-label">Thứ tự</label>
+            <input id="exp-order" name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
           </div>
           {editing && (
             <Link href="/admin/profile" className="text-[11px] text-muted underline underline-offset-4 hover:text-ink">
@@ -301,12 +301,12 @@ export function SkillsSection({ rows, editing }: { rows: Skill[]; editing?: Skil
         {editing && <input type="hidden" name="id" value={editing.id} />}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
-            <label className="field-label">Tên kỹ năng</label>
-            <input name="name" defaultValue={editing?.name ?? ""} required className="field" placeholder="TypeScript" />
+            <label htmlFor="skill-name" className="field-label">Tên kỹ năng</label>
+            <input id="skill-name" name="name" defaultValue={editing?.name ?? ""} required className="field" placeholder="TypeScript" />
           </div>
           <div>
-            <label className="field-label">Nhóm</label>
-            <select name="category" defaultValue={editing?.category ?? "engineering"} className="field">
+            <label htmlFor="skill-category" className="field-label">Nhóm</label>
+            <select id="skill-category" name="category" defaultValue={editing?.category ?? "engineering"} className="field">
               <option value="engineering">Kỹ thuật</option>
               <option value="design">Thiết kế</option>
               <option value="art">Nghệ thuật</option>
@@ -314,12 +314,12 @@ export function SkillsSection({ rows, editing }: { rows: Skill[]; editing?: Skil
             </select>
           </div>
           <div>
-            <label className="field-label">Mức độ (1–5)</label>
-            <input name="level" type="number" min={1} max={5} defaultValue={editing?.level ?? 3} className="field" />
+            <label htmlFor="skill-level" className="field-label">Mức độ (1–5)</label>
+            <input id="skill-level" name="level" type="number" min={1} max={5} defaultValue={editing?.level ?? 3} className="field" />
           </div>
           <div>
-            <label className="field-label">Thứ tự</label>
-            <input name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
+            <label htmlFor="skill-order" className="field-label">Thứ tự</label>
+            <input id="skill-order" name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
           </div>
           <label className="flex items-center gap-2 self-end text-[11.5px]">
             <input type="checkbox" name="visible" defaultChecked={editing?.visible ?? true} className="h-3.5 w-3.5 accent-[var(--accent)]" />
@@ -374,8 +374,8 @@ export function SocialSection({ rows, editing }: { rows: SocialLink[]; editing?:
         {editing && <input type="hidden" name="id" value={editing.id} />}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <label className="field-label">Nền tảng</label>
-            <select name="platform" defaultValue={editing?.platform ?? "other"} className="field">
+            <label htmlFor="social-platform" className="field-label">Nền tảng</label>
+            <select id="social-platform" name="platform" defaultValue={editing?.platform ?? "other"} className="field">
               <option value="github">GitHub</option>
               <option value="linkedin">LinkedIn</option>
               <option value="facebook">Facebook</option>
@@ -388,9 +388,9 @@ export function SocialSection({ rows, editing }: { rows: SocialLink[]; editing?:
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="field-label">URL</label>
+            <label htmlFor="social-url" className="field-label">URL</label>
             <input
-              name="url"
+              id="social-url" name="url"
               defaultValue={editing?.url ?? ""}
               required
               className="field"
@@ -398,12 +398,12 @@ export function SocialSection({ rows, editing }: { rows: SocialLink[]; editing?:
             />
           </div>
           <div>
-            <label className="field-label">Nhãn</label>
-            <input name="label" defaultValue={editing?.label ?? ""} className="field" placeholder="GitHub" />
+            <label htmlFor="social-label" className="field-label">Nhãn</label>
+            <input id="social-label" name="label" defaultValue={editing?.label ?? ""} className="field" placeholder="GitHub" />
           </div>
           <div>
-            <label className="field-label">Thứ tự</label>
-            <input name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
+            <label htmlFor="social-order" className="field-label">Thứ tự</label>
+            <input id="social-order" name="order" type="number" min={0} max={999} defaultValue={editing?.order ?? 0} className="field" />
           </div>
           <label className="flex items-center gap-2 self-end text-[11.5px]">
             <input type="checkbox" name="visible" defaultChecked={editing?.visible ?? true} className="h-3.5 w-3.5 accent-[var(--accent)]" />

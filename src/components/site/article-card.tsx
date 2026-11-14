@@ -5,6 +5,12 @@ import { formatDate } from "@/lib/utils";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
 
+/**
+ * One link per card (stretched-link pattern): the cover, title and read-more
+ * used to be three separate links to the same URL. Now a single stretched
+ * link covers the card, the title/read-more are plain text, and screen
+ * readers announce the destination once.
+ */
 export function ArticleCard({
   article,
   href,
@@ -60,8 +66,8 @@ export function ArticleCard({
   const isFeature = variant === "feature";
 
   return (
-    <article className="group flex h-full flex-col">
-      <Link href={href} className="block">
+    <article className="card-cv group relative flex h-full flex-col">
+      <div className="block">
         <div className={`relative overflow-hidden border border-line bg-surface-muted ${isFeature ? "aspect-[16/10]" : "aspect-[3/2]"}`}>
           {article.cover ? (
             <Image
@@ -70,7 +76,7 @@ export function ArticleCard({
               fill
               priority={priority}
               sizes={isFeature ? "(min-width: 1024px) 55vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
-              className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+              className="card-zoom object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
             />
           ) : (
             <div className="absolute inset-0 grid place-items-center">
@@ -78,7 +84,7 @@ export function ArticleCard({
             </div>
           )}
         </div>
-      </Link>
+      </div>
       <div className="flex flex-1 flex-col pt-5">
         <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-muted">
           {article.categoryName && <span className="text-accent">{article.categoryName}</span>}
@@ -88,9 +94,7 @@ export function ArticleCard({
           </time>
         </div>
         <h3 className={`mt-3 tracking-tight ${isFeature ? "text-2xl lg:text-[2rem] leading-tight" : "text-lg leading-snug"}`}>
-          <Link href={href} className="underline-sweep">
-            {article.title}
-          </Link>
+          <span className="underline-sweep">{article.title}</span>
         </h3>
         {article.subtitle && <p className="mt-2 text-sm text-muted">{article.subtitle}</p>}
         {article.excerpt && (
@@ -98,15 +102,15 @@ export function ArticleCard({
         )}
         <div className="mt-auto flex items-center gap-4 pt-5 text-[11px] text-muted">
           <span>{article.readingMinutes} {dict.common.minRead}</span>
-          <Link href={href} className="link-arrow ml-auto text-muted group-hover:text-ink">
+          <span className="link-arrow ml-auto text-muted group-hover:text-ink">
             <span aria-hidden="true">{dict.common.readMore}</span>
-            <span className="sr-only">: {article.title}</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
-          </Link>
+          </span>
         </div>
       </div>
+      <Link href={href} className="stretched-link" aria-label={article.title} />
     </article>
   );
 }
