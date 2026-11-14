@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   BookOpen,
+  CalendarClock,
+  CalendarDays,
+  ClipboardList,
   ExternalLink,
   FolderOpen,
   Frame,
@@ -35,6 +38,9 @@ const NAV = [
   { href: "/admin/taxonomy", label: "Danh mục & thẻ", icon: Tags },
   { href: "/admin/media", label: "Thư viện ảnh", icon: ImageIcon },
   { href: "/admin/messages", label: "Tin nhắn", icon: Mail },
+  { href: "/admin/surveys", label: "Khảo sát", icon: ClipboardList },
+  { href: "/admin/bookings", label: "Đặt lịch", icon: CalendarDays },
+  { href: "/admin/schedule-import", label: "Nhập lịch", icon: CalendarClock },
   { href: "/admin/settings", label: "Cài đặt", icon: Settings, superOnly: true },
   { href: "/admin/users", label: "Người dùng", icon: Users, superOnly: true },
   { href: "/admin/account", label: "Tài khoản", icon: KeyRound },
@@ -53,6 +59,9 @@ const TITLES: Record<string, string> = {
   "/admin/taxonomy": "Danh mục & thẻ",
   "/admin/media": "Thư viện ảnh",
   "/admin/messages": "Tin nhắn liên hệ",
+  "/admin/surveys": "Khảo sát",
+  "/admin/bookings": "Đặt lịch",
+  "/admin/schedule-import": "Nhập lịch",
   "/admin/settings": "Cài đặt website",
   "/admin/users": "Người dùng quản trị",
   "/admin/account": "Tài khoản & mật khẩu",
@@ -92,7 +101,13 @@ export function AdminShell({
 
   const title =
     TITLES[pathname] ??
-    (pathname.startsWith("/admin/projects/")
+    (pathname.startsWith("/admin/surveys/")
+      ? "Chỉnh sửa khảo sát"
+      : pathname.startsWith("/admin/bookings/")
+        ? "Đặt lịch"
+        : pathname.startsWith("/admin/schedule-import/")
+          ? "Nhập lịch"
+        : pathname.startsWith("/admin/projects/")
       ? "Chỉnh sửa dự án"
       : pathname.startsWith("/admin/blog/")
         ? "Chỉnh sửa bài viết"

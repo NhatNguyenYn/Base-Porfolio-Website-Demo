@@ -467,6 +467,8 @@ model Media {
   artworkThumbnails  Artwork[]           @relation("ArtworkThumbnail")
   collectionCovers   ArtworkCollection[] @relation("CollectionCover")
   articleCovers      Article[]           @relation("ArticleCover")
+  surveyCovers       Survey[]            @relation("SurveyCover")
+  surveyBrandLogos   Survey[]            @relation("SurveyBrandLogo")
 
   @@index([createdAt])
 }
@@ -513,4 +515,383 @@ model ActivityLog {
 
   @@index([createdAt])
   @@index([entityType])
+}
+
+// ---------------------------------------------------------------------------
+// Custom Survey System (Phase 10)
+// ---------------------------------------------------------------------------
+
+model Survey {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  // draft | published | closed | archived  (zod enum; see src/lib/validation.ts)
+  status          String    @default("draft")
+  coverMediaId    String?
+  // minimal | editorial | modern | premium | editorial-vn
+  themePreset     String    @default("minimal")
+  // layout: centered | split | editorial ; progressStyle: bar | dots | steps
+  layout          String    @default("centered")
+  progressStyle   String    @default("bar")
+  // Validated hex colours, never raw CSS. Null = preset default.
+  primaryColor    String?
+  accentColor     String?
+  backgroundColor String?
+  surfaceColor    String?
+  textColor       String?
+  // Completion-badge gradient colours (validated hex, null = preset default).
+  badgeFromColor  String?
+  badgeToColor    String?
+  // Brand header for the public survey/booking pages (15:14 photo reference):
+  // brand name + logo shown in the top strip. Null = fall back to site brand.
+  brandName       String?
+  brandLogoMediaId String?
+  // buttonStyle: solid | outline ; borderRadius: sm | md | lg | full (as String)
+  buttonStyle     String    @default("solid")
+  borderRadius    String    @default("md")
+  estimatedMinutes Int?
+  startsAt        DateTime?
+  endsAt          DateTime?
+  publishedAt     DateTime?
+  // true = this survey may be chosen as a booking intake survey
+  isBookingIntake Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  coverMedia   Media?              @relation("SurveyCover", fields: [coverMediaId], references: [id], onDelete: SetNull)
+  brandLogoMedia Media?              @relation("SurveyBrandLogo", fields: [brandLogoMediaId], references: [id], onDelete: SetNull)
+  translations SurveyTranslation[]
+  sections     SurveySection[]
+  questions    SurveyQuestion[]
+  responses    SurveyResponse[]
+  intakeFor    BookingService[]    @relation("IntakeSurvey")
+
+  @@index([status, publishedAt])
+  @@index([deletedAt])
+}
+
+model SurveyTranslation {
+  id                String @id @default(cuid())
+  surveyId          String
+  locale            String
+  title             String
+  subtitle          String @default("")
+  description       String @default("")
+  introduction      String @default("")
+  completionMessage String @default("")
+  privacyNotice     String @default("")
+  // Newline-separated custom bullet lines for the intro page; empty = no
+  // custom bullets (the page falls back to its generated bullet list).
+  highlights        String @default("")
+
+  survey Survey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyId, locale])
+  @@index([locale])
+}
+
+model SurveySection {
+  id       String @id @default(cuid())
+  surveyId String
+  order    Int    @default(0)
+
+  survey       Survey               @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  translations SurveySectionTranslation[]
+  questions    SurveyQuestion[]
+
+  @@index([surveyId, order])
+}
+
+model SurveySectionTranslation {
+  id          String @id @default(cuid())
+  sectionId   String
+  locale      String
+  title       String
+  description String @default("")
+
+  section SurveySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([sectionId, locale])
+}
+
+model SurveyQuestion {
+  id        String  @id @default(cuid())
+  surveyId  String
+  sectionId String?
+  // short_text | long_text | single_choice | multiple_choice | dropdown | rating | nps | yes_no
+  type      String
+  order     Int     @default(0)
+  required  Boolean @default(false)
+  minLength Int?
+  maxLength Int?
+  minRating Int?
+  maxRating Int?
+
+  survey       Survey            @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  section      SurveySection?    @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  translations SurveyQuestionTranslation[]
+  options      SurveyQuestionOption[]
+  answers      SurveyAnswer[]
+
+  @@index([surveyId, order])
+  @@index([sectionId, order])
+}
+
+model SurveyQuestionTranslation {
+  id          String @id @default(cuid())
+  questionId  String
+  locale      String
+  title       String
+  description String @default("")
+  placeholder String @default("")
+
+  question SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, locale])
+}
+
+model SurveyQuestionOption {
+  id         String @id @default(cuid())
+  questionId String
+  // Stable machine value (slugified label); the human label lives in translations.
+  value      String
+  order      Int    @default(0)
+
+  question     SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  translations SurveyQuestionOptionTranslation[]
+  answers      SurveyAnswer[]
+
+  @@unique([questionId, value])
+  @@index([questionId, order])
+}
+
+model SurveyQuestionOptionTranslation {
+  id       String @id @default(cuid())
+  optionId String
+  locale   String
+  label    String
+
+  option SurveyQuestionOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([optionId, locale])
+}
+
+model SurveyResponse {
+  id            String   @id @default(cuid())
+  surveyId      String
+  // Locale the respondent answered in; answers join questions via questionId.
+  locale        String
+  // Null for anonymous. When the survey is "identified", store sha256(lower(email))
+  // — the same hashedKey() pattern as the rate limiter — never the raw email.
+  // @@unique([surveyId, respondentKey]) enforces one response per identified
+  // respondent; Postgres treats NULLs as distinct, so anonymous responses
+  // are unaffected.
+  respondentKey String?
+  submittedAt   DateTime @default(now())
+  // No ip / userAgent columns by design (prompt §10.1). No name/email/phone
+  // columns: identification lives in Booking when linked, or in answers.
+
+  survey  Survey         @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  answers SurveyAnswer[]
+  booking Booking?
+
+  @@unique([surveyId, respondentKey])
+  @@index([surveyId, submittedAt])
+}
+
+model SurveyAnswer {
+  id         String @id @default(cuid())
+  responseId String
+  questionId String
+  // For choice questions, the selected option (SetNull keeps the answer row
+  // readable if the option is later removed). For rating/nps, the number as
+  // text. For text, the text itself. One row per selected option for
+  // multiple_choice (never a JSON array — this schema has no Json columns).
+  optionId   String?
+  value      String
+
+  response SurveyResponse       @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  question SurveyQuestion       @relation(fields: [questionId], references: [id], onDelete: Restrict)
+  option   SurveyQuestionOption? @relation(fields: [optionId], references: [id], onDelete: SetNull)
+
+  @@index([responseId, questionId])
+}
+
+// ---------------------------------------------------------------------------
+// Booking (Phase 10) — consultation appointments + flower code name
+// ---------------------------------------------------------------------------
+
+model BookingService {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  durationMinutes Int      @default(30) // 15 | 30 | 60 (zod enum)
+  active          Boolean  @default(true)
+  intakeSurveyId  String?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  intakeSurvey Survey?                   @relation("IntakeSurvey", fields: [intakeSurveyId], references: [id], onDelete: SetNull)
+  translations BookingServiceTranslation[]
+  slots        BookingSlot[]
+  bookings     Booking[]
+
+  @@index([active, order])
+}
+
+model BookingServiceTranslation {
+  id          String @id @default(cuid())
+  serviceId   String
+  locale      String
+  name        String
+  description String @default("")
+
+  service BookingService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, locale])
+}
+
+model BookingSlot {
+  id        String   @id @default(cuid())
+  serviceId String
+  // Stored in UTC; displayed in Asia/Ho_Chi_Minh.
+  startsAt  DateTime
+  endsAt    DateTime
+  // available | booked | blocked
+  status    String   @default("available")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  service  BookingService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@unique([serviceId, startsAt])
+  @@index([serviceId, startsAt, status])
+}
+
+model Booking {
+  id               String    @id @default(cuid())
+  // BK- + 6-char public reference, unambiguous alphabet (no 0/O, 1/I/l).
+  // Shown to the visitor; cancel/lookup requires referenceCode + email together.
+  referenceCode    String    @unique
+  serviceId        String
+  slotId           String
+  surveyResponseId String?   @unique
+  name             String
+  email            String
+  phone            String?
+  notes            String    @default("")
+  // Flower code name — see src/lib/flowers.ts (e.g. "tulip"). Kept forever as
+  // history; uniqueness among ACTIVE bookings is enforced by the partial index
+  // in the migration, NOT by nulling this column on cancel/complete.
+  flowerCode       String
+  // pending | confirmed | completed | cancelled
+  status           String    @default("pending")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  cancelledAt      DateTime?
+
+  service        BookingService  @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  slot           BookingSlot     @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  surveyResponse SurveyResponse? @relation(fields: [surveyResponseId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([serviceId])
+  @@index([email])
+}
+
+// ---------------------------------------------------------------------------
+// Schedule JSON Import (Phase 11) — imported schedules + import history
+// ---------------------------------------------------------------------------
+
+model IntegrationConnection {
+  id        String    @id @default(cuid())
+  name      String
+  // SHA-256 of the opaque `imp_…` token; the raw token is never persisted.
+  tokenHash String    @unique
+  autoApply Boolean   @default(false)
+  isActive  Boolean   @default(true)
+  lastUsedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  schedules ImportedSchedule[]
+  imports   ScheduleImport[]
+
+  @@index([isActive])
+}
+
+model ImportedSchedule {
+  id           String   @id @default(cuid())
+  // Null = manual admin import scope; a connection id = that connection's
+  // scope. Manual and API scopes never match each other (engine, D5).
+  // NOTE (D1 deviation, see engine.ts): D1 wrote `connectionId String`
+  // (non-null), but a null manual scope cannot be stored in a non-null FK
+  // column, so this is nullable. The @@unique below does not fire for NULL
+  // connectionId (Postgres treats NULLs as distinct); a partial unique
+  // index in the migration covers the manual scope instead.
+  connectionId String?
+  externalId   String
+  title        String
+  description  String   @default("")
+  location     String   @default("")
+  note         String   @default("")
+  // Stored in UTC; displayed in Asia/Ho_Chi_Minh (same rule as BookingSlot).
+  startsAt     DateTime
+  endsAt       DateTime
+  // scheduled | confirmed | completed | cancelled
+  status       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  connection IntegrationConnection? @relation(fields: [connectionId], references: [id], onDelete: Restrict)
+
+  @@unique([connectionId, externalId])
+  @@index([connectionId, startsAt])
+  @@index([status, startsAt])
+}
+
+model ScheduleImport {
+  id             String    @id @default(cuid())
+  // Null = manual admin import.
+  connectionId   String?
+  source         String
+  // completed | completed_with_errors | failed
+  status         String
+  totalRecords   Int
+  createdCount   Int
+  updatedCount   Int
+  unchangedCount Int
+  cancelledCount Int
+  failedCount    Int
+  importKey      String?
+  payloadHash    String?
+  createdByUserId String?
+  // Short message only, never a stack trace.
+  errorSummary   String?
+  createdAt      DateTime  @default(now())
+
+  connection IntegrationConnection? @relation(fields: [connectionId], references: [id], onDelete: Restrict)
+  items      ScheduleImportItem[]
+
+  // Postgres NULLs are distinct, so manual imports (importKey null) never
+  // collide on this.
+  @@unique([connectionId, importKey])
+  @@index([connectionId, createdAt])
+  @@index([status, createdAt])
+}
+
+model ScheduleImportItem {
+  id         String   @id @default(cuid())
+  importId   String
+  externalId String
+  // created | updated | unchanged | cancelled | failed
+  action     String
+  // Short message only.
+  error      String?
+  createdAt  DateTime @default(now())
+
+  import ScheduleImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  @@index([importId])
 }

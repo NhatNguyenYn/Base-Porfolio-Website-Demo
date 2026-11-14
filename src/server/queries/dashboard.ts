@@ -13,6 +13,11 @@ export type DashboardData = {
     media: number;
     messages: number;
     unreadMessages: number;
+    surveys: number;
+    publishedSurveys: number;
+    responses: number;
+    bookings: number;
+    pendingBookings: number;
   };
   views: { articles: number; artworks: number; total: number };
   recentArticles: { id: string; slug: string; title: string; status: string; updatedAt: Date }[];
@@ -31,6 +36,11 @@ export async function getDashboardData(): Promise<DashboardData> {
     media,
     messages,
     unreadMessages,
+    surveys,
+    publishedSurveys,
+    responses,
+    bookings,
+    pendingBookings,
     articleViews,
     artworkViews,
     recentArticles,
@@ -46,6 +56,11 @@ export async function getDashboardData(): Promise<DashboardData> {
     prisma.media.count(),
     prisma.contactMessage.count({ where: { deletedAt: null } }),
     prisma.contactMessage.count({ where: { deletedAt: null, status: "unread" } }),
+    prisma.survey.count({ where: { deletedAt: null } }),
+    prisma.survey.count({ where: { deletedAt: null, status: "published" } }),
+    prisma.surveyResponse.count(),
+    prisma.booking.count(),
+    prisma.booking.count({ where: { status: "pending" } }),
     prisma.article.aggregate({ _sum: { viewCount: true } }),
     prisma.artwork.aggregate({ _sum: { viewCount: true } }),
     prisma.article.findMany({
@@ -76,6 +91,11 @@ export async function getDashboardData(): Promise<DashboardData> {
       media,
       messages,
       unreadMessages,
+      surveys,
+      publishedSurveys,
+      responses,
+      bookings,
+      pendingBookings,
     },
     views: {
       articles: articleViews._sum.viewCount ?? 0,

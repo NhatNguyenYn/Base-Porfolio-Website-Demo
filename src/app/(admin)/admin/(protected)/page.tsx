@@ -2,6 +2,8 @@ import Link from "next/link";
 import {
   ArrowUpRight,
   BookOpen,
+  CalendarDays,
+  ClipboardList,
   Eye,
   FolderOpen,
   Frame,
@@ -47,6 +49,20 @@ export default async function DashboardPage() {
       icon: Mail,
     },
     {
+      label: "Khảo sát",
+      value: data.counts.surveys,
+      note: `${data.counts.publishedSurveys} đã xuất bản · ${data.counts.responses} câu trả lời`,
+      href: "/admin/surveys",
+      icon: ClipboardList,
+    },
+    {
+      label: "Đặt lịch",
+      value: data.counts.bookings,
+      note: `${data.counts.pendingBookings} chờ xác nhận`,
+      href: "/admin/bookings",
+      icon: CalendarDays,
+    },
+    {
       label: "Ảnh trong thư viện",
       value: data.counts.media,
       note: "Ảnh đã tải lên",
@@ -74,7 +90,7 @@ export default async function DashboardPage() {
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (

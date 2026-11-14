@@ -15,7 +15,7 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
     "db:start": "node scripts/dev-db.mjs start",
-    "test": "vitest run",
+    "test": "vitest run --fileParallelism=false",
     "test:watch": "vitest",
     "db:create-test": "node scripts/create-test-db.mjs",
     "postinstall": "prisma generate"

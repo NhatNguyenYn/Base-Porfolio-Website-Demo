@@ -140,3 +140,47 @@ export function aspectRatio(width?: number | null, height?: number | null): numb
   if (!width || !height) return 4 / 5;
   return width / height;
 }
+
+/** Replace `{name}` placeholders in an i18n message template. */
+export function interpolate(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_match, key: string) =>
+    key in values ? String(values[key]) : _match,
+  );
+}
+
+/**
+ * Drop intro bullets that restate an earlier bullet.
+ *
+ * The survey/booking intro always lists a few auto-generated facts (question
+ * count + time, anonymity, go-back note) and then appends the admin's
+ * `highlights` lines. When a highlight restates an auto fact — exactly, as a
+ * longer rewording of it, or with one word changed ("8 câu hỏi ngắn, khoảng
+ * 5 phút" vs "8 câu hỏi, khoảng 5 phút") — the page shows the same line twice
+ * (Phase 10 visual check, 2026-11-14). Keep the first occurrence and drop
+ * later lines that are equal to, contain, are contained by, or share at
+ * least 80% of their words with an earlier bullet. Word overlap only counts
+ * for lines of at least 4 words, so short generic lines never collapse
+ * distinct bullets.
+ */
+export function dedupeBullets(bullets: string[]): string[] {
+  const kept: string[] = [];
+  const norm = (value: string) => value.trim().replace(/\s+/g, " ").toLowerCase();
+  const tokens = (value: string) =>
+    new Set(norm(value).replace(/[.,;:!?()—–\-·]/g, " ").split(" ").filter(Boolean));
+  const restates = (a: string, b: string) => {
+    if (a === b) return true;
+    if (a.length >= 12 && b.length >= 12 && (a.includes(b) || b.includes(a))) return true;
+    const ta = tokens(a);
+    const tb = tokens(b);
+    if (ta.size < 4 || tb.size < 4) return false;
+    let shared = 0;
+    for (const token of ta) if (tb.has(token)) shared++;
+    return shared / (ta.size + tb.size - shared) >= 0.8;
+  };
+  for (const bullet of bullets) {
+    const n = norm(bullet);
+    if (!n) continue;
+    if (!kept.some((existing) => restates(n, norm(existing)))) kept.push(bullet);
+  }
+  return kept;
+}

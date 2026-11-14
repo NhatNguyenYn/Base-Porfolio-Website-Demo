@@ -1575,6 +1575,248 @@ async function main() {
     });
   }
 
+  // --------------------------------------- Phase 10 demo survey + booking
+  // Idempotent demo data (upsert-style, like the rest of this file): one
+  // published intake survey with all 8 question types across 2 sections,
+  // one 30-minute booking service linked to it, and future slots for the
+  // next 7 days at 09:00 and 14:00 Vietnam time (stored as UTC). No admin
+  // user is created here and no existing seed data is changed. Safe to run
+  // in CI / the Pages export: the survey + booking pages are staged out of
+  // the static build, so this data is simply unused there.
+  const DEMO_SURVEY_SLUG = "khao-sat-trai-nghiem-tu-van";
+  const DEMO_SERVICE_SLUG = "tu-van-1-1";
+  const existingDemoSurvey = await prisma.survey.findUnique({ where: { slug: DEMO_SURVEY_SLUG } });
+  const demoSurvey = await prisma.survey.upsert({
+    where: { slug: DEMO_SURVEY_SLUG },
+    update: {
+      status: "published",
+      themePreset: "editorial-vn",
+      layout: "editorial",
+      progressStyle: "steps",
+      brandName: "Portfolio Studio",
+      estimatedMinutes: 5,
+      isBookingIntake: true,
+      publishedAt: existingDemoSurvey?.publishedAt ?? new Date(),
+    },
+    create: {
+      slug: DEMO_SURVEY_SLUG,
+      status: "published",
+      themePreset: "editorial-vn",
+      layout: "editorial",
+      progressStyle: "steps",
+      brandName: "Portfolio Studio",
+      estimatedMinutes: 5,
+      isBookingIntake: true,
+      publishedAt: new Date(),
+    },
+  });
+  const demoSurveyTranslations = {
+    vi: {
+      title: "Khảo sát trải nghiệm tư vấn",
+      subtitle: "Phiếu khảo sát",
+      description:
+        "Vài câu hỏi ngắn giúp buổi tư vấn 1-1 hiệu quả hơn. Khảo sát này cũng là phiếu đầu vào khi bạn đặt lịch tư vấn.",
+      introduction:
+        "Cảm ơn bạn đã dành thời gian. Câu trả lời của bạn chỉ dùng để chuẩn bị cho buổi tư vấn và không được chia sẻ cho bên thứ ba.",
+      completionMessage: "Cảm ơn bạn! Câu trả lời của bạn đã được ghi nhận và sẽ giúp buổi tư vấn hiệu quả hơn.",
+      privacyNotice:
+        "Khảo sát ẩn danh — chúng tôi không thu thập tên, email hay địa chỉ IP của bạn trong phiếu này. Thông tin liên hệ (nếu có) chỉ được thu thập ở bước đặt lịch, để tư vấn viên liên hệ với bạn.",
+      // Distinct from the auto intro bullets (question count, anonymity,
+      // go-back note): a highlight restating them showed the same line twice
+      // on the intro page (Phase 10 visual check, 2026-11-14). The intake
+      // survey feeds a booking that DOES collect contact info, so no
+      // highlight may claim "no personal data is collected" here.
+      highlights: "Câu trả lời giúp tư vấn viên chuẩn bị trước buổi hẹn",
+    },
+    en: {
+      title: "Consultation experience survey",
+      subtitle: "Survey",
+      description:
+        "A few short questions to make your 1-on-1 consultation more useful. This survey is also the intake form when you book a consultation.",
+      introduction:
+        "Thank you for your time. Your answers are only used to prepare for the consultation and are never shared with third parties.",
+      completionMessage: "Thank you! Your answers have been recorded and will help make the consultation more useful.",
+      privacyNotice:
+        "This survey is anonymous — we do not collect your name, email or IP address in this form. Contact details (if any) are only collected at the booking step, so the consultant can reach you.",
+      // Distinct from the auto intro bullets — see the vi note above.
+      highlights: "Your answers help the consultant prepare before the session",
+    },
+  } as const;
+  for (const locale of ["vi", "en"] as const) {
+    const block = demoSurveyTranslations[locale];
+    await prisma.surveyTranslation.upsert({
+      where: { surveyId_locale: { surveyId: demoSurvey.id, locale } },
+      update: { ...block },
+      create: { surveyId: demoSurvey.id, locale, ...block },
+    });
+  }
+
+  if (!existingDemoSurvey) {
+    // Sections + questions are created only on first seed. Re-runs keep the
+    // existing questions untouched (deleting them could break stored answers,
+    // and SurveyAnswer.questionId is Restrict).
+    const demoSections = [
+      { order: 0, vi: { title: "Về bạn và nhu cầu tư vấn", description: "Giúp chúng tôi hiểu bạn cần gì." }, en: { title: "About you and your needs", description: "Help us understand what you need." } },
+      { order: 1, vi: { title: "Đánh giá và phản hồi", description: "Cho chúng tôi biết trải nghiệm của bạn." }, en: { title: "Rating and feedback", description: "Tell us about your experience." } },
+    ];
+    const sectionIds: string[] = [];
+    for (const section of demoSections) {
+      const created = await prisma.surveySection.create({
+        data: { surveyId: demoSurvey.id, order: section.order },
+      });
+      sectionIds.push(created.id);
+      for (const locale of ["vi", "en"] as const) {
+        await prisma.surveySectionTranslation.create({
+          data: { sectionId: created.id, locale, ...section[locale] },
+        });
+      }
+    }
+
+    type DemoOption = { value: string; vi: string; en: string };
+    type DemoQuestion = {
+      section: number;
+      order: number;
+      type: string;
+      required: boolean;
+      maxLength?: number;
+      minRating?: number;
+      maxRating?: number;
+      vi: { title: string; description: string; placeholder: string };
+      en: { title: string; description: string; placeholder: string };
+      options?: DemoOption[];
+    };
+    const demoQuestions: DemoQuestion[] = [
+      {
+        section: 0, order: 0, type: "short_text", required: true, maxLength: 500,
+        vi: { title: "Bạn đang quan tâm đến vấn đề gì nhất?", description: "Một câu ngắn gọn là đủ.", placeholder: "Ví dụ: tôi muốn cải thiện quy trình làm việc của nhóm…" },
+        en: { title: "What are you most interested in discussing?", description: "One short sentence is enough.", placeholder: "E.g. I want to improve my team's workflow…" },
+      },
+      {
+        section: 0, order: 1, type: "long_text", required: false, maxLength: 5000,
+        vi: { title: "Hãy mô tả ngắn gọn bối cảnh của bạn", description: "Càng cụ thể, buổi tư vấn càng hiệu quả.", placeholder: "Bối cảnh hiện tại, khó khăn đang gặp…" },
+        en: { title: "Briefly describe your situation", description: "The more specific, the more useful the session.", placeholder: "Your current situation, the difficulties you face…" },
+      },
+      {
+        section: 0, order: 2, type: "single_choice", required: true,
+        vi: { title: "Mục đích chính của buổi tư vấn là gì?", description: "", placeholder: "" },
+        en: { title: "What is the main purpose of this consultation?", description: "", placeholder: "" },
+        options: [
+          { value: "su-nghiep", vi: "Sự nghiệp", en: "Career" },
+          { value: "du-an", vi: "Dự án", en: "Project" },
+          { value: "kinh-doanh", vi: "Kinh doanh", en: "Business" },
+          { value: "ca-nhan", vi: "Cá nhân", en: "Personal" },
+        ],
+      },
+      {
+        section: 0, order: 3, type: "dropdown", required: false,
+        vi: { title: "Bạn biết đến dịch vụ tư vấn qua đâu?", description: "", placeholder: "" },
+        en: { title: "How did you hear about this consultation service?", description: "", placeholder: "" },
+        options: [
+          { value: "ban-be", vi: "Bạn bè giới thiệu", en: "Referred by a friend" },
+          { value: "mang-xa-hoi", vi: "Mạng xã hội", en: "Social media" },
+          { value: "tim-kiem", vi: "Tìm kiếm trên Google", en: "Google search" },
+          { value: "khac", vi: "Khác", en: "Other" },
+        ],
+      },
+      {
+        section: 1, order: 4, type: "rating", required: true, minRating: 1, maxRating: 5,
+        vi: { title: "Bạn đánh giá thế nào về trải nghiệm đặt lịch trên trang này?", description: "Thang điểm từ 1 đến 5.", placeholder: "" },
+        en: { title: "How would you rate the booking experience on this site?", description: "On a scale from 1 to 5.", placeholder: "" },
+      },
+      {
+        section: 1, order: 5, type: "nps", required: true, minRating: 0, maxRating: 10,
+        vi: { title: "Bạn có giới thiệu dịch vụ tư vấn này cho người khác không?", description: "0 là hoàn toàn không, 10 là chắc chắn giới thiệu.", placeholder: "" },
+        en: { title: "Would you recommend this consultation service to others?", description: "0 means not at all, 10 means definitely.", placeholder: "" },
+      },
+      {
+        section: 1, order: 6, type: "yes_no", required: true,
+        vi: { title: "Bạn đã từng tham gia tư vấn 1-1 trước đây chưa?", description: "", placeholder: "" },
+        en: { title: "Have you attended a 1-on-1 consultation before?", description: "", placeholder: "" },
+      },
+      {
+        section: 1, order: 7, type: "multiple_choice", required: false,
+        vi: { title: "Chủ đề bạn muốn trao đổi trong buổi tư vấn", description: "Chọn tất cả chủ đề phù hợp.", placeholder: "" },
+        en: { title: "Topics you would like to discuss in the session", description: "Choose all that apply.", placeholder: "" },
+        options: [
+          { value: "thiet-ke", vi: "Thiết kế", en: "Design" },
+          { value: "ky-thuat", vi: "Kỹ thuật", en: "Engineering" },
+          { value: "nghe-thuat", vi: "Nghệ thuật", en: "Art" },
+          { value: "chien-luoc", vi: "Chiến lược sản phẩm", en: "Product strategy" },
+        ],
+      },
+    ];
+    for (const question of demoQuestions) {
+      const created = await prisma.surveyQuestion.create({
+        data: {
+          surveyId: demoSurvey.id,
+          sectionId: sectionIds[question.section] ?? null,
+          type: question.type,
+          order: question.order,
+          required: question.required,
+          maxLength: question.maxLength ?? null,
+          minRating: question.minRating ?? null,
+          maxRating: question.maxRating ?? null,
+        },
+      });
+      for (const locale of ["vi", "en"] as const) {
+        await prisma.surveyQuestionTranslation.create({
+          data: { questionId: created.id, locale, ...question[locale] },
+        });
+      }
+      for (const [index, option] of (question.options ?? []).entries()) {
+        const createdOption = await prisma.surveyQuestionOption.create({
+          data: { questionId: created.id, value: option.value, order: index },
+        });
+        for (const locale of ["vi", "en"] as const) {
+          await prisma.surveyQuestionOptionTranslation.create({
+            data: { optionId: createdOption.id, locale, label: option[locale] },
+          });
+        }
+      }
+    }
+  }
+
+  const demoService = await prisma.bookingService.upsert({
+    where: { slug: DEMO_SERVICE_SLUG },
+    update: { durationMinutes: 30, active: true, intakeSurveyId: demoSurvey.id, order: 0 },
+    create: { slug: DEMO_SERVICE_SLUG, durationMinutes: 30, active: true, intakeSurveyId: demoSurvey.id, order: 0 },
+  });
+  const demoServiceTranslations = {
+    vi: { name: "Tư vấn 1-1", description: "Buổi tư vấn riêng 30 phút: trao đổi trực tiếp về vấn đề của bạn và nhận gợi ý cụ thể." },
+    en: { name: "1-on-1 consultation", description: "A private 30-minute session: discuss your problem directly and get concrete suggestions." },
+  } as const;
+  for (const locale of ["vi", "en"] as const) {
+    await prisma.bookingServiceTranslation.upsert({
+      where: { serviceId_locale: { serviceId: demoService.id, locale } },
+      update: { ...demoServiceTranslations[locale] },
+      create: { serviceId: demoService.id, locale, ...demoServiceTranslations[locale] },
+    });
+  }
+
+  // Future slots: next 7 days, 09:00 and 14:00 Vietnam time (= 02:00 and
+  // 07:00 UTC). Upsert on the [serviceId, startsAt] unique key, so re-runs
+  // never duplicate a slot. Past slots are never created (offset starts at
+  // +1 day from the current UTC date, and 02:00 UTC is 09:00 VN the same day).
+  const demoSlotHoursUtc = [2, 7];
+  let demoSlotCount = 0;
+  const nowUtc = new Date();
+  const baseDayUtc = Date.UTC(nowUtc.getUTCFullYear(), nowUtc.getUTCMonth(), nowUtc.getUTCDate());
+  for (let dayOffset = 1; dayOffset <= 7; dayOffset++) {
+    for (const hourUtc of demoSlotHoursUtc) {
+      const startsAt = new Date(baseDayUtc + dayOffset * 24 * 60 * 60 * 1000 + hourUtc * 60 * 60 * 1000);
+      const endsAt = new Date(startsAt.getTime() + 30 * 60 * 1000);
+      await prisma.bookingSlot.upsert({
+        where: { serviceId_startsAt: { serviceId: demoService.id, startsAt } },
+        update: {},
+        create: { serviceId: demoService.id, startsAt, endsAt, status: "available" },
+      });
+      demoSlotCount++;
+    }
+  }
+
+  console.log(`  Demo survey: ${DEMO_SURVEY_SLUG} (published, editorial-vn, intake)`);
+  console.log(`  Demo service: ${DEMO_SERVICE_SLUG} (30 min) + ${demoSlotCount} slots, next 7 days 09:00/14:00 VN`);
+
   console.log("Seed complete.");
   console.log(`  Profile: ${DEMO.vi.fullName} / ${DEMO.en.fullName}`);
   console.log(`  Projects: ${PROJECTS.length}, artworks: ${ARTWORKS.length}, articles: ${ARTICLES.length}`);

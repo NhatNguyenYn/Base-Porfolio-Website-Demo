@@ -3,7 +3,7 @@ import { defaultLocale, isLocale } from "@/i18n/config";
 import { buildContentSecurityPolicy, CSP_NONCE_HEADER } from "@/lib/csp";
 
 /** First path segment of a known public section (bare, without a locale). */
-const BARE_PUBLIC_SEGMENTS = new Set(["about", "blog", "projects", "art", "contact"]);
+const BARE_PUBLIC_SEGMENTS = new Set(["about", "blog", "projects", "art", "contact", "survey", "booking"]);
 
 /**
  * Bare known public path (e.g. `/about`, `/blog/my-post`) → its localized

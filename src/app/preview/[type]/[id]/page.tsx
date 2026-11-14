@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/utils";
 import { resolveLocale, type Locale } from "@/i18n/config";
 import { normalizeArticleTemplate } from "@/lib/article-template";
 import { ArticleBody as ArticleBodyContent } from "@/components/blog/article-body";
+import { QUESTION_TYPE_LABELS } from "@/components/admin/status-badge";
 
 export const dynamic = "force-dynamic";
 
@@ -21,11 +22,13 @@ const TYPE_LABEL: Record<string, string> = {
   article: "Bài viết",
   project: "Dự án",
   artwork: "Tác phẩm",
+  survey: "Khảo sát",
 };
 
 type ArticlePreview = Extract<PreviewData, { kind: "article" }>;
 type ProjectPreview = Extract<PreviewData, { kind: "project" }>;
 type ArtworkPreview = Extract<PreviewData, { kind: "artwork" }>;
+type SurveyPreview = Extract<PreviewData, { kind: "survey" }>;
 
 async function ArticleBody({ data, locale }: { data: ArticlePreview; locale: Locale }) {
   const translation = data.translation;
@@ -105,6 +108,95 @@ async function ProjectBody({ data }: { data: ProjectPreview }) {
   );
 }
 
+function SurveyBody({ data, locale }: { data: SurveyPreview; locale: Locale }) {
+  const translation = data.translation;
+  if (!translation) return null;
+  const pickTitle = (translations: { locale: string; title: string }[], fallback: string) =>
+    translations.find((item) => item.locale === locale)?.title ||
+    translations.find((item) => item.locale === "vi")?.title ||
+    fallback;
+  const pickLabel = (translations: { locale: string; label: string }[], fallback: string) =>
+    translations.find((item) => item.locale === locale)?.label ||
+    translations.find((item) => item.locale === "vi")?.label ||
+    fallback;
+  const ungrouped = data.questions.filter((question) => !question.sectionId);
+
+  return (
+    <article>
+      <p className="text-[10px] uppercase tracking-[0.16em] text-accent">Khảo sát</p>
+      <h1 className="display mt-4 text-[clamp(2rem,5vw,3.4rem)] leading-[1.05]">{translation.title}</h1>
+      {translation.subtitle && (
+        <p className="serif-accent mt-4 text-[clamp(1.2rem,2.4vw,1.7rem)] text-slateblue">{translation.subtitle}</p>
+      )}
+      <p className="mt-5 text-[11px] uppercase tracking-[0.14em] text-muted">
+        /{data.slug} · {data.themePreset} · {data.layout}
+        {data.estimatedMinutes ? ` · khoảng ${data.estimatedMinutes} phút` : ""} · {data.responseCount} câu trả lời
+        {data.isBookingIntake ? " · khảo sát đầu vào đặt lịch" : ""}
+      </p>
+      {data.cover && (
+        <div className="relative mt-8 aspect-[16/9] overflow-hidden border border-line">
+          <Image src={assetUrl(data.cover)} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
+        </div>
+      )}
+      {translation.description && <p className="mt-6 text-[15px] leading-[1.8] text-muted">{translation.description}</p>}
+      {translation.introduction && (
+        <p className="mt-4 whitespace-pre-line text-[15px] leading-[1.8]">{translation.introduction}</p>
+      )}
+      {data.sections.map((section) => {
+        const sectionQuestions = data.questions.filter((question) => question.sectionId === section.id);
+        if (sectionQuestions.length === 0) return null;
+        return (
+          <section key={section.id} className="mt-10">
+            <h2 className="text-[15px] font-medium">{pickTitle(section.translations, "Mục")}</h2>
+            <ol className="mt-4 space-y-5">
+              {sectionQuestions.map((question) => (
+                <li key={question.id} className="border border-line bg-surface p-4">
+                  <p className="text-[14px] font-medium">
+                    {pickTitle(question.translations, question.id)}
+                    {question.required && <span className="ml-2 text-[11px] text-accent">Bắt buộc</span>}
+                  </p>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-muted">
+                    {QUESTION_TYPE_LABELS[question.type] ?? question.type}
+                  </p>
+                  {question.options.length > 0 && (
+                    <ul className="mt-3 list-disc space-y-1 pl-5 text-[13px] text-muted">
+                      {question.options.map((option) => (
+                        <li key={option.id}>{pickLabel(option.translations, option.value)}</li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        );
+      })}
+      {ungrouped.length > 0 && (
+        <section className="mt-10">
+          <ol className="space-y-5">
+            {ungrouped.map((question) => (
+              <li key={question.id} className="border border-line bg-surface p-4">
+                <p className="text-[14px] font-medium">
+                  {pickTitle(question.translations, question.id)}
+                  {question.required && <span className="ml-2 text-[11px] text-accent">Bắt buộc</span>}
+                </p>
+                <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-muted">
+                  {QUESTION_TYPE_LABELS[question.type] ?? question.type}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+      {translation.completionMessage && (
+        <p className="mt-10 border-t border-line pt-4 text-[13px] text-muted">
+          Thông điệp hoàn thành: {translation.completionMessage}
+        </p>
+      )}
+    </article>
+  );
+}
+
 function ArtworkBody({ data, locale }: { data: ArtworkPreview; locale: Locale }) {
   const translation = data.translation;
   if (!translation) return null;
@@ -163,10 +255,11 @@ export default async function PreviewPage({
   const data = await getPreviewData(type, id, locale);
   if (!data) notFound();
 
-  const editorHref = {
+  const editorHref: string = {
     article: `/admin/blog/${id}`,
     project: `/admin/projects/${id}`,
     artwork: `/admin/art/${id}`,
+    survey: `/admin/surveys/${id}`,
   }[type];
 
   const otherLocale = data.locales.find((item) => item !== locale);
@@ -222,6 +315,8 @@ export default async function PreviewPage({
           <ArticleBody data={data} locale={locale} />
         ) : data.kind === "project" ? (
           <ProjectBody data={data} />
+        ) : data.kind === "survey" ? (
+          <SurveyBody data={data} locale={locale} />
         ) : (
           <ArtworkBody data={data} locale={locale} />
         )}
