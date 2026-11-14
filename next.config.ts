@@ -8,12 +8,22 @@ import type { NextConfig } from "next";
 // untouched — same routes, same dynamic rendering, same headers.
 const isPagesExport = process.env.PAGES_EXPORT === "1";
 
+// GitHub Pages serves this project site from a subpath.
+const basePath = isPagesExport ? "/Base-Porfolio-Website-Demo" : "";
+
 const nextConfig: NextConfig = {
+  // Same value as `basePath`, exposed to the client bundle so `assetUrl`
+  // (src/lib/asset.ts) prefixes local image URLs in both modes. Without
+  // this, `next/image` with `images.unoptimized` renders the stored
+  // root-absolute URL verbatim and every demo image 404s.
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   ...(isPagesExport
     ? {
         output: "export",
         // GitHub Pages serves this project site from a subpath.
-        basePath: "/Base-Porfolio-Website-Demo",
+        basePath,
         trailingSlash: true,
       }
     : {}),

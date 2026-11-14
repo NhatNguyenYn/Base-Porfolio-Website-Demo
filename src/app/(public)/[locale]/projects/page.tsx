@@ -150,7 +150,15 @@ export default async function ProjectsPage({
   const categoryLabels = dict.projects.categories as Record<string, string>;
   const categoryLabel = (slug: string) => categoryLabels[slug] ?? slug;
 
+  // Static export (GitHub Pages demo): a prerendered page cannot re-render
+  // for a query string — `?category=slug` only changes the URL while the
+  // served HTML stays the unfiltered list. So in export mode the chips link
+  // to the prerendered /projects/category/<slug>/ pages instead. Server mode
+  // keeps the query-param filter so it can combine with the q/tech/sort search.
   const categoryHref = (slug: string) => {
+    if (process.env.PAGES_EXPORT === "1") {
+      return slug ? `${basePath}/category/${slug}` : basePath;
+    }
     const search = new URLSearchParams();
     if (q) search.set("q", q);
     if (tech) search.set("tech", tech);

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { listProjectsForAdmin } from "@/server/queries/projects";
 import { deleteProjectAction, toggleProjectFeaturedAction } from "@/server/actions/projects";
+import { assetUrl } from "@/lib/asset";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -59,7 +60,7 @@ export default async function AdminProjectsPage({
                   <div className="relative h-10 w-14 shrink-0 overflow-hidden border border-line bg-surface-muted">
                     {project.thumbnailMedia ? (
                       <Image
-                        src={project.thumbnailMedia.url}
+                        src={assetUrl(project.thumbnailMedia.url)}
                         alt=""
                         fill
                         sizes="56px"

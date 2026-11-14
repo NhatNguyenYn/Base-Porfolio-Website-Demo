@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { ArticleCardData, ArticleDetailData } from "@/data/articles";
 import type { Dictionary } from "@/i18n";
 import { localeHref, type Locale } from "@/i18n/config";
+import { assetUrl } from "@/lib/asset";
 import { formatDate } from "@/lib/utils";
 import type { TocItem } from "@/lib/markdown";
 import { ArticleBody } from "./article-body";
@@ -38,6 +39,16 @@ export function EditorialArticle({
   const coverCaption = article.cover?.alt && article.cover.alt !== article.title ? article.cover.alt : "";
   const monogram = article.authorName.trim().slice(0, 1).toUpperCase() || "A";
   const aboutHref = localeHref(locale, "/about");
+  // Static export (GitHub Pages demo): a prerendered page cannot re-render
+  // for a query string — `?category=slug` only changes the URL while the
+  // served HTML stays the unfiltered list. So in export mode the category
+  // chip links to the prerendered /blog/category/<slug>/ page instead (same
+  // pattern as the list-page chips in blog/page.tsx). Server mode keeps the
+  // query-param filter so it can combine with the q/tag search.
+  // (Tag chips keep `?tag=` — there is no /blog/tag/[slug]/ route to point
+  // them at; building one is out of scope for this fix.)
+  const categoryHref = (slug: string) =>
+    process.env.PAGES_EXPORT === "1" ? `${blogHref}/category/${slug}` : `${blogHref}?category=${slug}`;
 
   const toc = body.toc.length > 0 && (
     <ol className="space-y-2.5">
@@ -64,7 +75,7 @@ export function EditorialArticle({
             {article.categoryName && (
               article.categorySlug ? (
                 <Link
-                  href={`${blogHref}?category=${article.categorySlug}`}
+                  href={categoryHref(article.categorySlug)}
                   className="rounded-full bg-accent-soft px-2.5 py-1 text-accent transition-colors hover:bg-accent hover:text-primary-fg"
                 >
                   {article.categoryName}
@@ -121,7 +132,7 @@ export function EditorialArticle({
           <Reveal variant="mask" priority>
             <div className="relative aspect-[16/9] overflow-hidden bg-surface-muted lg:aspect-[21/9]">
               <Image
-                src={article.cover.url}
+                src={assetUrl(article.cover.url)}
                 alt={article.cover.alt || article.title}
                 fill
                 priority

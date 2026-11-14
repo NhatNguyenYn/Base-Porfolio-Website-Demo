@@ -153,6 +153,26 @@ export default async function BlogCategoryPage({
         meta={[{ label: dict.blog.count, value: String(data.total).padStart(2, "0") }]}
       />
 
+      {data.categories.length > 0 && (
+        <section className="container-page pb-8">
+          <div className="flex flex-wrap items-center gap-2 border-y border-line py-4">
+            <Link href={blogHref} className="chip transition-colors">
+              {dict.blog.allCategories}
+            </Link>
+            {data.categories.map((item) => (
+              <Link
+                key={item.slug}
+                href={`${blogHref}/category/${item.slug}`}
+                className={`chip transition-colors ${item.slug === slug ? "chip-active" : ""}`}
+              >
+                {item.name}
+                <span className="tabular-nums opacity-60">{item.count}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="container-page pb-24">
         {data.items.length > 0 ? (
           <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">

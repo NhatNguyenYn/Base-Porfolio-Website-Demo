@@ -12,6 +12,7 @@ import { getArticleLocales } from "@/server/queries/articles";
 import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
 import { buildPageMetadata, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
+import { assetUrl } from "@/lib/asset";
 import { absoluteUrl, formatDate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildArticleSchema, buildBreadcrumbSchema } from "@/lib/structured-data";
@@ -119,6 +120,14 @@ export default async function ArticlePage({
   ]);
 
   const blogHref = localeHref(locale, "/blog");
+  // Static export (GitHub Pages demo): a prerendered page cannot re-render
+  // for a query string — `?category=slug` only changes the URL while the
+  // served HTML stays the unfiltered list. So in export mode the category
+  // chip links to the prerendered /blog/category/<slug>/ page instead (same
+  // pattern as the list-page chips in blog/page.tsx). Server mode keeps the
+  // query-param filter so it can combine with the q/tag search.
+  const categoryHref = (slug: string) =>
+    process.env.PAGES_EXPORT === "1" ? `${blogHref}/category/${slug}` : `${blogHref}?category=${slug}`;
   const aboutHref = localeHref(locale, "/about");
   const homeHref = localeHref(locale, "/");
   const schemaCanonicalUrl = absoluteUrl(`/${locale}/blog/${article.slug}`);
@@ -188,7 +197,7 @@ export default async function ArticlePage({
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] uppercase tracking-[0.16em] text-muted">
           {article.categoryName &&
             (article.categorySlug ? (
-              <Link href={`${blogHref}?category=${article.categorySlug}`} className="text-accent hover:underline">
+              <Link href={categoryHref(article.categorySlug)} className="text-accent hover:underline">
                 {article.categoryName}
               </Link>
             ) : (
@@ -235,7 +244,7 @@ export default async function ArticlePage({
         <div className="container-page mt-10">
           <div className="relative aspect-[16/9] overflow-hidden border border-line bg-surface-muted">
             <Image
-              src={article.cover.url}
+              src={assetUrl(article.cover.url)}
               alt={article.cover.alt || article.title}
               fill
               priority

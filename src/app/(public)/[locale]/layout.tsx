@@ -13,6 +13,7 @@ import {
   type Locale,
 } from "@/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
+import { assetUrl } from "@/lib/asset";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { canonicalAbsoluteUrl, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { buildSiteGraph } from "@/lib/structured-data";
@@ -104,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       images: [{ url: social.url, alt: social.alt, width: social.width, height: social.height }],
       ...(xHandle ? { site: xHandle, creator: xHandle } : {}),
     },
-    icons: { icon: settings.favicon?.url || "/icon.png" },
+    icons: { icon: assetUrl(settings.favicon?.url || "/icon.png") },
     robots: { index: true, follow: true },
   };
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ArticleCardData } from "@/data/articles";
+import { assetUrl } from "@/lib/asset";
 import { formatDate } from "@/lib/utils";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
@@ -71,7 +72,7 @@ export function ArticleCard({
         <div className={`relative overflow-hidden border border-line bg-surface-muted ${isFeature ? "aspect-[16/10]" : "aspect-[3/2]"}`}>
           {article.cover ? (
             <Image
-              src={article.cover.url}
+              src={assetUrl(article.cover.url)}
               alt={article.cover.alt || article.title}
               fill
               priority={priority}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { listMediaLibrary } from "@/server/queries/media-library";
 import { deleteMediaAction, updateMediaMetaAction } from "@/server/actions/media";
+import { assetUrl } from "@/lib/asset";
 import { PageHeader } from "@/components/admin/page-header";
 import { MediaUploader } from "@/components/admin/media-uploader";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
@@ -47,7 +48,7 @@ export default async function MediaPage({
             <article key={media.id} className="border border-line bg-surface">
               <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
                 <Image
-                  src={media.url}
+                  src={assetUrl(media.url)}
                   alt={media.alt ?? ""}
                   fill
                   sizes="(min-width: 1280px) 22vw, (min-width: 640px) 45vw, 92vw"

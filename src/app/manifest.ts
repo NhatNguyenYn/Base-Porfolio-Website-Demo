@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { defaultLocale } from "@/i18n/config";
+import { assetUrl, getBasePath } from "@/lib/asset";
 import { getSettings } from "@/data/settings";
 
 /**
@@ -23,18 +24,22 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     // Manifest must still serve when settings cannot load.
   }
 
+  // Manifest URLs are root-absolute paths: under the Pages demo subpath
+  // they must carry the basePath, otherwise start_url/scope/icons 404.
+  // Server mode has no basePath, so assetUrl/getBasePath are identity there.
+  const basePath = getBasePath();
   return {
     name,
     short_name: name,
     description: "Personal portfolio — selected work, art gallery and writing.",
-    start_url: `/${defaultLocale}`,
-    scope: "/",
+    start_url: `${basePath}/${defaultLocale}`,
+    scope: `${basePath}/`,
     display: "standalone",
     background_color: "#f8f8f6",
     theme_color: "#f8f8f6",
     icons: [
       {
-        src: "/icon.png",
+        src: assetUrl("/icon.png"),
         sizes: "512x512",
         type: "image/png",
         purpose: "any",

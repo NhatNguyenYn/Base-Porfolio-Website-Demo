@@ -23,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: {
         slug: true,
         updatedAt: true,
+        category: true,
         translations: { select: { locale: true } },
         thumbnailMedia: { select: { url: true } },
       },
@@ -107,6 +108,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // Project categories are a plain string field (no category table): derive
+  // them from the public, published projects already fetched above, instead
+  // of a second query — same set generateStaticParams in
+  // projects/category/[slug]/page.tsx prerenders. Freshness follows the
+  // newest project in the category. Project categories have no translations
+  // table, but the category pages render in both locales (labels come from
+  // the dictionary).
+  const projectCategoryRows = (() => {
+    const newestBySlug = new Map<string, Date>();
+    for (const row of projects) {
+      if (!row.category) continue;
+      const prev = newestBySlug.get(row.category);
+      if (!prev || row.updatedAt > prev) newestBySlug.set(row.category, row.updatedAt);
+    }
+    return [...newestBySlug.entries()].map(([slug, updatedAt]) => ({
+      slug,
+      updatedAt,
+      translations: locales.map((locale) => ({ locale })),
+      imageUrl: null as string | null,
+    }));
+  })();
+
   const detailGroups = [
     { path: "/projects", rows: projects.map((row) => ({ ...row, imageUrl: row.thumbnailMedia?.url ?? null })) },
     { path: "/art", rows: artworks.map((row) => ({ ...row, imageUrl: row.imageMedia?.url ?? null })) },
@@ -122,6 +145,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         translations: row.translations,
         imageUrl: null,
       })),
+    },
+    {
+      path: "/projects/category",
+      rows: projectCategoryRows,
     },
   ];
 
