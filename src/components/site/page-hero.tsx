@@ -19,7 +19,7 @@ export function PageHero({
           <span className="label">{label}</span>
         </div>
         <div className="mt-7 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-end">
-          <h1 className="display text-[clamp(2.6rem,6vw,5.2rem)]">{title}</h1>
+          <h1 className="display text-accent text-[clamp(2.6rem,6vw,5.2rem)]">{title}</h1>
           <div className="max-w-md lg:pb-2">
             {description && <p className="text-[0.9375rem] leading-relaxed text-muted">{description}</p>}
             {meta && meta.length > 0 && (

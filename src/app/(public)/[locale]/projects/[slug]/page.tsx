@@ -158,7 +158,7 @@ export default async function ProjectDetailPage({
               {project.featured && <span className="chip">{dict.common.featured}</span>}
               {project.year && <span className="text-[11px] tabular-nums text-muted">{project.year}</span>}
             </div>
-            <h1 className="display mt-6 text-[clamp(2.4rem,5.4vw,4.6rem)]">{project.name}</h1>
+            <h1 className="display mt-6 text-accent text-[clamp(2.4rem,5.4vw,4.6rem)]">{project.name}</h1>
             <p className="mt-5 max-w-2xl text-[0.975rem] leading-relaxed text-muted">{project.shortDescription}</p>
             <div className="mt-6">
               <ShareBar

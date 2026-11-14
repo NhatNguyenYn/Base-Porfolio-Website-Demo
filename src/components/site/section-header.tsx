@@ -40,7 +40,7 @@ export function SectionHeader({
           <h2
             className={cn(
               "mt-4 text-[clamp(1.75rem,3.4vw,2.85rem)] leading-[1.08] tracking-[-0.03em]",
-              tone === "inverse" ? "text-white" : "text-ink",
+              tone === "inverse" ? "text-white" : "text-accent",
             )}
           >
             {title}

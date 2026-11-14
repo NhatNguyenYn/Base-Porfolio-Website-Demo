@@ -128,7 +128,7 @@ export default async function AdminArtPage({
                     <input type="hidden" name="id" value={artwork.id} />
                     <ConfirmSubmit
                       title={`Xoá tác phẩm “${vi?.title ?? en?.title ?? artwork.slug}”?`}
-                      description="Tác phẩm sẽ bị ẩn khỏi phòng tranh (xoá mềm). Ảnh gốc vẫn còn trong thư viện."
+                      description="Tác phẩm sẽ bị ẩn khỏi góc nghệ thuật số (xoá mềm). Ảnh gốc vẫn còn trong thư viện."
                       triggerLabel="Xoá"
                       confirmLabel="Xoá tác phẩm"
                     />
@@ -138,7 +138,7 @@ export default async function AdminArtPage({
             },
           };
         })}
-        empty="Phòng tranh chưa có tác phẩm. Bấm “Tải tác phẩm” để bắt đầu."
+        empty="Góc nghệ thuật số chưa có tác phẩm. Bấm “Tải tác phẩm” để bắt đầu."
       />
 
       <Pagination

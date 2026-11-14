@@ -17,7 +17,7 @@ export const navPaths: Record<NavKey, string> = {
   contact: "/contact",
 };
 
-const NAV_ORDER: NavKey[] = ["home", "about", "projects", "art", "blog", "booking", "contact"];
+const NAV_ORDER: NavKey[] = ["home", "about", "projects", "blog", "art", "booking", "contact"];
 
 /**
  * Which navigation entries a visitor can see. Labels live in the dictionaries

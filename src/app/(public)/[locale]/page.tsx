@@ -119,7 +119,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <Reveal delay={80} priority>
               <AnimatedHeadline
                 text={name}
-                className="display mt-8 text-[clamp(2.9rem,7.4vw,6.1rem)] text-balance"
+                className="display mt-8 text-accent text-[clamp(2.9rem,7.4vw,6.1rem)] text-balance"
               />
               <p className="serif-accent mt-4 max-w-2xl text-[clamp(1.35rem,2.6vw,2.1rem)] leading-[1.25] text-slateblue">
                 {title}
@@ -415,7 +415,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="relative grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <span className="label">{dict.home.contactLabel}</span>
-              <h2 className="display mt-4 text-[clamp(2rem,4.6vw,3.6rem)]">{dict.home.contactTitle}</h2>
+              <h2 className="display mt-4 text-accent text-[clamp(2rem,4.6vw,3.6rem)]">{dict.home.contactTitle}</h2>
               <p className="mt-5 max-w-lg text-[0.95rem] leading-relaxed text-muted">{dict.home.contactText}</p>
             </div>
             <div className="lg:col-span-5 lg:text-right">

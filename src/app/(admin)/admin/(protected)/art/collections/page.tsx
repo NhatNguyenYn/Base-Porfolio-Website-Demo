@@ -50,7 +50,7 @@ export default async function CollectionsPage({
     <>
       <PageHeader
         title="Bộ sưu tập"
-        description="Nhóm các tác phẩm thành bộ sưu tập có câu chuyện riêng. Bộ sưu tập công khai hiển thị trong phòng tranh."
+        description="Nhóm các tác phẩm thành bộ sưu tập có câu chuyện riêng. Bộ sưu tập công khai hiển thị trong góc nghệ thuật số."
         back={{ href: "/admin/art", label: "Danh sách tác phẩm" }}
       />
 

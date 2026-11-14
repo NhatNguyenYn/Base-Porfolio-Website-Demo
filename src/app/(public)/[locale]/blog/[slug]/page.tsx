@@ -213,7 +213,7 @@ export default async function ArticlePage({
           </span>
         </div>
 
-        <h1 className="display mt-6 text-[clamp(2.1rem,4.8vw,3.9rem)]">{article.title}</h1>
+        <h1 className="display mt-6 text-accent text-[clamp(2.1rem,4.8vw,3.9rem)]">{article.title}</h1>
         {article.subtitle && (
           <p className="serif-accent mt-5 max-w-3xl text-[clamp(1.1rem,1.8vw,1.4rem)] leading-snug text-slateblue">
             {article.subtitle}

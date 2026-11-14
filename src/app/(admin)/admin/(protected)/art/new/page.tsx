@@ -17,7 +17,7 @@ export default async function NewArtworkPage() {
     <>
       <PageHeader
         title="Tải tác phẩm"
-        description="Chọn ảnh, nhập tiêu đề và mô tả, chọn bộ sưu tập rồi lưu. Tác phẩm công khai xuất hiện ngay trong phòng tranh."
+        description="Chọn ảnh, nhập tiêu đề và mô tả, chọn bộ sưu tập rồi lưu. Tác phẩm công khai xuất hiện ngay trong góc nghệ thuật số."
         back={{ href: "/admin/art", label: "Danh sách tác phẩm" }}
       />
       <ArtworkForm

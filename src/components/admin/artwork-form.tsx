@@ -128,7 +128,7 @@ export function ArtworkForm({
               initial={initial.image ? [initial.image] : []}
               library={library}
               maxHeight="aspect-[4/5]"
-              help="Ảnh gốc càng lớn càng tốt. Tỷ lệ khác nhau tạo nhịp điệu cho phòng tranh."
+              help="Ảnh gốc càng lớn càng tốt. Tỷ lệ khác nhau tạo nhịp điệu cho góc nghệ thuật số."
             />
           </div>
         </div>
@@ -170,7 +170,7 @@ export function ArtworkForm({
                   Hiển thị
                 </label>
                 <select id="visibility" name="visibility" defaultValue={initial.visibility} className="field">
-                  <option value="public">Công khai trong phòng tranh</option>
+                  <option value="public">Công khai trong góc nghệ thuật số</option>
                   <option value="private">Riêng tư (ẩn)</option>
                 </select>
               </div>

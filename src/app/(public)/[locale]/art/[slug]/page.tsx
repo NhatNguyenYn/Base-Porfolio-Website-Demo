@@ -204,7 +204,7 @@ export default async function ArtworkPage({
                 {artwork.collectionName}
               </Link>
             )}
-            <h1 className="display mt-5 text-[clamp(2rem,3.6vw,2.9rem)]">{artwork.title}</h1>
+            <h1 className="display mt-5 text-accent text-[clamp(2rem,3.6vw,2.9rem)]">{artwork.title}</h1>
             {artwork.categoryName && (
               <p className="mt-2 text-[11px] uppercase tracking-[0.16em] text-accent">{artwork.categoryName}</p>
             )}
