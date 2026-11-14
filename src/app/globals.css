@@ -877,9 +877,16 @@
   /* Long card lists: skip rendering off-screen cards (with an intrinsic-size
      estimate so the scrollbar does not jump). Applied to the article/project
      card roots; NOT to artwork cards — their masonry (multi-column) layout
-     must not have its column balancing estimated from placeholder sizes. */
+     must not have its column balancing estimated from placeholder sizes.
+     E2E 2026-11-14: the width estimate must be 0. With
+     `contain-intrinsic-size: auto 500px` the skipped card's placeholder is
+     500px wide, and a single-column (mobile) grid's implicit `auto` track
+     sizes to it — 130px horizontal overflow at 390px viewports
+     (documentElement.scrollWidth 520). The height estimate is what keeps
+     the scrollbar stable, so only the width is zeroed. */
   .card-cv {
     content-visibility: auto;
     contain-intrinsic-size: auto 500px;
+    contain-intrinsic-width: 0;
   }
 }

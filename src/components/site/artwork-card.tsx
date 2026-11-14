@@ -7,6 +7,11 @@ import { cn } from "@/lib/utils";
 /**
  * A single artwork plate. Clicking opens the lightbox, which lives in the
  * gallery client component so it can handle keyboard navigation.
+ *
+ * The button is the card's single interactive control (one control per card,
+ * like the stretched link on article/project cards); the caption is plain
+ * text. Hover zoom/overlay apply on hover-capable pointers only
+ * (`.card-zoom-art` / `.card-overlay*` in globals.css).
  */
 export function ArtworkCard({
   artwork,
@@ -38,7 +43,7 @@ export function ArtworkCard({
             fill
             priority={priority}
             sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
-            className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+            className="card-zoom-art object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
           />
         ) : (
           <span className="absolute inset-0 grid place-items-center">
@@ -46,8 +51,8 @@ export function ArtworkCard({
           </span>
         )}
 
-        <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-2 items-end justify-between gap-3 p-4 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+        <span className="card-overlay-fade pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 transition-opacity duration-500" />
+        <span className="card-overlay pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-2 items-end justify-between gap-3 p-4 text-white opacity-0 transition-all duration-500">
           <span>
             <span className="block text-[10px] uppercase tracking-[0.16em] text-white/70">
               {artwork.collectionName || artwork.categoryName}

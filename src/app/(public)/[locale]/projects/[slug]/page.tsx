@@ -5,16 +5,19 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
-import { getNextProject, getProjectDetail } from "@/data/projects";
+import { getNextProject, getProjectDetail, getRelatedProjects } from "@/data/projects";
 import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
 import { getProjectLocales } from "@/server/queries/projects";
 import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
-import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
+import { buildPageMetadata, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { absoluteUrl, formatDate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { ProjectCard } from "@/components/site/project-card";
+import { ShareBar } from "@/components/site/share-bar";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -53,6 +56,7 @@ export async function generateMetadata({
   }
 
   const available = await getProjectLocales(slug);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
 
   return buildPageMetadata({
     locale: raw,
@@ -64,6 +68,9 @@ export async function generateMetadata({
     image: project.thumbnail
       ? socialImage(project.thumbnail.url, project.thumbnail.alt || project.name, project.thumbnail.width, project.thumbnail.height)
       : null,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -96,10 +103,15 @@ export default async function ProjectDetailPage({
     );
   }
 
-  const [body, next] = await Promise.all([renderMarkdown(project.fullDescription), getNextProject(slug, locale)]);
+  const [body, next, related] = await Promise.all([
+    renderMarkdown(project.fullDescription),
+    getNextProject(slug, locale),
+    getRelatedProjects(locale, project.id, project.category, 3),
+  ]);
   const statusLabel = (dict.projects.statuses as Record<string, string>)[project.status] ?? project.status;
   const projectsHref = localeHref(locale, "/projects");
-  const canonicalUrl = absoluteUrl(`/${locale}/projects/${project.slug}`);
+  const schemaCanonicalUrl = absoluteUrl(`/${locale}/projects/${project.slug}`);
+  const shareCanonicalUrl = canonicalUrl(locale, `/projects/${project.slug}`);
   const schemaImage = project.thumbnail
     ? safeSocialImage(
         socialImage(project.thumbnail.url, project.thumbnail.alt || project.name, project.thumbnail.width, project.thumbnail.height),
@@ -116,12 +128,13 @@ export default async function ProjectDetailPage({
     "@graph": [
       buildBreadcrumbSchema(crumbs),
       buildCreativeWorkSchema({
-        canonicalUrl,
+        canonicalUrl: schemaCanonicalUrl,
         name: project.name,
         description: project.shortDescription,
         imageUrl: schemaImage?.url,
         datePublished: project.startDate?.toISOString(),
         dateModified: project.updatedAt.toISOString(),
+        technologies: project.technologies,
       }),
     ],
   };
@@ -146,6 +159,13 @@ export default async function ProjectDetailPage({
             </div>
             <h1 className="display mt-6 text-[clamp(2.4rem,5.4vw,4.6rem)]">{project.name}</h1>
             <p className="mt-5 max-w-2xl text-[0.975rem] leading-relaxed text-muted">{project.shortDescription}</p>
+            <div className="mt-6">
+              <ShareBar
+                title={project.name}
+                url={shareCanonicalUrl}
+                labels={{ share: dict.common.share, copy: dict.common.copyLink, copied: dict.common.copied }}
+              />
+            </div>
           </div>
 
           <div className="lg:col-span-4">
@@ -193,7 +213,7 @@ export default async function ProjectDetailPage({
       </header>
 
       {project.thumbnail && (
-        <Reveal className="container-page mt-12">
+        <Reveal className="container-page mt-12" priority>
           <div className="relative aspect-[16/9] overflow-hidden border border-line bg-surface-muted">
             <Image
               src={project.thumbnail.url}
@@ -209,7 +229,12 @@ export default async function ProjectDetailPage({
 
       <section className="container-page py-16 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-8">
+          {/* E2E 2026-11-14: min-w-0 on grid children. Below lg this grid is
+              a single implicit `auto` track, which sizes to the largest
+              item's min-content — the <pre> code block in the prose
+              (~403px) — causing 33px horizontal overflow at 390px
+              viewports. min-w-0 lets the track shrink to the container. */}
+          <div className="min-w-0 lg:col-span-8">
             <h2 className="text-[10px] uppercase tracking-[0.18em] text-muted">{dict.projects.detail.overview}</h2>
             {body.html ? (
               <div className="prose-editorial mt-6" dangerouslySetInnerHTML={{ __html: body.html }} />
@@ -218,7 +243,7 @@ export default async function ProjectDetailPage({
             )}
           </div>
 
-          <aside className="lg:col-span-4 lg:pl-4">
+          <aside className="min-w-0 lg:col-span-4 lg:pl-4">
             <div className="lg:sticky lg:top-24">
               <h2 className="text-[10px] uppercase tracking-[0.18em] text-muted">{dict.projects.detail.stack}</h2>
               <ul className="mt-5 flex flex-wrap gap-1.5">
@@ -254,6 +279,24 @@ export default async function ProjectDetailPage({
                     className="object-cover"
                   />
                 </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {related.length > 0 && (
+        <section className="container-page border-t border-line py-16">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="label">{dict.projects.detail.related}</h2>
+            <Link href={projectsHref} className="link-arrow text-muted hover:text-ink">
+              {dict.common.viewAll}
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((item, index) => (
+              <Reveal key={item.id} delay={index * 60}>
+                <ProjectCard project={item} href={`${projectsHref}/${item.slug}`} dict={dict} />
               </Reveal>
             ))}
           </div>

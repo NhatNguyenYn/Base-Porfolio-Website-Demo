@@ -139,7 +139,7 @@ export const en: Dictionary = {
     label: "Work",
     title: "Products I have given my heart to",
     description:
-      "A collection of engineering work: design systems, data products and small tools that earn their place.",
+      "Selected engineering work — shared design systems, data dashboards and small offline-first tools — each with the problem it solved, how it was built, and what it taught me.",
     searchPlaceholder: "Search projects…",
     allTechnologies: "All technologies",
     sortNewest: "Newest",
@@ -163,6 +163,7 @@ export const en: Dictionary = {
       stack: "Technologies used",
       links: "Links",
       next: "Next project",
+      related: "Related projects",
       empty: "No detailed write-up for this project yet.",
     },
     emptyTitle: "No public projects yet",
@@ -170,9 +171,9 @@ export const en: Dictionary = {
   },
   art: {
     label: "Gallery",
-    title: "A digital exhibition",
+    title: "A digital exhibition of colour, light and form",
     description:
-      "A quiet space to look. Open a work for the fullscreen view, then move through the room with the arrow keys.",
+      "A quiet space to look at original digital artworks — abstract studies, urban geometry and soft shapes — grouped into collections. Open a work for the fullscreen view, then move through the room with the arrow keys.",
     allWorks: "All works",
     collections: "Collections",
     allCollections: "All collections",
@@ -187,9 +188,9 @@ export const en: Dictionary = {
   },
   blog: {
     label: "Writing",
-    title: "Notes & essays",
+    title: "Notes & essays on design, engineering and making",
     description:
-      "Essays on software engineering, artificial intelligence, personal growth and the creative process.",
+      "Essays on software engineering, artificial intelligence, personal growth and the creative process — what I learned building products, and how I think about the work.",
     featured: "Featured article",
     latest: "Latest articles",
     allCategories: "All categories",
@@ -206,7 +207,7 @@ export const en: Dictionary = {
     label: "Contact",
     title: "Tell me about what you are building",
     description:
-      "I am always open to good conversations — a new product, an identity, or an idea that is still half-formed.",
+      "I am always open to good conversations — a new product, an identity, or an idea that is still half-formed. Write in Vietnamese or English; every message is read and answered personally.",
     emailLabel: "Email",
     locationLabel: "Location",
     socialLabel: "Social",

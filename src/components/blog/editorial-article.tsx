@@ -24,6 +24,7 @@ export function EditorialArticle({
   dict,
   locale,
   blogHref,
+  canonicalUrl,
 }: {
   article: ArticleDetailData;
   body: { html: string; toc: TocItem[] };
@@ -31,9 +32,12 @@ export function EditorialArticle({
   dict: Dictionary;
   locale: Locale;
   blogHref: string;
+  /** Canonical article URL to share (instead of window.location.href). */
+  canonicalUrl?: string;
 }) {
   const coverCaption = article.cover?.alt && article.cover.alt !== article.title ? article.cover.alt : "";
   const monogram = article.authorName.trim().slice(0, 1).toUpperCase() || "A";
+  const aboutHref = localeHref(locale, "/about");
 
   const toc = body.toc.length > 0 && (
     <ol className="space-y-2.5">
@@ -95,12 +99,17 @@ export function EditorialArticle({
                 {monogram}
               </span>
               <div>
-                <p className="text-[12px] text-ink">{article.authorName}</p>
+                <p className="text-[12px] text-ink">
+                  <Link href={aboutHref} className="hover:underline">
+                    {article.authorName}
+                  </Link>
+                </p>
                 <p className="text-[10px] uppercase tracking-[0.14em] text-muted">{dict.common.by}</p>
               </div>
             </div>
             <ShareBar
               title={article.title}
+              url={canonicalUrl}
               labels={{ share: dict.common.share, copy: dict.common.copyLink, copied: dict.common.copied }}
             />
           </div>
@@ -109,7 +118,7 @@ export function EditorialArticle({
 
       {article.cover && (
         <figure className="container-page mt-10">
-          <Reveal variant="mask">
+          <Reveal variant="mask" priority>
             <div className="relative aspect-[16/9] overflow-hidden bg-surface-muted lg:aspect-[21/9]">
               <Image
                 src={article.cover.url}
@@ -144,7 +153,11 @@ export function EditorialArticle({
 
             <div className="mt-8 border-t border-line pt-5">
               <p className="label">{dict.common.by}</p>
-              <p className="mt-3 text-[14px] tracking-tight">{article.authorName}</p>
+              <p className="mt-3 text-[14px] tracking-tight">
+                <Link href={aboutHref} className="hover:underline">
+                  {article.authorName}
+                </Link>
+              </p>
               <p className="mt-1 text-[11px] text-muted">
                 {dict.common.updated}: {formatDate(article.updatedAt, locale)}
               </p>
@@ -190,7 +203,11 @@ export function EditorialArticle({
                 {monogram}
               </span>
               <div>
-                <p className="text-[13.5px] tracking-tight">{article.authorName}</p>
+                <p className="text-[13.5px] tracking-tight">
+                  <Link href={aboutHref} className="hover:underline">
+                    {article.authorName}
+                  </Link>
+                </p>
                 <p className="text-[10px] uppercase tracking-[0.14em] text-muted">{dict.common.by}</p>
               </div>
             </div>

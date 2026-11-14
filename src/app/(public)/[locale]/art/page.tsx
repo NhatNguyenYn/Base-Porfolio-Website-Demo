@@ -1,12 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { listArtworks, listCollections } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
-import { buildPageMetadata } from "@/lib/seo";
+import { getSocialLinks } from "@/data/social";
+import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildItemListSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
 import { Reveal } from "@/components/ui/reveal";
@@ -20,12 +26,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
   const settings = await getSettings();
+  const xHandle = xHandleFromSocials(await getSocialLinks());
   return buildPageMetadata({
     locale: raw,
     path: "/art",
     title: dict.art.title,
     description: dict.art.description,
     siteName: settings.siteName,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -37,9 +47,34 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
 
   const [artworks, collections] = await Promise.all([listArtworks(locale), listCollections(locale)]);
   const artHref = localeHref(locale, "/art");
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.art.label, href: artHref },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildCollectionPageSchema({ pageUrl: artHref, name: dict.art.title, description: dict.art.description }),
+      buildItemListSchema({
+        id: `${absoluteUrl(artHref)}#artworks`,
+        items: artworks.map((artwork) => ({ name: artwork.title, url: `${artHref}/${artwork.slug}` })),
+      }),
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
       <PageHero
         label={dict.art.label}
         title={dict.art.title}

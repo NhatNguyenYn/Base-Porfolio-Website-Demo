@@ -55,6 +55,16 @@ export function validateEnv(env) {
     errors.push("APP_URL is not a valid absolute URL.");
   } else if (!isHttpsUrl(env.APP_URL)) {
     errors.push("APP_URL must use https:// in production (cookies are Secure).");
+  } else if (
+    (() => {
+      const host = parseUrl(env.APP_URL)?.hostname.toLowerCase() ?? "";
+      return host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".localhost");
+    })()
+  ) {
+    // A localhost APP_URL would emit http://localhost:3000-style canonicals,
+    // sitemap and OG URLs from production. CI is unaffected: it never runs
+    // this preflight and keeps APP_URL=http://localhost:3000 for `next build`.
+    errors.push("APP_URL must not be localhost in production; set the public production origin.");
   } else if (env.APP_URL.endsWith("/")) {
     warnings.push("APP_URL has a trailing slash; canonical URLs will contain a double slash.");
   }
@@ -129,10 +139,18 @@ export function validateEnv(env) {
   }
 
   if (env.SEED_ADMIN_PASSWORD) {
-    if (env.SEED_ADMIN_PASSWORD === DEFAULT_SEED_PASSWORD) {
-      warnings.push("SEED_ADMIN_PASSWORD is still the repository default; rotate the admin password before go-live.");
+    if (env.NODE_ENV === "production" && env.SEED_ADMIN_PASSWORD === DEFAULT_SEED_PASSWORD) {
+      // Doc/code mismatch fix (Phase 9 #1): PRODUCTION_DEPLOYMENT.md says the
+      // default seed password stops a deploy, so this is an error, not a
+      // warning. Non-production runs are unaffected: validateEnv already
+      // fails those for NODE_ENV, and the seed check only errors in prod.
+      errors.push("SEED_ADMIN_PASSWORD is still the repository default; rotate the admin password before go-live.");
+    } else {
+      if (env.SEED_ADMIN_PASSWORD === DEFAULT_SEED_PASSWORD) {
+        warnings.push("SEED_ADMIN_PASSWORD is still the repository default; rotate the admin password before go-live.");
+      }
+      warnings.push("SEED_ADMIN_PASSWORD is set; remove it after seeding (seed never overwrites an existing password).");
     }
-    warnings.push("SEED_ADMIN_PASSWORD is set; remove it after seeding (seed never overwrites an existing password).");
   }
 
   if (!env.APP_URL) {

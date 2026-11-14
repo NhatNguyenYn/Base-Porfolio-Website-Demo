@@ -534,6 +534,8 @@ const ARTICLES = [
       subtitle: "Nó bắt đầu từ những quyết định bạn không muốn phải đưa ra lần thứ hai.",
       excerpt:
         "Một thư viện component đẹp vẫn có thể thất bại. Điều quyết định thành công của design system là những quy ước nằm trước component — và cách chúng được ghi lại.",
+        seoTitle: "Design system bền vững: quy ước trước, component sau",
+        seoDescription: "Vì sao một thư viện component đẹp vẫn có thể thất bại, và ba câu hỏi cần trả lời trước khi viết component đầu tiên.",
       content: `Khi được hỏi về design system, hầu hết chúng ta nghĩ ngay tới một trang Storybook đầy button, input và modal. Nhưng một thư viện component chỉ là phần nổi. Phần chìm — thứ quyết định hệ thống có sống được hai năm hay không — là những quyết định đã được đóng gói lại.
 
 ## Ba câu hỏi trước khi viết component đầu tiên
@@ -575,6 +577,8 @@ Component là kết quả. Quy ước là sản phẩm. Nếu bạn chỉ có th
       subtitle: "They start with the decisions you refuse to make twice.",
       excerpt:
         "A beautiful component library can still fail. What decides a design system's fate are the conventions that sit before the components — and how they are written down.",
+        seoTitle: "A design system that lasts: conventions before components",
+        seoDescription: "Why a beautiful component library can still fail, and the three questions to answer before writing the first component.",
       content: `When people talk about design systems, they usually picture a Storybook page full of buttons, inputs and modals. But a component library is only the visible part. The submerged part — the thing that decides whether the system is still alive in two years — is a set of decisions made once and packaged.
 
 ## Three questions before the first component
@@ -624,6 +628,8 @@ Components are the output. Conventions are the product. If you only have time fo
       subtitle: "Khi việc viết code trở nên rẻ, việc quyết định viết gì trở nên đắt hơn.",
       excerpt:
         "Công cụ AI viết được hàm, viết được test, viết được cả một module. Nhưng nó không chịu trách nhiệm về kiến trúc — và đó là nơi giá trị của kỹ sư nằm lại.",
+        seoTitle: "Viết code rẻ hơn, quyết định đắt hơn: làm việc cùng AI",
+        seoDescription: "Khi AI viết code trong mười giây, giá trị của kỹ sư chuyển sang định nghĩa bài toán, ranh giới module và kiểm chứng.",
       content: `Tôi đã dùng các công cụ sinh code trong hơn hai năm. Chúng thật sự hữu ích. Và chúng cũng thật sự đã thay đổi việc tôi dành thời gian vào đâu.
 
 ## Chi phí viết code đang giảm
@@ -658,6 +664,8 @@ Công cụ tốt giúp chúng ta nghĩ nhiều hơn về những thứ quan tr�
       subtitle: "When writing code gets cheap, deciding what to write gets expensive.",
       excerpt:
         "AI tools can write a function, write the tests, even write a module. What they do not own is architecture — and that is where an engineer's value remains.",
+        seoTitle: "Cheaper code, costlier decisions: working with AI",
+        seoDescription: "When AI writes code in ten seconds, an engineer's value moves to defining the problem, drawing module boundaries and verifying.",
       content: `I have used code generation tools for over two years. They are genuinely useful. They have also genuinely changed where I spend my time.
 
 ## The cost of writing is falling
@@ -700,6 +708,8 @@ Good tools help us think harder about what matters. If they only help us write m
       subtitle: "Không phải năng suất. Chỉ là một ngày không bị chia nhỏ.",
       excerpt:
         "Tôi đã thử nhiều hệ thống quản lý thời gian. Thứ duy nhất thay đổi chất lượng công việc của tôi là bảo vệ ba khối thời gian mỗi ngày.",
+        seoTitle: "Làm việc sâu với ba khối 90 phút mỗi ngày",
+        seoDescription: "Không cần tám tiếng tập trung: chỉ cần bảo vệ ba khối thời gian và bỏ những thứ làm mình xao nhãng.",
       content: `Có một câu hỏi tôi hỏi mình mỗi tối: hôm nay tôi đã làm được một việc có ý nghĩa, hay chỉ xử lý được nhiều việc nhỏ?
 
 ## Ba khối, không phải tám tiếng
@@ -731,6 +741,8 @@ Khi làm ít việc hơn, tôi hoàn thành nhiều việc hơn. Không phải v
       subtitle: "Not productivity. Just a day that is not cut into pieces.",
       excerpt:
         "I have tried many time-management systems. The only thing that changed the quality of my work was protecting three blocks of time each day.",
+        seoTitle: "Deep work in three 90-minute blocks a day",
+        seoDescription: "You do not need eight focused hours: protect three blocks of time and remove the things that interrupt you.",
       content: `There is a question I ask myself every evening: did I do one meaningful thing today, or did I only get through many small ones?
 
 ## Three blocks, not eight hours
@@ -770,6 +782,8 @@ Do not start with an elaborate system. Pick one ninety-minute block tomorrow, tu
       subtitle: "Một bảng màu không phải là cảm hứng. Nó là một tập hợp các ràng buộc.",
       excerpt:
         "Chọn màu trong sản phẩm số khác với chọn màu trên canvas: bạn phải tính đến độ tương phản, dark mode, màn hình lỗi và cả những người không nhìn thấy màu.",
+        seoTitle: "Màu sắc trong sản phẩm số: bắt đầu từ độ tương phản",
+        seoDescription: "Bảng màu là hạ tầng, không phải cảm hứng: kiểm tra tương phản, đặt tên màu theo vai trò và dùng sắc nhấn thật tiết kiệm.",
       content: `Trong hội hoạ, màu là biểu cảm. Trong sản phẩm số, màu là hạ tầng. Nó phải hoạt động trong mọi trạng thái, trên mọi màn hình, với mọi người dùng.
 
 ## Bắt đầu từ độ tương phản, không từ sắc đẹp
@@ -810,6 +824,8 @@ Màu tốt không phải màu đẹp nhất. Màu tốt là màu mà bạn khôn
       subtitle: "A palette is not inspiration. It is a set of constraints.",
       excerpt:
         "Choosing colour in a digital product is not like choosing it on a canvas: you have to account for contrast, dark mode, bad screens, and people who cannot see colour.",
+        seoTitle: "Colour in digital products: start with contrast",
+        seoDescription: "A palette is infrastructure, not inspiration: check contrast, name colours by role, and spend the accent sparingly.",
       content: `In painting, colour is expression. In digital products, colour is infrastructure. It has to work in every state, on every screen, for every person.
 
 ## Start with contrast, not with beauty
@@ -858,6 +874,8 @@ Good colour is not the prettiest colour. Good colour is the one you never have t
       subtitle: "Tôi không viết vì đã hiểu. Tôi viết để hiểu.",
       excerpt:
         "Một trang giấy trống là công cụ suy nghĩ rẻ nhất và hiệu quả nhất mà tôi có. Bài viết này là về việc dùng nó thường xuyên hơn.",
+        seoTitle: "Viết 200 từ mỗi sáng để nghĩ rõ hơn",
+        seoDescription: "Một trang giấy trống là công cụ suy nghĩ rẻ nhất: viết buộc mỗi câu phải nối tiếp câu trước và phơi bày lỗ hổng trong lập luận.",
       content: `Có một khoảng cách giữa cảm giác "tôi hiểu rồi" và việc thực sự hiểu. Khoảng cách đó thường chỉ được lấp đầy khi tôi viết ra giấy.
 
 ## Vì sao viết hiệu quả hơn nghĩ
@@ -887,6 +905,8 @@ Nếu bạn đang băn khoăn về một quyết định, hãy viết một tran
       subtitle: "I do not write because I understand. I write in order to understand.",
       excerpt:
         "A blank page is the cheapest and most effective thinking tool I own. This piece is about using it more often.",
+        seoTitle: "Write 200 words each morning to think clearly",
+        seoDescription: "A blank page is the cheapest thinking tool: writing forces each sentence to follow the last and exposes gaps in reasoning.",
       content: `There is a gap between feeling that I understand and actually understanding. That gap usually closes only when I write it down.
 
 ## Why writing beats thinking
@@ -918,10 +938,14 @@ function daysAgo(days: number): Date {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 }
 
-async function upsertMedia(key: string, width: number, height: number, alt: string, mimeType = "image/svg+xml") {
+async function upsertMedia(key: string, width: number, height: number, titleText: string, mimeType = "image/svg+xml") {
+  // 8C-8: demo media carries no per-locale alt text. Store alt as "" so the
+  // rendering layer falls back to the localized title/name
+  // (`cover.alt || article.title`, etc.) instead of an English-only alt.
+  // The English label is kept as `title` for the admin media library.
   return prisma.media.upsert({
     where: { storageKey: `demo/${key}` },
-    update: { url: `/demo/${key}`, width, height, alt },
+    update: { url: `/demo/${key}`, width, height, alt: "" },
     create: {
       storageKey: `demo/${key}`,
       url: `/demo/${key}`,
@@ -930,8 +954,8 @@ async function upsertMedia(key: string, width: number, height: number, alt: stri
       size: 12000,
       width,
       height,
-      alt,
-      title: alt,
+      alt: "",
+      title: titleText,
     },
   });
 }
@@ -1009,8 +1033,9 @@ async function main() {
       interests: INTERESTS_VI,
       philosophy: PHILOSOPHY_VI,
       futureGoals: GOALS_VI,
-      seoTitle: `${DEMO.vi.fullName} — ${DEMO.vi.title}`,
-      seoDescription: DEMO.vi.shortBio,
+      seoTitle: "Portfolio của Tên Của Bạn — thiết kế sản phẩm, kỹ thuật & nghệ thuật số",
+      seoDescription:
+        "Portfolio cá nhân: hệ thống thiết kế, sản phẩm dữ liệu, tranh kỹ thuật số và bài viết về nghề làm sản phẩm.",
     },
     {
       locale: "en",
@@ -1021,8 +1046,9 @@ async function main() {
       interests: INTERESTS_EN,
       philosophy: PHILOSOPHY_EN,
       futureGoals: GOALS_EN,
-      seoTitle: `${DEMO.en.fullName} — ${DEMO.en.title}`,
-      seoDescription: DEMO.en.shortBio,
+      seoTitle: "Portfolio of Your Name — product design, engineering & digital art",
+      seoDescription:
+        "Personal portfolio: design systems, data products, digital art and essays on the craft of building products.",
     },
   ];
 
@@ -1064,20 +1090,24 @@ async function main() {
   }
 
   const socialLinks = [
-    { platform: "github", url: "https://example.com/your-username", label: "GitHub" },
-    { platform: "linkedin", url: "https://example.com/in/your-username", label: "LinkedIn" },
-    { platform: "facebook", url: "https://example.com/your-username", label: "Facebook" },
-    { platform: "instagram", url: "https://example.com/your-username", label: "Instagram" },
-    { platform: "behance", url: "https://example.com/your-username", label: "Behance" },
-    { platform: "email", url: "mailto:hello@example.com", label: "Email" },
+    // 8D-10: no placeholder example.com profiles. SocialLink.url is a
+    // required column, so the placeholders keep an empty URL and are hidden
+    // (visible: false) — getSocialLinks only returns visible rows, and the
+    // layout's sameAs list filters out non-http URLs, so nothing renders.
+    { platform: "github", url: "", label: "GitHub", visible: false },
+    { platform: "linkedin", url: "", label: "LinkedIn", visible: false },
+    { platform: "facebook", url: "", label: "Facebook", visible: false },
+    { platform: "instagram", url: "", label: "Instagram", visible: false },
+    { platform: "behance", url: "", label: "Behance", visible: false },
+    { platform: "email", url: "mailto:hello@example.com", label: "Email", visible: true },
   ];
 
   for (const [index, link] of socialLinks.entries()) {
     const existing = await prisma.socialLink.findFirst({ where: { platform: link.platform } });
     if (existing) {
-      await prisma.socialLink.update({ where: { id: existing.id }, data: { ...link, order: index, visible: true } });
+      await prisma.socialLink.update({ where: { id: existing.id }, data: { ...link, order: index } });
     } else {
-      await prisma.socialLink.create({ data: { ...link, order: index, visible: true } });
+      await prisma.socialLink.create({ data: { ...link, order: index } });
     }
   }
 
@@ -1273,8 +1303,8 @@ async function main() {
       status: project.status,
       startDate: new Date(project.start),
       completionDate: project.end ? new Date(project.end) : null,
-      githubUrl: "https://example.com/your-username/repository",
-      demoUrl: "https://example.com/project-demo",
+      githubUrl: null,
+      demoUrl: null,
       featured: project.featured,
       visibility: "public",
       order: PROJECTS.indexOf(project),
@@ -1409,6 +1439,9 @@ async function main() {
       categoryId: categoryIds.get(article.category) ?? null,
       authorId,
       status: "published",
+      // 8C-9: exactly one seed article uses the editorial template so it is
+      // live-verifiable (the first/featured article). The rest stay default.
+      template: ARTICLES.indexOf(article) === 0 ? "editorial" : "default",
       publishedAt: new Date(article.publishedAt),
       scheduledFor: null,
       featured: article.featured,
@@ -1429,8 +1462,8 @@ async function main() {
           subtitle: block.subtitle,
           excerpt: block.excerpt,
           content: block.content,
-          seoTitle: block.title,
-          seoDescription: block.excerpt,
+          seoTitle: block.seoTitle,
+          seoDescription: block.seoDescription,
         },
         create: {
           articleId: record.id,
@@ -1439,8 +1472,8 @@ async function main() {
           subtitle: block.subtitle,
           excerpt: block.excerpt,
           content: block.content,
-          seoTitle: block.title,
-          seoDescription: block.excerpt,
+          seoTitle: block.seoTitle,
+          seoDescription: block.seoDescription,
         },
       });
     }

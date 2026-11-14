@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { locales, type Locale } from "@/i18n/config";
 import { prisma } from "@/server/db";
 import { absoluteUrl } from "@/lib/utils";
-import { languageAlternates } from "@/lib/seo";
+import { canonicalAbsoluteUrl, canonicalUrl, isSvgUrl, languageAlternates } from "@/lib/seo";
 
 // Regenerated per request: publishing must appear without a redeploy. The query
 // set is small and crawlers are infrequent.
@@ -17,7 +17,7 @@ function newest(rows: { updatedAt: Date }[], fallback: Date): Date {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [projects, artworks, articles, collections, settings] = await Promise.all([
+  const [projects, artworks, articles, collections, categories, settings] = await Promise.all([
     prisma.project.findMany({
       where: { visibility: "public", deletedAt: null, publishedAt: { not: null } },
       select: {
@@ -49,6 +49,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { visibility: "public", deletedAt: null },
       select: { slug: true, updatedAt: true, translations: { select: { locale: true } } },
     }),
+    prisma.category.findMany({
+      // Only categories that actually have a published article — an empty
+      // category page must not be advertised to crawlers.
+      where: {
+        kind: "article",
+        articles: { some: { status: "published", visibility: "public", deletedAt: null, publishedAt: { lte: new Date() } } },
+      },
+      select: {
+        slug: true,
+        updatedAt: true,
+        translations: { select: { locale: true } },
+        articles: {
+          where: { status: "published", visibility: "public", deletedAt: null, publishedAt: { lte: new Date() } },
+          select: { updatedAt: true },
+        },
+      },
+    }),
     prisma.siteSetting.aggregate({ _max: { updatedAt: true } }),
   ]);
 
@@ -74,13 +91,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     for (const item of staticPaths) {
       entries.push({
-        url: absoluteUrl(`/${locale}${item.path}`),
+        url: canonicalUrl(locale, item.path),
         lastModified: item.lastModified,
         changeFrequency: item.changeFrequency,
         priority: item.priority,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((available) => [available, absoluteUrl(`/${available}${item.path}`)]),
+            Object.entries(languageAlternates(item.path, [...locales])).map(([key, value]) => [
+              key,
+              canonicalAbsoluteUrl(absoluteUrl(value)),
+            ]),
           ),
         },
       });
@@ -92,6 +112,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/art", rows: artworks.map((row) => ({ ...row, imageUrl: row.imageMedia?.url ?? null })) },
     { path: "/blog", rows: articles.map((row) => ({ ...row, imageUrl: row.coverMedia?.url ?? null })) },
     { path: "/art/collections", rows: collections.map((row) => ({ ...row, imageUrl: null })) },
+    {
+      path: "/blog/category",
+      rows: categories.map((row) => ({
+        slug: row.slug,
+        // Freshness follows the newest article in the category, not the
+        // category row itself (which rarely changes).
+        updatedAt: newest(row.articles, row.updatedAt),
+        translations: row.translations,
+        imageUrl: null,
+      })),
+    },
   ];
 
   for (const group of detailGroups) {
@@ -103,16 +134,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       for (const locale of available) {
         entries.push({
-          url: absoluteUrl(`/${locale}${group.path}/${row.slug}`),
+          url: canonicalAbsoluteUrl(absoluteUrl(`/${locale}${group.path}/${row.slug}`)),
           lastModified: row.updatedAt,
           changeFrequency: "monthly",
           priority: group.path === "/blog" ? 0.7 : 0.6,
-          ...(row.imageUrl ? { images: [absoluteUrl(row.imageUrl)] } : {}),
+          // SVG covers are unusable as sitemap images (same rule as OG:
+          // crawlers do not reliably render SVG), so they are omitted.
+          ...(row.imageUrl && !isSvgUrl(row.imageUrl) ? { images: [absoluteUrl(row.imageUrl)] } : {}),
           alternates: {
             languages: Object.fromEntries(
               Object.entries(languageAlternates(`${group.path}/${row.slug}`, available)).map(([key, value]) => [
                 key,
-                absoluteUrl(value),
+                canonicalAbsoluteUrl(absoluteUrl(value)),
               ]),
             ),
           },

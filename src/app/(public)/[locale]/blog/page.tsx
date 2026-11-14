@@ -1,11 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getFeaturedArticle, listArticles } from "@/data/articles";
 import { getSettings } from "@/data/settings";
-import { buildPageMetadata } from "@/lib/seo";
+import { getSocialLinks } from "@/data/social";
+import { buildPageMetadata, listCanonicalQuery, paginationLinks, xHandleFromSocials } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBlogSchema, buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ArticleCard } from "@/components/site/article-card";
 import { Pagination } from "@/components/site/pagination";
@@ -21,17 +27,49 @@ function one(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: SearchParams;
+}): Promise<Metadata> {
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const dict = getDictionary(raw);
   const settings = await getSettings();
+  // Static export (GitHub Pages demo): only the default view is prerendered,
+  // so metadata must not depend on the request's search params — awaiting
+  // them here opts the route out of static generation and the page silently
+  // disappears from the export (no build error). Server mode keeps the
+  // per-view metadata (filtered titles, canonicals, noindex on search).
+  const query: { [key: string]: string | string[] | undefined } =
+    process.env.PAGES_EXPORT === "1" ? {} : await searchParams;
+  const q = one(query.q)?.trim() ?? "";
+  const category = one(query.category) ?? "";
+  const tag = one(query.tag) ?? "";
+  const page = Number.parseInt(one(query.page) ?? "1", 10) || 1;
+  const xHandle = xHandleFromSocials(await getSocialLinks());
+
+  // Filtered/paginated views get distinct titles and a self-canonical that
+  // carries the view's parameters. Search views are noindex,follow: the query
+  // space is unbounded and the results themselves are the indexable content.
+  const filterLabel = [q ? `"${q}"` : "", category, tag].filter(Boolean).join(" · ");
+  const title = [dict.blog.title, filterLabel || undefined, page > 1 ? `${dict.common.page} ${page}` : undefined]
+    .filter(Boolean)
+    .join(" — ");
+
   return buildPageMetadata({
     locale: raw,
     path: "/blog",
-    title: dict.blog.label,
+    title,
     description: dict.blog.description,
     siteName: settings.siteName,
+    canonicalQuery: listCanonicalQuery({ q: q || undefined, category: category || undefined, tag: tag || undefined, page: page > 1 ? String(page) : undefined }),
+    ...(q ? { robots: { index: false, follow: true } } : {}),
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -59,6 +97,31 @@ export default async function BlogPage({
 
   const blogHref = localeHref(locale, "/blog");
   const isFiltered = Boolean(q || category || tag);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.blog.label, href: blogHref },
+  ];
+  // React 19 hoists <link> rendered in the tree into <head>.
+  const pageLinks = paginationLinks({
+    locale,
+    path: "/blog",
+    params: { q: q || undefined, category: category || undefined, tag: tag || undefined },
+    page: data.page,
+    pages: data.pages,
+  });
+  const listedArticles = [...(featured ? [featured] : []), ...items];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildBlogSchema({ blogUrl: blogHref, name: dict.blog.title, description: dict.blog.description }),
+      buildItemListSchema({
+        id: `${absoluteUrl(blogHref)}#articles`,
+        items: listedArticles.map((article) => ({ name: article.title, url: `${blogHref}/${article.slug}` })),
+      }),
+    ],
+  };
 
   const categoryHref = (slug: string) => {
     const search = new URLSearchParams();
@@ -71,6 +134,17 @@ export default async function BlogPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      {pageLinks.prev && <link rel="prev" href={pageLinks.prev} />}
+      {pageLinks.next && <link rel="next" href={pageLinks.next} />}
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
       <PageHero
         label={dict.blog.label}
         title={dict.blog.title}
@@ -163,11 +237,11 @@ export default async function BlogPage({
             </Reveal>
             <Reveal delay={100} className="lg:col-span-5 lg:pl-6">
               <p className="label">{dict.blog.featured}</p>
-              <h2 className="mt-4 text-[clamp(1.5rem,2.6vw,2.1rem)] leading-tight tracking-tight">
+              <p className="mt-4 text-[clamp(1.5rem,2.6vw,2.1rem)] leading-tight tracking-tight">
                 <Link href={`${blogHref}/${featured.slug}`} className="underline-sweep">
                   {featured.title}
                 </Link>
-              </h2>
+              </p>
               <p className="mt-4 text-[14px] leading-relaxed text-muted">{featured.excerpt}</p>
               <div className="mt-6 flex flex-wrap items-center gap-2">
                 {featured.tags.slice(0, 4).map((item) => (

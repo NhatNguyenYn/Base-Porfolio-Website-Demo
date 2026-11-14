@@ -84,3 +84,29 @@ Kết bài.`;
     expect(html).toContain("không có cặp hỏi đáp");
   });
 });
+
+describe("content headings (8C-2)", () => {
+  it("demotes a Markdown H1 to H2 so the page keeps a single H1", async () => {
+    const { html, toc } = await renderMarkdown("# Title from the author\n\n## A real section\n\nText.");
+    expect(html).not.toContain("<h1");
+    expect(html).not.toContain("</h1>");
+    expect(html).toContain("<h2");
+    expect(html).toContain(">Title from the author</h2>");
+    // The demoted heading still feeds the table of contents, as an H2.
+    expect(toc).toContainEqual(expect.objectContaining({ text: "Title from the author", level: 2 }));
+    expect(toc.map((item) => item.text)).toEqual(["Title from the author", "A real section"]);
+  });
+
+  it("demotes a raw-HTML H1 and leaves fenced code untouched", async () => {
+    const { html } = await renderMarkdown('<h1 class="big">Raw heading</h1>\n\n```md\n# not a heading\n```');
+    expect(html).not.toContain("<h1");
+    expect(html).toContain(">Raw heading</h2>");
+    expect(html).toContain("# not a heading");
+  });
+
+  it("demotes H1s in the editorial template too", async () => {
+    const { html, toc } = await renderMarkdown("# Editorial intro\n\nBody text.", { editorial: true });
+    expect(html).not.toContain("<h1");
+    expect(toc.map((item) => item.text)).toEqual(["Editorial intro"]);
+  });
+});

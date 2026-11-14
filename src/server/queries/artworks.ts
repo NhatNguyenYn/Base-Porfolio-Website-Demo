@@ -23,6 +23,8 @@ export type ArtworkCardData = {
 export type ArtworkDetailData = ArtworkCardData & {
   tags: { name: string; slug: string }[];
   viewCount: number;
+  /** Content-edit timestamp, for the detail page's schema dateModified (8B-5). */
+  updatedAt: Date;
 };
 
 type ArtworkRow = Awaited<ReturnType<typeof fetchArtworkRows>>[number];
@@ -192,6 +194,7 @@ export async function getArtworkDetail(
       order: artwork.order,
       tags: artwork.tags.map((item) => ({ name: item.tag.name, slug: item.tag.slug })),
       viewCount: artwork.viewCount,
+      updatedAt: artwork.updatedAt,
     },
   };
 }

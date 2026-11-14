@@ -1,6 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale } from "@/i18n/config";
+import { defaultLocale, isLocale } from "@/i18n/config";
 import { buildContentSecurityPolicy, CSP_NONCE_HEADER } from "@/lib/csp";
+
+/** First path segment of a known public section (bare, without a locale). */
+const BARE_PUBLIC_SEGMENTS = new Set(["about", "blog", "projects", "art", "contact"]);
+
+/**
+ * Bare known public path (e.g. `/about`, `/blog/my-post`) → its localized
+ * form (`/vi/about`). Returns null for `/` (already redirected), localized
+ * URLs, and anything outside the known public sections (admin, api, unknown
+ * paths keep their existing behaviour). Pure, so it is unit-testable.
+ */
+export function resolveBareLocaleRedirect(pathname: string): string | null {
+  if (!pathname.startsWith("/") || pathname === "/") return null;
+  const [first, ...rest] = pathname.slice(1).split("/");
+  if (!first || isLocale(first) || !BARE_PUBLIC_SEGMENTS.has(first)) return null;
+  return `/${defaultLocale}/${[first, ...rest].join("/")}`;
+}
 
 export function middleware(request: NextRequest) {
   // Web Crypto is available in the middleware runtime.
@@ -14,10 +30,13 @@ export function middleware(request: NextRequest) {
   // Next reads the CSP request header to stamp the nonce onto its own scripts.
   requestHeaders.set("Content-Security-Policy-Report-Only", csp);
 
+  const bareTarget = resolveBareLocaleRedirect(request.nextUrl.pathname);
   const response =
     request.nextUrl.pathname === "/"
       ? NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
-      : NextResponse.next({ request: { headers: requestHeaders } });
+      : bareTarget
+        ? NextResponse.redirect(new URL(`${bareTarget}${request.nextUrl.search}`, request.url))
+        : NextResponse.next({ request: { headers: requestHeaders } });
 
   response.headers.set("Content-Security-Policy-Report-Only", csp);
   response.headers.set("x-request-id", requestId);

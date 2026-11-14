@@ -7,12 +7,14 @@ import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getArtworkDetail, incrementArtworkView, listArtworks } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
 import { getArtworkLocales } from "@/server/queries/artworks";
-import { buildPageMetadata, safeSocialImage, socialImage } from "@/lib/seo";
-import { absoluteUrl, formatDate } from "@/lib/utils";
+import { buildPageMetadata, safeSocialImage, socialImage, canonicalUrl, xHandleFromSocials } from "@/lib/seo";
+import { absoluteUrl, formatDate, truncate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { ShareBar } from "@/components/site/share-bar";
 import { prisma } from "@/server/db";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 import { ArtGallery } from "@/components/site/art-gallery";
@@ -52,17 +54,21 @@ export async function generateMetadata({
     });
   }
   const available = await getArtworkLocales(slug);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
 
   return buildPageMetadata({
     locale: raw,
     path: `/art/${slug}`,
     title: artwork.title,
-    description: artwork.description.slice(0, 180),
+    description: truncate(artwork.description, 180),
     siteName: settings.siteName,
     availableLocales: available,
     image: artwork.image
       ? socialImage(artwork.image.url, artwork.image.alt || artwork.title, artwork.image.width, artwork.image.height)
       : null,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
   });
 }
 
@@ -104,7 +110,7 @@ export default async function ArtworkPage({
   const width = artwork.image?.width ?? 1200;
   const height = artwork.image?.height ?? 1500;
   const artHref = localeHref(locale, "/art");
-  const canonicalUrl = absoluteUrl(`/${locale}/art/${artwork.slug}`);
+  const schemaCanonicalUrl = absoluteUrl(`/${locale}/art/${artwork.slug}`);
   const schemaImage = artwork.image
     ? safeSocialImage(
         socialImage(artwork.image.url, artwork.image.alt || artwork.title, artwork.image.width, artwork.image.height),
@@ -121,13 +127,15 @@ export default async function ArtworkPage({
     "@graph": [
       buildBreadcrumbSchema(crumbs),
       buildCreativeWorkSchema({
-        canonicalUrl,
+        canonicalUrl: schemaCanonicalUrl,
         name: artwork.title,
         description: artwork.description,
         imageUrl: schemaImage?.url,
         datePublished: artwork.createdDate?.toISOString(),
+        dateModified: artwork.updatedAt.toISOString(),
         type: "VisualArtwork",
         medium: artwork.medium,
+        keywords: artwork.tags.map((tag) => tag.name),
       }),
     ],
   };
@@ -145,7 +153,7 @@ export default async function ArtworkPage({
       </div>
 
       <div className="container-page mt-8 grid gap-10 lg:grid-cols-12 lg:gap-14">
-        <Reveal className="lg:col-span-8">
+        <Reveal className="lg:col-span-8" priority>
           <figure>
             <div
               className="relative w-full overflow-hidden border border-line bg-surface-muted"
@@ -229,6 +237,14 @@ export default async function ArtworkPage({
                 </div>
               )}
             </dl>
+
+            <div className="mt-8 border-t border-line pt-5">
+              <ShareBar
+                title={artwork.title}
+                url={canonicalUrl(locale, `/art/${artwork.slug}`)}
+                labels={{ share: dict.common.share, copy: dict.common.copyLink, copied: dict.common.copied }}
+              />
+            </div>
 
             <Link href={localeHref(locale, "/contact")} className="btn btn-outline mt-8 w-full">
               {dict.home.contactMe}

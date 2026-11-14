@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "../db";
 import { requireUser } from "../auth";
 import { logActivity } from "../audit";
+import { rateLimit } from "@/lib/rate-limit";
 import { storeImage, UploadError } from "../media/upload";
 import { getStorage } from "../storage";
 import { getString } from "./helpers";
@@ -22,6 +23,13 @@ export type UploadState = {
  */
 export async function uploadMediaAction(_prev: UploadState, formData: FormData): Promise<UploadState> {
   const user = await requireUser();
+  // Same 60/hour/user throttle as POST /api/admin/media, so the Server
+  // Action cannot be used to bypass the API limit.
+  const limit = rateLimit(`media:${user.id}`, 60, 60 * 60 * 1000);
+  if (!limit.ok) {
+    return { ok: false, message: "Too many uploads. Try again later." };
+  }
+
   const entries = formData.getAll("files").filter((entry): entry is File => entry instanceof File);
   const alt = getString(formData, "alt");
 

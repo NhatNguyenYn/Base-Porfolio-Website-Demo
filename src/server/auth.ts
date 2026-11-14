@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createHash, randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
+import { clientIp } from "@/lib/rate-limit";
 import { prisma } from "./db";
 
 export const SESSION_COOKIE = "ps_session";
@@ -35,11 +36,23 @@ export async function verifyPassword(password: string, passwordHash: string): Pr
   return bcrypt.compare(password, passwordHash);
 }
 
+/**
+ * Fixed bcrypt hash of a password nobody knows, used only as a timing
+ * stand-in: comparing against it on the unknown-email login path makes that
+ * path take the same time as a real password check, so an attacker cannot
+ * tell whether an email exists from response time. It is never a real
+ * credential and no password verifies against it.
+ */
+export const DUMMY_PASSWORD_HASH = "$2b$12$OZVzr7Ma2BTzgHhFvELCOuCF6zpX/ef4EcbImytPPVnQGy2BKLVMW";
+
 export async function createSession(userId: string): Promise<void> {
   const token = randomBytes(32).toString("base64url");
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
   const requestHeaders = await headers();
-  const forwarded = requestHeaders.get("x-forwarded-for");
+  // Logging-only IP, resolved with the same trusted-proxy-hop logic as rate
+  // limiting — never the raw left-most X-Forwarded-For entry, which any
+  // client can forge. No decision is ever based on this value.
+  const ip = clientIp(requestHeaders);
 
   await prisma.session.create({
     data: {
@@ -47,7 +60,7 @@ export async function createSession(userId: string): Promise<void> {
       userId,
       expiresAt,
       userAgent: requestHeaders.get("user-agent")?.slice(0, 250) ?? null,
-      ip: forwarded?.split(",")[0]?.trim() ?? null,
+      ip: ip === "unknown" ? null : ip,
     },
   });
 
@@ -81,6 +94,17 @@ export async function revokeOtherSessions(userId: string): Promise<void> {
       ...(token ? { NOT: { tokenHash: hashToken(token) } } : {}),
     },
   });
+}
+
+/**
+ * Revokes ALL sessions of a user. Used on login, before the new session is
+ * created, so a stolen token from an earlier session stops working instead
+ * of staying valid for up to 7 days. Deleting first (rather than revoking
+ * "other" sessions after creating the new one) avoids depending on reading
+ * back the just-set cookie in the same request.
+ */
+export async function revokeAllSessions(userId: string): Promise<void> {
+  await prisma.session.deleteMany({ where: { userId } });
 }
 
 /**

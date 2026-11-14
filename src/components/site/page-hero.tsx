@@ -13,7 +13,7 @@ export function PageHero({
 }) {
   return (
     <section className="container-page pt-14 pb-12 lg:pt-20 lg:pb-16">
-      <Reveal>
+      <Reveal priority>
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-accent" aria-hidden="true" />
           <span className="label">{label}</span>

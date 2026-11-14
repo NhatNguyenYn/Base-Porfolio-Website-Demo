@@ -1,7 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { localeShort, locales, stripLocale, type Locale } from "@/i18n/config";
 
 export function LanguageSwitcher({
@@ -13,15 +12,13 @@ export function LanguageSwitcher({
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
 
-  function switchTo(next: Locale) {
-    if (next === locale || pending) return;
+  // Anchor links (not router.push buttons) so the alternate-language URL is a
+  // real, crawlable link with the right href in the HTML.
+  function hrefFor(next: Locale): string {
     const { path } = stripLocale(pathname || "/");
     const query = searchParams.toString();
-    const target = `/${next}${path === "/" ? "" : path}${query ? `?${query}` : ""}`;
-    startTransition(() => router.push(target));
+    return `/${next}${path === "/" ? "" : path}${query ? `?${query}` : ""}`;
   }
 
   return (
@@ -31,17 +28,17 @@ export function LanguageSwitcher({
       aria-label={label}
     >
       {locales.map((item) => (
-        <button
+        <a
           key={item}
-          type="button"
-          onClick={() => switchTo(item)}
+          href={hrefFor(item)}
+          hrefLang={item}
           aria-current={item === locale ? "true" : undefined}
           className={`rounded-full px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] transition-colors ${
             item === locale ? "bg-primary text-primary-fg" : "text-muted hover:text-ink"
           }`}
         >
           {localeShort[item]}
-        </button>
+        </a>
       ))}
     </div>
   );
