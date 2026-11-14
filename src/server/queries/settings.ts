@@ -25,17 +25,17 @@ export type SiteSettings = {
 };
 
 export const DEFAULT_SETTINGS: Omit<SiteSettings, "logo" | "favicon"> = {
-  siteName: "Portfolio Studio",
-  siteTagline: "Product design, engineering and digital art",
-  seoTitle: "Portfolio Studio — Product designer & software engineer",
+  siteName: "Thu Hà Ruby",
+  siteTagline: "Giảng viên · Nghệ sĩ thư pháp",
+  seoTitle: "Thu Hà Ruby — NCS. ThS. Nguyễn Thu Hà | Giảng viên & Nghệ sĩ thư pháp",
   seoDescription:
-    "Personal portfolio with selected technology work, a digital art gallery and essays on design and engineering.",
+    "Trang cá nhân của NCS. ThS. Nguyễn Thu Hà (Thu Hà Ruby) — giảng viên Học viện Cán bộ TP. HCM, nghệ sĩ thư pháp Việt và Anh.",
   seoKeywords: "portfolio, product design, software engineering, digital art, writing",
-  footerText: "Designed and built with care. Sample content for demonstration.",
-  footerTextEn: "Designed and built with care. Sample content for demonstration.",
-  contactEmail: "hello@example.com",
+  footerText: "Trang cá nhân của Thu Hà Ruby — giảng viên & nghệ sĩ thư pháp.",
+  footerTextEn: "Thu Hà Ruby's personal site — lecturer & calligraphy artist.",
+  contactEmail: "nguyenthuhaxinchao@gmail.com",
   contactPhone: "",
-  contactLocation: "Ho Chi Minh City, Vietnam",
+  contactLocation: "Hạnh Thông, TP. HCM",
   logoMediaId: "",
   faviconMediaId: "",
   postsPerPage: 9,

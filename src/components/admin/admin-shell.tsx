@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -26,7 +27,9 @@ import {
 } from "lucide-react";
 import { logoutAction } from "@/server/actions/auth";
 import type { SessionUser } from "@/server/auth";
+import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
+import type { MediaView } from "@/server/queries/types";
 
 const NAV = [
   { href: "/admin", label: "Tổng quan", icon: LayoutDashboard, exact: true },
@@ -76,11 +79,13 @@ export function AdminShell({
   user,
   unread,
   siteName,
+  logo,
   children,
 }: {
   user: SessionUser;
   unread: number;
   siteName: string;
+  logo: MediaView | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "/admin";
@@ -115,11 +120,30 @@ export function AdminShell({
           ? "Chỉnh sửa tác phẩm"
           : "Quản trị");
 
+  // Monogram fallback for the sidebar brand box when no logo is set
+  // (same initials rule as the public header).
+  const monogram = siteName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
+
   const sidebar = (
     <div className="flex h-full flex-col">
       <div className="flex h-[60px] items-center gap-2.5 border-b border-line px-5">
         <span className="relative grid h-7 w-7 place-items-center border border-line-strong text-[10px] font-semibold">
-          PS
+          {logo ? (
+            <Image
+              src={assetUrl(logo.url)}
+              alt={logo.alt || siteName}
+              fill
+              sizes="28px"
+              className="object-cover"
+            />
+          ) : (
+            monogram || "TH"
+          )}
           <span className="absolute -right-[2px] -top-[2px] h-1.5 w-1.5 bg-accent" aria-hidden="true" />
         </span>
         <div className="min-w-0">

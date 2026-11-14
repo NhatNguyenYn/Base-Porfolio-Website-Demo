@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { localeHref, stripLocale, type Locale } from "@/i18n/config";
 import { matchesNav, siteNav } from "@/data/navigation";
+import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
+import type { MediaView } from "@/server/queries/types";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeSwitcher } from "./theme-switcher";
 import { SocialLinks, type SocialLinkItem } from "./social-links";
@@ -14,6 +17,7 @@ import { SocialLinks, type SocialLinkItem } from "./social-links";
 export type HeaderProps = {
   locale: Locale;
   siteName: string;
+  logo: MediaView | null;
   nav: { home: string; about: string; projects: string; art: string; blog: string; booking: string; contact: string; menu: string; close: string };
   themeLabels: { theme: string; light: string; dark: string };
   languageLabel: string;
@@ -21,7 +25,7 @@ export type HeaderProps = {
   email: string;
 };
 
-export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, socials, email }: HeaderProps) {
+export function SiteHeader({ locale, siteName, logo, nav, themeLabels, languageLabel, socials, email }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -115,10 +119,20 @@ export function SiteHeader({ locale, siteName, nav, themeLabels, languageLabel, 
       <div className="container-page flex h-[70px] items-center justify-between gap-6">
         <Link href={localeHref(locale)} className="group flex items-center gap-3">
           <span className="relative grid h-8 w-8 place-items-center border border-line-strong text-[11px] font-semibold tracking-tight transition-colors group-hover:border-ink">
-            {monogram || "PS"}
+            {logo ? (
+              <Image
+                src={assetUrl(logo.url)}
+                alt={logo.alt || siteName}
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
+            ) : (
+              monogram || "TH"
+            )}
             <span className="absolute -right-[3px] -top-[3px] h-1.5 w-1.5 bg-ruby-bright" aria-hidden="true" />
           </span>
-          <span className="hidden text-[13px] font-medium tracking-[0.01em] sm:block">{siteName}</span>
+          <span className="hidden font-serif text-[17px] leading-none tracking-[0.01em] text-accent sm:block">{siteName}</span>
           <span className="sr-only sm:hidden">{siteName}</span>
         </Link>
 

@@ -17,7 +17,7 @@ import { getSettings } from "@/data/settings";
 export const dynamic = "force-dynamic";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  let name = "Portfolio Studio";
+  let name = "Thu Hà Ruby";
   try {
     name = (await getSettings()).siteName;
   } catch {

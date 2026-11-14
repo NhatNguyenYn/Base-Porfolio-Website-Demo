@@ -7,7 +7,7 @@ import { ThemeScript } from "@/components/site/theme-script";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Quản trị — Portfolio Studio",
+  title: "Quản trị — Thu Hà Ruby",
   robots: { index: false, follow: false },
 };
 

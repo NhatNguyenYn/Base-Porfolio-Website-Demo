@@ -7,7 +7,7 @@ import type { Locale } from "@/i18n/config";
  * Env-gated: mail is sent only when BOTH are set, otherwise the caller skips
  * it and the booking stays `pending` for the admin to confirm manually.
  * - RESEND_API_KEY — the Resend API key (Nguyen already has one).
- * - EMAIL_FROM — the verified sender, e.g. `Portfolio Studio <noreply@your-domain>`.
+ * - EMAIL_FROM — the verified sender, e.g. `Thu Hà Ruby <noreply@your-domain>`.
  *   The domain must be verified in Resend; until then no mail can be sent.
  */
 export function confirmationEmailConfigured(): boolean {

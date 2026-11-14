@@ -24,11 +24,11 @@ export default async function LoginPage({
       <div className="w-full max-w-sm">
         <div className="mb-8 flex items-center gap-2.5">
           <span className="relative grid h-8 w-8 place-items-center border border-line-strong text-[10px] font-semibold">
-            PS
+            TH
             <span className="absolute -right-[2px] -top-[2px] h-1.5 w-1.5 bg-accent" aria-hidden="true" />
           </span>
           <div>
-            <p className="text-[13px] font-medium leading-tight">Portfolio Studio</p>
+            <p className="text-[13px] font-medium leading-tight">Thu Hà Ruby</p>
             <p className="text-[9px] uppercase tracking-[0.18em] text-muted">Quản trị nội dung</p>
           </div>
         </div>

@@ -187,6 +187,7 @@ export default async function LocaleLayout({
         <SiteHeader
           locale={locale}
           siteName={settings.siteName}
+          logo={settings.logo}
           nav={dict.nav}
           themeLabels={{ theme: dict.common.theme, light: dict.common.light, dark: dict.common.dark }}
           languageLabel={dict.common.language}

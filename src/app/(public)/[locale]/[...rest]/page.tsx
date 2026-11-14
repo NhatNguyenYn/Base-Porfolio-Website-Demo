@@ -33,7 +33,7 @@ export async function generateMetadata({
   const locale: Locale = isLocale(raw) ? raw : "vi";
   const dict = getDictionary(locale);
   const path = `/${(rest ?? []).join("/")}`;
-  let siteName = "Portfolio Studio";
+  let siteName = "Thu Hà Ruby";
   try {
     siteName = (await getSettings()).siteName;
   } catch {

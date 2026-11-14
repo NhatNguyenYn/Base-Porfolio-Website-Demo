@@ -11,7 +11,7 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
   const [counts, settings] = await Promise.all([messageCounts(), getSettings()]);
 
   return (
-    <AdminShell user={user} unread={counts.unread} siteName={settings.siteName}>
+    <AdminShell user={user} unread={counts.unread} siteName={settings.siteName} logo={settings.logo}>
       {children}
     </AdminShell>
   );

@@ -2,7 +2,14 @@
 // + resend, with the Resend client mocked (no real mail leaves the test).
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-const mockSend = vi.hoisted(() => vi.fn(async () => ({ data: { id: "mail-test" }, error: null })));
+// The mock takes the send payload so mock.calls is typed with one argument
+// (a no-arg mock types calls as the empty tuple, breaking calls[0] access).
+const mockSend = vi.hoisted(() =>
+  vi.fn(async (mail: { to?: string; subject?: string; text?: string; html?: string }) => ({
+    data: { id: "mail-test" },
+    error: null,
+  })),
+);
 vi.mock("resend", () => ({
   Resend: class {
     emails = { send: mockSend };
