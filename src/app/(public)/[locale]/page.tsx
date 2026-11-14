@@ -139,9 +139,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <Link href={bookingHref} className="btn btn-outline">
                   {dict.home.bookingCta}
                 </Link>
-                <Link href={contactHref} className="btn btn-outline">
-                  {dict.home.contactMe}
-                </Link>
               </div>
             </Reveal>
 
