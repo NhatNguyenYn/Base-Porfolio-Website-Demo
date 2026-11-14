@@ -13,6 +13,7 @@ export const en: Dictionary = {
     projects: "Work",
     art: "Gallery",
     blog: "Writing",
+    booking: "Booking",
     contact: "Contact",
     admin: "Admin",
     menu: "Open menu",
@@ -99,6 +100,11 @@ export const en: Dictionary = {
     blogLabel: "Latest writing",
     blogTitle: "Notes on engineering, design and making",
     blogCta: "View all articles",
+    bookingLabel: "Book a consultation",
+    bookingTitle: "A 1-on-1 conversation, prepared in advance.",
+    bookingText:
+      "Pick a time that suits you, leave your contact details and answer a few short questions — the session is more useful because I come prepared.",
+    bookingCta: "Book a consultation",
     contactLabel: "Get in touch",
     contactTitle: "Let's make something thoughtful.",
     contactText:
@@ -335,7 +341,7 @@ export const en: Dictionary = {
     thankYouText: "Your appointment has been recorded. Keep the booking code and flower name to look it up or cancel it later.",
     flowerBadgeLabel: "Your flower",
     intakeTitle: "3. Pre-consultation survey",
-    intakeHint: "A few short questions to make the session more useful.",
+    intakeHint: "To complete your booking, please fill in the survey below — a few short questions to make the session more useful.",
     reviewTitle: "4. Confirm",
     back: "Back",
     continue: "Continue",

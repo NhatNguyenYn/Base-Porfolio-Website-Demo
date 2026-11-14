@@ -11,6 +11,7 @@ export const vi = {
     projects: "Dự án",
     art: "Phòng tranh",
     blog: "Bài viết",
+    booking: "Đặt lịch",
     contact: "Liên hệ",
     admin: "Quản trị",
     menu: "Mở menu",
@@ -97,6 +98,11 @@ export const vi = {
     blogLabel: "Bài viết mới",
     blogTitle: "Ghi chép về kỹ thuật, thiết kế và sáng tạo",
     blogCta: "Xem tất cả bài viết",
+    bookingLabel: "Đặt lịch tư vấn",
+    bookingTitle: "Trò chuyện 1-1, có chuẩn bị trước.",
+    bookingText:
+      "Chọn khung giờ phù hợp, để lại thông tin liên hệ và trả lời vài câu hỏi ngắn — buổi tư vấn sẽ hiệu quả hơn vì tôi đã chuẩn bị trước.",
+    bookingCta: "Đặt lịch tư vấn",
     contactLabel: "Kết nối",
     contactTitle: "Cùng tạo ra một điều gì đó tử tế.",
     contactText:
@@ -334,7 +340,7 @@ export const vi = {
     thankYouText: "Lịch hẹn của bạn đã được ghi nhận. Hãy lưu lại mã đặt lịch và tên hoa để tra cứu hoặc huỷ lịch khi cần.",
     flowerBadgeLabel: "Tên hoa của bạn",
     intakeTitle: "3. Khảo sát trước buổi tư vấn",
-    intakeHint: "Vài câu hỏi ngắn giúp buổi tư vấn hiệu quả hơn.",
+    intakeHint: "Để hoàn thành đặt lịch, bạn hãy làm mẫu khảo sát tiếp theo nhé — vài câu hỏi ngắn giúp buổi tư vấn hiệu quả hơn.",
     reviewTitle: "4. Xác nhận",
     back: "Quay lại",
     continue: "Tiếp tục",

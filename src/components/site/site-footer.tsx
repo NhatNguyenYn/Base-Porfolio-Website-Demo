@@ -16,7 +16,7 @@ export type FooterProps = {
   socials: SocialLinkItem[];
   year: number;
   showDemoBadge: boolean;
-  nav: { home: string; about: string; projects: string; art: string; blog: string; contact: string };
+  nav: { home: string; about: string; projects: string; art: string; blog: string; booking: string; contact: string };
 };
 
 export function SiteFooter({
@@ -32,7 +32,7 @@ export function SiteFooter({
   nav,
 }: FooterProps) {
   const explore = siteNav(locale, nav).filter((item) =>
-    ["about", "projects", "art", "blog"].includes(item.key),
+    ["about", "projects", "art", "blog", "booking"].includes(item.key),
   );
 
   return (

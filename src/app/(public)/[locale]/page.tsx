@@ -93,6 +93,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const projectsHref = localeHref(locale, "/projects");
   const artHref = localeHref(locale, "/art");
   const blogHref = localeHref(locale, "/blog");
+  const bookingHref = localeHref(locale, "/booking");
   const contactHref = localeHref(locale, "/contact");
 
   return (
@@ -134,6 +135,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                     <path d="M5 12h14M13 6l6 6-6 6" />
                   </svg>
+                </Link>
+                <Link href={bookingHref} className="btn btn-outline">
+                  {dict.home.bookingCta}
                 </Link>
                 <Link href={contactHref} className="btn btn-outline">
                   {dict.home.contactMe}
@@ -382,6 +386,29 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <p className="text-sm text-muted">{dict.blog.emptyTitle}</p>
           </div>
         )}
+      </section>
+
+      {/* ------------------------------------------------------------ Booking */}
+      <section className="container-page py-16 lg:py-24">
+        <SectionHeader
+          index="05"
+          label={dict.home.bookingLabel}
+          title={dict.home.bookingTitle}
+          action={{ href: bookingHref, label: dict.home.bookingCta }}
+        />
+        <Reveal className="mt-10">
+          <p className="max-w-2xl text-[clamp(1.2rem,2vw,1.6rem)] leading-[1.55] tracking-[-0.01em]">
+            {dict.home.bookingText}
+          </p>
+          <div className="mt-8">
+            <Link href={bookingHref} className="btn btn-primary">
+              {dict.home.bookingCta}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
+        </Reveal>
       </section>
 
       {/* ------------------------------------------------------------ Contact */}

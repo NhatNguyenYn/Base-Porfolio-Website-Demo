@@ -15,25 +15,28 @@ const labels = {
   projects: "Work",
   art: "Art",
   blog: "Blog",
+  booking: "Booking",
   contact: "Contact",
 };
 
 describe("navigation visibility", () => {
   it("hides Projects by default and keeps every other entry", () => {
     expect(navVisibility.projects).toBe(false);
-    expect(visibleNavKeys()).toEqual(["home", "about", "art", "blog", "contact"]);
+    expect(navVisibility.booking).toBe(true);
+    expect(visibleNavKeys()).toEqual(["home", "about", "art", "blog", "booking", "contact"]);
   });
 
   it("omits Projects from both locales without changing other entries", () => {
     for (const locale of ["vi", "en"] as const) {
       const items = siteNav(locale, labels);
-      expect(items.map((item) => item.key)).toEqual(["home", "about", "art", "blog", "contact"]);
+      expect(items.map((item) => item.key)).toEqual(["home", "about", "art", "blog", "booking", "contact"]);
       expect(items.some((item) => item.key === "projects")).toBe(false);
       expect(items.map((item) => item.href)).toEqual([
         localeHref(locale, ""),
         localeHref(locale, "/about"),
         localeHref(locale, "/art"),
         localeHref(locale, "/blog"),
+        localeHref(locale, "/booking"),
         localeHref(locale, "/contact"),
       ]);
     }
@@ -49,7 +52,7 @@ describe("navigation visibility", () => {
   it("can show a hidden entry again by flipping only the config", () => {
     const visible: NavVisibility = { ...navVisibility, projects: true };
     const keys = siteNav("vi", labels, visible).map((item) => item.key);
-    expect(keys).toEqual(["home", "about", "projects", "art", "blog", "contact"]);
+    expect(keys).toEqual(["home", "about", "projects", "art", "blog", "booking", "contact"]);
     expect(siteNav("vi", labels, visible)[2].href).toBe("/vi/projects");
   });
 
@@ -59,13 +62,19 @@ describe("navigation visibility", () => {
       blog: false,
       contact: false,
     };
-    expect(visibleNavKeys(withoutBlogAndContact)).toEqual(["home", "about", "art"]);
-    expect(siteNav("en", labels, withoutBlogAndContact)).toHaveLength(3);
+    expect(visibleNavKeys(withoutBlogAndContact)).toEqual(["home", "about", "art", "booking"]);
+    expect(siteNav("en", labels, withoutBlogAndContact)).toHaveLength(4);
   });
 
   it("keeps routing untouched for a hidden page", () => {
     expect(navPaths.projects).toBe("/projects");
     expect(matchesNav("projects", "/projects")).toBe(true);
     expect(matchesNav("projects", "/projects/aurora-design-system")).toBe(true);
+  });
+
+  it("marks booking pages active under the booking entry", () => {
+    expect(navPaths.booking).toBe("/booking");
+    expect(matchesNav("booking", "/booking")).toBe(true);
+    expect(matchesNav("booking", "/booking/tu-van-1-1")).toBe(true);
   });
 });

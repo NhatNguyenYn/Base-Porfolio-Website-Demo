@@ -14,7 +14,7 @@ import { SocialLinks, type SocialLinkItem } from "./social-links";
 export type HeaderProps = {
   locale: Locale;
   siteName: string;
-  nav: { home: string; about: string; projects: string; art: string; blog: string; contact: string; menu: string; close: string };
+  nav: { home: string; about: string; projects: string; art: string; blog: string; booking: string; contact: string; menu: string; close: string };
   themeLabels: { theme: string; light: string; dark: string };
   languageLabel: string;
   socials: SocialLinkItem[];

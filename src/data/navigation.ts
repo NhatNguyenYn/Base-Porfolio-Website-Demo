@@ -5,7 +5,7 @@ import type { Dictionary } from "@/i18n";
  * Central route configuration for the public site. Adding a page means adding
  * one entry here — the header, footer and mobile menu all read from it.
  */
-export type NavKey = "home" | "about" | "projects" | "art" | "blog" | "contact";
+export type NavKey = "home" | "about" | "projects" | "art" | "blog" | "booking" | "contact";
 
 export const navPaths: Record<NavKey, string> = {
   home: "/",
@@ -13,10 +13,11 @@ export const navPaths: Record<NavKey, string> = {
   projects: "/projects",
   art: "/art",
   blog: "/blog",
+  booking: "/booking",
   contact: "/contact",
 };
 
-const NAV_ORDER: NavKey[] = ["home", "about", "projects", "art", "blog", "contact"];
+const NAV_ORDER: NavKey[] = ["home", "about", "projects", "art", "blog", "booking", "contact"];
 
 /**
  * Which navigation entries a visitor can see. Labels live in the dictionaries
@@ -35,6 +36,7 @@ export const navVisibility: NavVisibility = {
   projects: false,
   art: true,
   blog: true,
+  booking: true,
   contact: true,
 };
 
