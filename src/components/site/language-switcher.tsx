@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { localeShort, locales, stripLocale, type Locale } from "@/i18n/config";
 
@@ -13,8 +14,13 @@ export function LanguageSwitcher({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Anchor links (not router.push buttons) so the alternate-language URL is a
-  // real, crawlable link with the right href in the HTML.
+  // `next/link` renders a real <a> in the HTML, so the alternate-language
+  // URL stays a crawlable link — and unlike a hand-built <a href>, Link
+  // prefixes the deploy basePath automatically. (A raw <a> with
+  // `/${next}${path}` 404d on the GitHub Pages demo, whose pages live under
+  // /Base-Porfolio-Website-Demo; `usePathname()` does not include basePath.)
+  // `hrefFor` therefore stays base-path-free on purpose: adding the prefix
+  // here would double-prefix.
   function hrefFor(next: Locale): string {
     const { path } = stripLocale(pathname || "/");
     const query = searchParams.toString();
@@ -28,7 +34,7 @@ export function LanguageSwitcher({
       aria-label={label}
     >
       {locales.map((item) => (
-        <a
+        <Link
           key={item}
           href={hrefFor(item)}
           hrefLang={item}
@@ -38,7 +44,7 @@ export function LanguageSwitcher({
           }`}
         >
           {localeShort[item]}
-        </a>
+        </Link>
       ))}
     </div>
   );

@@ -7,6 +7,7 @@ import {
   moveArtworkAction,
   toggleArtworkFeaturedAction,
 } from "@/server/actions/artworks";
+import { assetUrl } from "@/lib/asset";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -66,7 +67,7 @@ export default async function AdminArtPage({
               artwork: (
                 <div className="flex items-center gap-3">
                   <div className="relative h-14 w-11 shrink-0 overflow-hidden border border-line bg-surface-muted">
-                    <Image src={artwork.imageMedia.url} alt="" fill sizes="44px" className="object-cover" />
+                    <Image src={assetUrl(artwork.imageMedia.url)} alt="" fill sizes="44px" className="object-cover" />
                   </div>
                   <div className="min-w-0">
                     <Link href={`/admin/art/${artwork.id}`} className="block truncate text-[12.5px] hover:underline">

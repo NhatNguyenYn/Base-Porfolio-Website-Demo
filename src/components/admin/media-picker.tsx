@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { ImagePlus, Upload, X } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
+import { assetUrl } from "@/lib/asset";
 import { useFocusTrap } from "@/lib/focus-trap";
 import type { MediaView } from "@/server/queries/types";
 
@@ -119,11 +120,11 @@ export function MediaPicker({
           <div className={multiple ? "relative" : `relative w-full max-w-xs ${maxHeight}`}>
             {multiple ? (
               <div className="relative aspect-square overflow-hidden border border-line bg-surface-muted">
-                <Image src={selected[0]!.url} alt={selected[0]!.alt} fill sizes="140px" className="object-cover" />
+                <Image src={assetUrl(selected[0]!.url)} alt={selected[0]!.alt} fill sizes="140px" className="object-cover" />
               </div>
             ) : (
               <div className={`relative overflow-hidden border border-line bg-surface-muted ${maxHeight}`}>
-                <Image src={selected[0]!.url} alt={selected[0]!.alt} fill sizes="360px" className="object-cover" />
+                <Image src={assetUrl(selected[0]!.url)} alt={selected[0]!.alt} fill sizes="360px" className="object-cover" />
               </div>
             )}
             {!multiple && (
@@ -158,7 +159,7 @@ export function MediaPicker({
           {multiple &&
             selected.slice(1).map((item) => (
               <div key={item.id} className="relative aspect-square overflow-hidden border border-line bg-surface-muted">
-                <Image src={item.url} alt={item.alt} fill sizes="140px" className="object-cover" />
+                <Image src={assetUrl(item.url)} alt={item.alt} fill sizes="140px" className="object-cover" />
                 <button
                   type="button"
                   onClick={() => remove(item.id)}
@@ -258,7 +259,7 @@ export function MediaPicker({
                           active ? "border-accent ring-2 ring-accent/40" : "border-line hover:border-line-strong"
                         }`}
                       >
-                        <Image src={item.url} alt={item.alt} fill sizes="180px" className="object-cover" />
+                        <Image src={assetUrl(item.url)} alt={item.alt} fill sizes="180px" className="object-cover" />
                         <span className="absolute inset-x-0 bottom-0 truncate bg-black/55 px-1.5 py-1 text-[9px] text-white opacity-0 transition-opacity group-hover:opacity-100">
                           {item.title || item.alt}
                         </span>

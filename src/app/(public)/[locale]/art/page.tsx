@@ -9,6 +9,7 @@ import { listArtworks, listCollections } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
 import { getSocialLinks } from "@/data/social";
 import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
+import { assetUrl } from "@/lib/asset";
 import { absoluteUrl } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCollectionPageSchema, buildItemListSchema } from "@/lib/structured-data";
@@ -99,7 +100,7 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
                   <div className="relative h-20 w-24 shrink-0 overflow-hidden bg-surface-muted">
                     {collection.cover ? (
                       <Image
-                        src={collection.cover.url}
+                        src={assetUrl(collection.cover.url)}
                         alt={collection.cover.alt || collection.name}
                         fill
                         sizes="96px"

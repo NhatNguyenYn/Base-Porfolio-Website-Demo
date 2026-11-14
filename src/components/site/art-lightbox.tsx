@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import type { ArtworkCardData } from "@/data/artworks";
 import type { Locale } from "@/i18n/config";
 import { localeHref } from "@/i18n/config";
+import { assetUrl } from "@/lib/asset";
 import { formatDate } from "@/lib/utils";
 import { useFocusTrap } from "@/lib/focus-trap";
 
@@ -119,7 +120,7 @@ export function ArtLightbox({
         {open.image ? (
           <div className="relative h-full w-full">
             <Image
-              src={open.image.url}
+              src={assetUrl(open.image.url)}
               alt={open.image.alt || open.title}
               fill
               sizes="100vw"

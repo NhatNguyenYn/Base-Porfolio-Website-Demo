@@ -10,6 +10,7 @@ import { getSettings } from "@/data/settings";
 import { getSocialLinks } from "@/data/social";
 import { getArtworkLocales } from "@/server/queries/artworks";
 import { buildPageMetadata, safeSocialImage, socialImage, canonicalUrl, xHandleFromSocials } from "@/lib/seo";
+import { assetUrl } from "@/lib/asset";
 import { absoluteUrl, formatDate, truncate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
@@ -161,7 +162,7 @@ export default async function ArtworkPage({
             >
               {artwork.image ? (
                 <Image
-                  src={artwork.image.url}
+                  src={assetUrl(artwork.image.url)}
                   alt={artwork.image.alt || artwork.title}
                   fill
                   priority
@@ -181,7 +182,7 @@ export default async function ArtworkPage({
               </span>
               {artwork.image && (
                 <a
-                  href={artwork.image.url}
+                  href={assetUrl(artwork.image.url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-4 hover:text-ink"

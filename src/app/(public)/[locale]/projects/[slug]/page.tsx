@@ -12,6 +12,7 @@ import { getProjectLocales } from "@/server/queries/projects";
 import { prisma } from "@/server/db";
 import { renderMarkdown } from "@/lib/markdown";
 import { buildPageMetadata, canonicalUrl, safeSocialImage, socialImage, xHandleFromSocials } from "@/lib/seo";
+import { assetUrl } from "@/lib/asset";
 import { absoluteUrl, formatDate } from "@/lib/utils";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { buildBreadcrumbSchema, buildCreativeWorkSchema } from "@/lib/structured-data";
@@ -216,7 +217,7 @@ export default async function ProjectDetailPage({
         <Reveal className="container-page mt-12" priority>
           <div className="relative aspect-[16/9] overflow-hidden border border-line bg-surface-muted">
             <Image
-              src={project.thumbnail.url}
+              src={assetUrl(project.thumbnail.url)}
               alt={project.thumbnail.alt || project.name}
               fill
               priority
@@ -272,7 +273,7 @@ export default async function ProjectDetailPage({
               <Reveal key={image.id} delay={(index % 2) * 60}>
                 <div className="relative aspect-[4/3] overflow-hidden border border-line bg-surface-muted">
                   <Image
-                    src={image.url}
+                    src={assetUrl(image.url)}
                     alt={image.alt || `${project.name} ${index + 1}`}
                     fill
                     sizes="(min-width: 768px) 45vw, 92vw"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { alternateLocale, defaultLocale, locales, localeOgLocale, type Locale } from "@/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
+import { assetUrl } from "@/lib/asset";
 
 export const OG_IMAGE_PATH = "/og-default.png";
 export const OG_IMAGE_WIDTH = 1200;
@@ -286,7 +287,11 @@ export function buildPageMetadata({
       ...(twitterSite ? { site: twitterSite } : {}),
       ...(twitterCreator ? { creator: twitterCreator } : {}),
     },
-    icons: { icon: faviconUrl || "/icon.png" },
+    // The icon href is emitted verbatim into <link rel="icon">, so a bare
+    // "/icon.png" (or a stored "/media/..." favicon) 404s on the Pages
+    // export, where pages live under the subpath. `assetUrl` prefixes it
+    // there and is the identity in server mode.
+    icons: { icon: assetUrl(faviconUrl || "/icon.png") },
     ...(robots
       ? { robots }
       : noindex

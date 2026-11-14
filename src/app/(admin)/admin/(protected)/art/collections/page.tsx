@@ -8,6 +8,7 @@ import {
 import { deleteCollectionAction } from "@/server/actions/artworks";
 import { getMediaLibrary } from "@/server/queries/media-library";
 import { toMediaView } from "@/server/queries/media";
+import { assetUrl } from "@/lib/asset";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable } from "@/components/admin/data-table";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
@@ -85,7 +86,7 @@ export default async function CollectionsPage({
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-14 shrink-0 overflow-hidden border border-line bg-surface-muted">
                     {collection.coverMedia ? (
-                      <Image src={collection.coverMedia.url} alt="" fill sizes="56px" className="object-cover" />
+                      <Image src={assetUrl(collection.coverMedia.url)} alt="" fill sizes="56px" className="object-cover" />
                     ) : (
                       <span className="grid h-full place-items-center text-[9px] text-muted">—</span>
                     )}

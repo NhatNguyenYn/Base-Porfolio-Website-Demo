@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProjectCardData } from "@/data/projects";
+import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n";
 
@@ -38,7 +39,7 @@ export function ProjectCard({
         >
           {project.thumbnail ? (
             <Image
-              src={project.thumbnail.url}
+              src={assetUrl(project.thumbnail.url)}
               alt={project.thumbnail.alt || project.name}
               fill
               priority={priority}

@@ -123,7 +123,16 @@ export default async function BlogPage({
     ],
   };
 
+  // Static export (GitHub Pages demo): a prerendered page cannot re-render
+  // for a query string — `?category=slug` only changes the URL while the
+  // served HTML stays the unfiltered list (bug: the chip looked active for
+  // nothing). So in export mode the chips link to the prerendered
+  // /blog/category/<slug>/ pages instead. Server mode keeps the query-param
+  // filter so it can combine with the q/tag search.
   const categoryHref = (slug: string) => {
+    if (process.env.PAGES_EXPORT === "1") {
+      return slug ? `${blogHref}/category/${slug}` : blogHref;
+    }
     const search = new URLSearchParams();
     if (q) search.set("q", q);
     if (tag) search.set("tag", tag);

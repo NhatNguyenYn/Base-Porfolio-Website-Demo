@@ -9,6 +9,7 @@ import { getEducation, getExperience, getProfile, getSkills } from "@/data/profi
 import { getSocialLinks } from "@/data/social";
 import { getSettings } from "@/data/settings";
 import { renderMarkdown } from "@/lib/markdown";
+import { assetUrl } from "@/lib/asset";
 import { formatMonthYear } from "@/lib/utils";
 import { buildPageMetadata, socialImage, xHandleFromSocials } from "@/lib/seo";
 import { parseInterests } from "@/lib/interests";
@@ -181,7 +182,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <div className="relative aspect-[4/5] overflow-hidden border border-line bg-surface-muted">
                 {profile?.avatar ? (
                   <Image
-                    src={profile.avatar.url}
+                    src={assetUrl(profile.avatar.url)}
                     alt={profile.avatar.alt || content.fullName}
                     fill
                     sizes="(min-width: 1024px) 30vw, 90vw"

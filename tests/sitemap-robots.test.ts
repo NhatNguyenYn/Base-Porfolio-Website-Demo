@@ -28,6 +28,7 @@ describe("sitemap", () => {
       {
         slug: "case-study",
         updatedAt: projectDate,
+        category: "platform",
         translations: [{ locale: "vi" }],
         thumbnailMedia: { url: "/media/project.jpg" },
       },
@@ -151,6 +152,23 @@ describe("sitemap", () => {
       vi: "https://portfolio.example/vi/blog/category/design",
       en: "https://portfolio.example/en/blog/category/design",
       "x-default": "https://portfolio.example/vi/blog/category/design",
+    });
+  });
+
+  it("advertises project category landing pages in both locales", async () => {
+    const entries = await sitemap();
+    const byUrl = new Map(entries.map((entry) => [entry.url, entry]));
+
+    const vi = byUrl.get("https://portfolio.example/vi/projects/category/platform");
+    const en = byUrl.get("https://portfolio.example/en/projects/category/platform");
+    expect(vi).toBeDefined();
+    expect(en).toBeDefined();
+    // Freshness follows the newest project in the category.
+    expect(vi?.lastModified).toEqual(projectDate);
+    expect(vi?.alternates?.languages).toEqual({
+      vi: "https://portfolio.example/vi/projects/category/platform",
+      en: "https://portfolio.example/en/projects/category/platform",
+      "x-default": "https://portfolio.example/vi/projects/category/platform",
     });
   });
 

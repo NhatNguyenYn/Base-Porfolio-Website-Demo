@@ -242,10 +242,18 @@
     color: var(--muted);
   }
 
+  /* Display headings keep their tight 0.98 line-height, but Vietnamese
+     below-baseline diacritics (dot below in ệ/ộ/ậ, descenders g/y) paint
+     ~0.12em below the last line box (measured: 8.9px at 76.8px, 11.6px at
+     94.7px). The padding keeps that ink inside the element's own box, so
+     no clipping ancestor (a reveal wrapper, a grid cell) can shear it off,
+     and scrollHeight stays equal to clientHeight. It only adds space below
+     the heading — inter-line rhythm is untouched. */
   .display {
     font-weight: 500;
     letter-spacing: -0.035em;
     line-height: 0.98;
+    padding-bottom: 0.15em;
   }
 
   .serif-accent {
@@ -666,11 +674,15 @@
   }
 
   /* Editorial hero and reading chrome ------------------------------- */
+  /* Same descender clearance as .display: at line-height 1.02 the
+     below-baseline dots still paint ~0.10em below the last line box
+     (measured 6.9px at 71.7px on the editorial article title). */
   .editorial-title {
     font-weight: 500;
     letter-spacing: -0.035em;
     line-height: 1.02;
     text-wrap: balance;
+    padding-bottom: 0.15em;
   }
 
   .editorial-deck {
@@ -799,8 +811,20 @@
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
-    clip-path: inset(0 0 0 0);
     will-change: auto;
+  }
+
+  /* Only the mask variant keeps a final clip-path: it wraps images, never
+     text, and its wipe (inset(0 0 100% 0) -> inset(0 0 0 0)) needs the
+     end state to stay a clip-path so the transition interpolates. Every
+     other variant must NOT clip: with `clip-path: inset(0 0 0 0)` here, a
+     reveal wrapper whose bottom edge coincides with its heading's bottom
+     edge (PageHero: grid items-end, description shorter than the title)
+     sheared off the Vietnamese below-baseline dots that paint below the
+     tight display line box — e.g. the dots under ậ/ạ on /vi/blog/ were
+     cut to slivers on desktop. */
+  .js .reveal[data-variant="mask"].is-visible {
+    clip-path: inset(0 0 0 0);
   }
 
   .text-balance {
@@ -812,11 +836,15 @@
     display: inline-block;
   }
 
+  /* The sweep sits below the text: at bottom:-2px its clearance over the
+     lowest ink was only 1.0-1.8px (measured on nav + card/featured titles),
+     so it read as touching the descenders and below-baseline dots of
+     Vietnamese (ủ/ế/ậ). -0.3em keeps >= ~3px clearance at every size. */
   .underline-sweep::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -2px;
+    bottom: -0.3em;
     height: 1px;
     width: 0;
     background: currentColor;

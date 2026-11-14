@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPreviewData, isPreviewKind, type PreviewData } from "@/lib/services/preview";
 import { renderMarkdown } from "@/lib/markdown";
+import { assetUrl } from "@/lib/asset";
 import { formatDate } from "@/lib/utils";
 import { resolveLocale, type Locale } from "@/i18n/config";
 import { normalizeArticleTemplate } from "@/lib/article-template";
@@ -45,7 +46,7 @@ async function ArticleBody({ data, locale }: { data: ArticlePreview; locale: Loc
       </p>
       {data.cover && (
         <div className="relative mt-8 aspect-[16/9] overflow-hidden border border-line">
-          <Image src={data.cover} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
+          <Image src={assetUrl(data.cover)} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
         </div>
       )}
       <ArticleBodyContent html={html} template={template} className="mt-10" />
@@ -86,7 +87,7 @@ async function ProjectBody({ data }: { data: ProjectPreview }) {
       </div>
       {data.cover && (
         <div className="relative mt-8 aspect-[16/10] overflow-hidden border border-line">
-          <Image src={data.cover} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
+          <Image src={assetUrl(data.cover)} alt="" fill sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
         </div>
       )}
       {translation.role && <p className="mt-6 text-[13px] text-muted">Vai trò: {translation.role}</p>}
@@ -95,7 +96,7 @@ async function ProjectBody({ data }: { data: ProjectPreview }) {
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
           {data.gallery.map((url) => (
             <div key={url} className="relative aspect-[4/3] overflow-hidden border border-line">
-              <Image src={url} alt="" fill sizes="360px" className="object-cover" />
+              <Image src={assetUrl(url)} alt="" fill sizes="360px" className="object-cover" />
             </div>
           ))}
         </div>
@@ -116,7 +117,7 @@ function ArtworkBody({ data, locale }: { data: ArtworkPreview; locale: Locale })
         <div className="mt-7 border border-line bg-surface-muted">
           {data.dimensions.width && data.dimensions.height ? (
             <Image
-              src={data.image}
+              src={assetUrl(data.image)}
               alt={translation.title}
               width={data.dimensions.width}
               height={data.dimensions.height}
@@ -126,7 +127,7 @@ function ArtworkBody({ data, locale }: { data: ArtworkPreview; locale: Locale })
             />
           ) : (
             <div className="relative aspect-[4/5]">
-              <Image src={data.image} alt={translation.title} fill sizes="720px" className="object-contain" />
+              <Image src={assetUrl(data.image)} alt={translation.title} fill sizes="720px" className="object-contain" />
             </div>
           )}
         </div>

@@ -11,6 +11,7 @@ import { listArtworks } from "@/data/artworks";
 import { getFeaturedArticle, listArticles } from "@/data/articles";
 import { DEFAULT_SETTINGS } from "@/data/settings";
 import { loadSection } from "@/lib/services/safe-data";
+import { assetUrl } from "@/lib/asset";
 import { markdownExcerpt } from "@/lib/utils";
 import { buildPageMetadata, socialImage } from "@/lib/seo";
 import { Reveal } from "@/components/ui/reveal";
@@ -162,7 +163,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <div className="relative aspect-[4/5] overflow-hidden border border-line bg-surface-muted">
                   {profile?.avatar ? (
                     <Image
-                      src={profile.avatar.url}
+                      src={assetUrl(profile.avatar.url)}
                       alt={profile.avatar.alt || name}
                       fill
                       priority

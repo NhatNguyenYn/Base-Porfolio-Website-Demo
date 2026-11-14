@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type { ArtworkCardData } from "@/data/artworks";
+import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
 
 /**
@@ -38,7 +39,7 @@ export function ArtworkCard({
       >
         {artwork.image ? (
           <Image
-            src={artwork.image.url}
+            src={assetUrl(artwork.image.url)}
             alt={artwork.image.alt || artwork.title}
             fill
             priority={priority}

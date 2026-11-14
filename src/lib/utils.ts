@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { getBasePath } from "./asset";
 
 export function cn(...inputs: ClassValue[]): string {
   return clsx(inputs);
@@ -48,8 +49,21 @@ export function readingMinutes(markdown: string): number {
 export function absoluteUrl(path = "/"): string {
   // CMS media may already be stored on an absolute CDN/S3 origin.
   if (/^https?:\/\//i.test(path)) return path;
-  const base = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
-  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+  const basePath = getBasePath();
+  const origin = (process.env.APP_URL || "http://localhost:3000").replace(/\/+$/, "");
+  // In the Pages-export workflow APP_URL already contains the subpath
+  // (https://<user>.github.io/Base-Porfolio-Website-Demo); in server mode
+  // the base path is empty. Append it only when it is not already there,
+  // so the result is never double-prefixed.
+  const base = basePath && !origin.endsWith(basePath) ? `${origin}${basePath}` : origin;
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  // A caller that already prefixed the path (e.g. `assetUrl` output) must
+  // not gain the segment a second time.
+  const unprefixed =
+    basePath && (clean === basePath || clean.startsWith(`${basePath}/`))
+      ? clean.slice(basePath.length) || "/"
+      : clean;
+  return `${base}${unprefixed}`;
 }
 
 export function parseCommaList(value: FormDataEntryValue | null | undefined): string[] {
