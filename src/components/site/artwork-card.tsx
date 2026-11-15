@@ -44,6 +44,8 @@ export function ArtworkCard({
             fill
             priority={priority}
             sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
+            placeholder={artwork.image.blurDataUrl ? "blur" : "empty"}
+            blurDataURL={artwork.image.blurDataUrl ?? undefined}
             className="card-zoom-art object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
           />
         ) : (

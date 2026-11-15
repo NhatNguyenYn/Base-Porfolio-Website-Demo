@@ -4,6 +4,7 @@ import { deleteMediaAction, updateMediaMetaAction } from "@/server/actions/media
 import { assetUrl } from "@/lib/asset";
 import { PageHeader } from "@/components/admin/page-header";
 import { MediaUploader } from "@/components/admin/media-uploader";
+import { MediaOptimizer } from "@/components/admin/media-optimizer";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
 import { Flash } from "@/components/admin/flash";
 import { Pagination } from "@/components/site/pagination";
@@ -22,7 +23,7 @@ export default async function MediaPage({
     <>
       <PageHeader
         title="Thư viện ảnh"
-        description={`${total} ảnh đã tải lên. Ảnh được lưu qua lớp storage (local khi phát triển, S3-compatible khi triển khai).`}
+        description={`${total} ảnh đã tải lên. Ảnh được lưu qua lớp storage (local khi phát triển, S3-compatible khi triển khai). Ảnh mới được nén tự động khi tải lên.`}
       />
 
       {query.saved && <Flash message="Đã cập nhật thông tin ảnh." />}
@@ -36,6 +37,10 @@ export default async function MediaPage({
 
       <div className="mb-8">
         <MediaUploader />
+      </div>
+
+      <div className="mb-8">
+        <MediaOptimizer />
       </div>
 
       {rows.length === 0 ? (
@@ -60,8 +65,11 @@ export default async function MediaPage({
                   {media.title || media.filename}
                 </p>
                 <p className="mt-0.5 text-[10px] text-muted">
-                  {media.width ?? "?"} × {media.height ?? "?"} · {fileSize(media.size)} ·{" "}
-                  {formatShortDate(media.createdAt, "vi")}
+                  {media.width ?? "?"} × {media.height ?? "?"} · {fileSize(media.size)}
+                  {media.originalSize && media.originalSize > media.size
+                    ? ` · gốc ${fileSize(media.originalSize)}`
+                    : ""}{" "}
+                  · {formatShortDate(media.createdAt, "vi")}
                 </p>
 
                 <details className="mt-2">

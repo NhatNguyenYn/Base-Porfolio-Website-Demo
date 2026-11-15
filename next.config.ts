@@ -29,6 +29,13 @@ const nextConfig: NextConfig = {
     : {}),
   images: {
     formats: ["image/avif", "image/webp"],
+    // Artwork sources are capped at 1600px by the upload optimizer, so
+    // generating 3840w variants only burns Render CPU on first hit. 2048w
+    // still covers the fullscreen lightbox on large screens.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    // Optimized URLs embed the source URL, so a changed file gets a new URL;
+    // a long cache is safe and keeps repeat visits off the optimizer.
+    minimumCacheTTL: 86400,
     // Demo artwork ships as SVG placeholders; uploaded artwork is raster.
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
