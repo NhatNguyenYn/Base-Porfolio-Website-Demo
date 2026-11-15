@@ -893,6 +893,35 @@
     }
   }
 
+  /* Skeleton loading frame for images (replaces the blur placeholder):
+     a soft diagonal sheen sweeping over the muted surface, so a loading
+     image reads as a deliberate placeholder instead of a blurry preview. */
+  .skeleton-shimmer {
+    background:
+      linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.45) 50%, transparent 70%),
+      var(--surface-muted);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s linear infinite;
+  }
+
+  /* Dark variant for the lightbox, which sits on a black backdrop. */
+  .skeleton-shimmer-dark {
+    background:
+      linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.08) 50%, transparent 70%),
+      #171c22;
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s linear infinite;
+  }
+
+  @keyframes skeleton-shimmer {
+    from {
+      background-position: 180% 0;
+    }
+    to {
+      background-position: -80% 0;
+    }
+  }
+
   /* One link per card: the stretched link covers the whole card so the
      cover, title and read-more are a single tab stop and a single
      announcement. The visible title/read-more stay plain text/spans. */

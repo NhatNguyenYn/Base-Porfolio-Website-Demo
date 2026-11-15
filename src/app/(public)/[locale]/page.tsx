@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getDictionary } from "@/i18n";
@@ -19,6 +18,7 @@ import { Parallax } from "@/components/ui/parallax";
 import { SectionHeader } from "@/components/site/section-header";
 import { ArticleCard } from "@/components/site/article-card";
 import { ArtGallery } from "@/components/site/art-gallery";
+import { SkeletonImage } from "@/components/site/skeleton-image";
 import { SocialLinks } from "@/components/site/social-links";
 import { parseInterests } from "@/lib/interests";
 
@@ -144,14 +144,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <figure className="relative">
                 <div className="relative aspect-[4/5] overflow-hidden border border-line bg-surface-muted">
                   {profile?.avatar ? (
-                    <Image
+                    <SkeletonImage
                       src={assetUrl(profile.avatar.url)}
                       alt={profile.avatar.alt || name}
                       fill
                       priority
                       sizes="(min-width: 1024px) 38vw, 92vw"
-                      placeholder={profile.avatar.blurDataUrl ? "blur" : "empty"}
-                      blurDataURL={profile.avatar.blurDataUrl ?? undefined}
                       className="object-cover"
                     />
                   ) : (

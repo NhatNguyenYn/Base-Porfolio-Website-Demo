@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SkeletonImage } from "@/components/site/skeleton-image";
 import type { ArtworkCardData } from "@/data/artworks";
 import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
@@ -38,15 +38,13 @@ export function ArtworkCard({
         style={{ aspectRatio: `${width} / ${height}` }}
       >
         {artwork.image ? (
-          <Image
+          <SkeletonImage
             src={assetUrl(artwork.image.url)}
             alt={artwork.image.alt || artwork.title}
             fill
             priority={priority}
             sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
-            placeholder={artwork.image.blurDataUrl ? "blur" : "empty"}
-            blurDataURL={artwork.image.blurDataUrl ?? undefined}
-            className="card-zoom-art object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+            className="card-zoom-art object-cover transition-[opacity,transform] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
           />
         ) : (
           <span className="absolute inset-0 grid place-items-center">

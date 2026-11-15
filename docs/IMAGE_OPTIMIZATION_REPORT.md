@@ -92,33 +92,36 @@ not in the repo).
 - `npm run build` (incl. `prisma migrate deploy`): **passed**; the new
   migration applied cleanly to the local test DB and dev DB.
 
-## 7. Live verification — PENDING (after deploy)
+## 7. Live verification — DONE 2026-11-15 12:46
 
-Run after the Render deploy, before calling this done:
+Migration ran in the cloud browser (dry-run first, then real runs, 10 files
+per run, 6 runs):
 
-1. Homepage + `/vi/art` load; hero portrait + first gallery images render
-   (blur placeholder visible briefly); no broken images.
-2. Upload one test image in `/admin/media` (a large original): the stored
-   file must be ≤1600px, smaller than the upload, and the grid must show the
-   original size ("gốc …").
-3. `/admin/media` → "Xem trước" (dry-run): expect ~45 files, ~190 MB saved,
-   nothing changed. Then "Tối ưu ảnh cũ" repeatedly until remaining = 0.
-4. Re-check `/vi/art` + thu-phap-viet collection: same 45 artworks, visibly
-   identical, loading from the new (JPEG) URLs; confirm the old PNG objects
-   still exist in R2 (rollback path).
-5. Fill in the table below with the live numbers.
+1. Homepage + `/vi/art` load; hero portrait + first gallery images render;
+   no broken images. Verified 200 again after the migration.
+2. Upload path verified live during batches 3–6: every uploaded file is
+   stored ≤1600px and the admin grid shows the original size ("gốc …").
+   (Example: batch-3 file 11 v2, 232,092 bytes uploaded → stored optimized.)
+3. `/admin/media` → "Xem trước" (dry-run): 59 candidates, ~30.3 MB expected
+   savings. Then "Tối ưu ảnh cũ" repeatedly until remaining = 0.
+4. `/vi/art` + thu-phap-viet collection re-checked: same 45 artworks,
+   visibly identical, loading from the new (JPEG) URLs; the old PNG objects
+   still exist in R2 (rollback path via `originalStorageKey`).
+5. Table filled with the live numbers below.
 
 | Metric | Before | After (live) |
 | --- | --- | --- |
-| Batch-1 files on R2 (bytes) | ~211 MB (45 PNG) | _to fill after migration_ |
-| Gallery first-load transfer (mobile, 6 cards) | _measure_ | _measure_ |
-| Homepage LCP image | avatar PNG/JPG original | optimized + blur placeholder |
-| Broken images on `/vi/art`, `/vi/art/collections/*`, homepage | 0 (after the 10:11 outage cleared) | _to confirm_ |
+| Files optimized by the migration | 59 files (45 batch-1 PNGs + 14 batch-2 JPGs) | **59 files, 31,727,846 bytes (~30.3 MB) saved, 0 errors, 0 skipped, 0 remaining** |
+| Batch-1 files on R2 (bytes) | ~211 MB (45 PNG) | Most of the ~30.3 MB total saving came from the 45 batch-1 PNGs; batch-2 JPGs were already small (a few KB saved each) |
+| Gallery first-load transfer (mobile, 6 cards) | _not measured_ | _not measured — superseded by the deviceSizes trim (see PR #6)_ |
+| Homepage LCP image | avatar PNG/JPG original | optimized; blur placeholder replaced by the skeleton loading frame (PR #6) |
+| Broken images on `/vi/art`, `/vi/art/collections/*`, homepage | 0 (after the 10:11 outage cleared) | **0 confirmed** (16/16 pages 200 in the final sweep 14:05 15/11) |
 
 ## 8. Remaining issues / next steps
 
-- **Live migration not run yet** — the code is deployed, the admin must run
-  it (dry-run, then real runs) and the table above filled in.
+- **Live migration DONE 2026-11-15 12:46** (see §7): 59 files, ~30.3 MB
+  saved, 0 remaining. A re-check is running to confirm nothing new is
+  unoptimized after batches 3–6.
 - Duplicate/unused media rows could not be audited from outside the DB; the
   migration report gives the exact candidate count server-side. Orphaned
   original R2 objects (after migration) can be deleted from the R2 dashboard
