@@ -42,6 +42,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     image: profile?.avatar
       ? socialImage(profile.avatar.url, profile.avatar.alt || content?.fullName || settings.siteName, profile.avatar.width, profile.avatar.height)
       : null,
+    // Without this, buildPageMetadata falls back to /icon.png and overrides
+    // the layout's favicon (child metadata wins the merge) — the uploaded
+    // logo would never show as the tab icon on the homepage.
+    faviconUrl: settings.favicon?.url,
   });
 }
 

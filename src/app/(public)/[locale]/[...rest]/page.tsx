@@ -34,8 +34,11 @@ export async function generateMetadata({
   const dict = getDictionary(locale);
   const path = `/${(rest ?? []).join("/")}`;
   let siteName = "Thu Hà Ruby";
+  let faviconUrl: string | null = null;
   try {
-    siteName = (await getSettings()).siteName;
+    const settings = await getSettings();
+    siteName = settings.siteName;
+    faviconUrl = settings.favicon?.url ?? null;
   } catch {
     // The 404 must still render noindex when settings cannot load.
   }
@@ -46,6 +49,7 @@ export async function generateMetadata({
     description: dict.notFound.text,
     siteName,
     noindex: true,
+    faviconUrl,
   });
 }
 
