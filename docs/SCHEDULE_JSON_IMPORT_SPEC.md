@@ -27,6 +27,11 @@ In scope for Phase 11 (website side only):
 - Import preview, idempotent apply, per-record import history (D5, D6, D10).
 - A read-only "Lịch sắp tới" (Upcoming schedule) section on the existing
   public booking page (D9).
+- **Phase 12 (2026-11-15):** an import also maintains `BookingSlot` rows
+  for the site's default booking service, so an imported `scheduled` /
+  `confirmed` time is bookable right away (see §5.2). Imported schedules
+  still never become `Booking` rows — no contact data, no `flowerCode`,
+  no `referenceCode`.
 
 Out of scope for Phase 11:
 
@@ -284,8 +289,12 @@ Index: `@@index([importId])`.
 - No `externalId`/`source` column on `Booking` or `BookingSlot` (the
   Phase 10 §K.2 gap is filled by the new `ImportedSchedule` model
   instead — D1). Imported schedules are never converted into bookings,
-  slots, `flowerCode`s, or `referenceCode`s, and an import update never
-  touches `Booking` fields (Phase 10 §K.5).
+  `flowerCode`s, or `referenceCode`s, and an import update never
+  touches `Booking` fields (Phase 10 §K.5). **Phase 12 (2026-11-15)
+  changes the slot half of this bullet:** an import now creates /
+  moves / removes `BookingSlot` rows for the default booking service
+  (§5.2) — the schedule's time becomes bookable — while `Booking`
+  rows are still never created by an import.
 - No seed changes in v1: demo import data is created by tests, not by
   `prisma/seed.ts` (audit §4).
 
@@ -321,10 +330,18 @@ to a generic Vietnamese message, §6.5).
 ```ts
 export type ImportedScheduleStatus = "scheduled" | "confirmed" | "completed" | "cancelled";
 export type ImportAction = "created" | "updated" | "unchanged" | "cancelled" | "failed";
-export type ImportItemResult = { externalId: string; action: ImportAction; error?: string };
+export type SlotSyncAction =
+  | "created" | "moved" | "updated" | "removed" | "kept" | "exists" | "failed" | "none";
+export type ImportItemResult = {
+  externalId: string; action: ImportAction; error?: string;
+  slot?: SlotSyncAction; slotError?: string;
+};
 export type ImportSummary = {
   total: number; created: number; updated: number; unchanged: number;
   cancelled: number; failed: number; items: ImportItemResult[];
+  serviceSlug: string | null;
+  slots: { created: number; moved: number; updated: number; removed: number; kept: number; failed: number };
+  slotsNote?: string;
 };
 export type ValidatedSchedule = {
   externalId: string; title: string; description: string; location: string;
@@ -356,6 +373,57 @@ fields changed counts as `updated`; re-imported unchanged it counts as
 `unchanged`. (The engine checks the cancelled transition before the
 fields-changed check, so a newly-cancelled row counts as `cancelled`
 even when other fields changed at the same time.)
+
+### 5.2 Booking-slot sync (Phase 12, 2026-11-15)
+
+An import also maintains `BookingSlot` rows for the site's **default
+booking service** — the first active `BookingService` by `order`, the
+same service the public booking page books (today: `tu-van-1-1`,
+"Tư vấn 1-1"). The slot sync runs in the same transaction as the
+schedule writes, in both the API and the manual-admin paths, and for
+preview it is planned read-only (no writes). The summary carries the
+service slug (`serviceSlug`), the aggregate slot counts (`slots`), and
+a per-item slot outcome (`slot` / `slotError`); the admin preview shows
+the same counts plus a per-row "Khung giờ" column.
+
+Rules, per planned schedule item:
+
+- **New `scheduled` / `confirmed` schedule** → create an `available`
+  slot at the schedule's exact `startsAt`–`endsAt`. The slot's duration
+  is the schedule's own window (e.g. 09:00–10:00), not the service's
+  `durationMinutes` — the booking flow only requires the slot to be
+  `available`, in the future, and owned by the service, so any duration
+  books.
+- **New `cancelled` / `completed` schedule** → no slot.
+- **Schedule time moved** → the old slot is removed (when free) and the
+  new time becomes bookable (created, or adopted when a slot already
+  exists there) — outcome `moved`. A slot at the new time created
+  manually beforehand is adopted (`exists`), never duplicated.
+- **Only the end time changed** → the slot's `endsAt` is updated in
+  place — outcome `updated`.
+- **Schedule cancelled / flipped to `completed`** → its free slot is
+  deleted — outcome `removed`.
+- **Unchanged schedule** → no slot work: the admin's manual slot state
+  stays authoritative (an admin-deleted slot is not resurrected by a
+  re-import).
+- **A `booked` slot is never deleted or retimed.** Cancelling or moving
+  a schedule whose slot already has a booking keeps that slot
+  (`kept`, with a note) — the customer's booking stands. A move also
+  creates the new slot, so the new time is bookable too.
+- **No active booking service** → the import still succeeds, but no
+  slots are synced: `serviceSlug: null` and `slotsNote` explains why.
+- **A slot failure never fails the import.** The schedule still imports
+  and the item records `slot: "failed"` with `slotError` (e.g. a race
+  on the `@@unique([serviceId, startsAt])` key is resolved by adopting
+  the slot that is there now). Slot writes are two-phase (remove old
+  slots first, then create/update) so a time-swap inside one payload
+  cannot collide on the unique key, and every slot write is
+  status-guarded so a concurrent booking claim turns the item into
+  `kept` / `exists` instead of an error.
+- **Replay (same `importId` + same payload)** returns the stored
+  schedule counts, but the slot part is recomputed from the **current**
+  slot state (`exists` for a slot already there) — a retry therefore
+  still answers "can customers book these times now?" (§8.2, §9.5).
 
 ## 6. API endpoint
 
@@ -594,9 +662,12 @@ extended, not competing:
   history list and a per-import detail page.
 - Status mapping (D2): import statuses map 1:1 onto
   `ImportedSchedule.status`. `scheduled` = on the calendar, no booking
-  attached. There is **no** mapping onto `Booking`/`BookingSlot`
-  statuses — an imported schedule never creates or changes a booking or
-  a slot (Phase 10 §K.3).
+  attached. There is **no** mapping onto `Booking` statuses — an
+  imported schedule never creates a booking (Phase 10 §K.3). **Phase 12
+  (2026-11-15):** a `scheduled` / `confirmed` schedule **does** create
+  and maintain a `BookingSlot` for the default booking service (§5.2),
+  so the imported time is bookable; the slot is a separate row from the
+  schedule and a booking is still only created when a visitor books it.
 
 ### 7.5 Transactions, concurrency, rollback (D5)
 
@@ -696,8 +767,10 @@ Request: `POST /api/integrations/schedules/import`, header
       "cancelled": 0,
       "failed": 0,
       "items": [
-        { "externalId": "EXCEL-001", "action": "created" }
-      ]
+        { "externalId": "EXCEL-001", "action": "created", "slot": "created" }
+      ],
+      "serviceSlug": "tu-van-1-1",
+      "slots": { "created": 1, "moved": 0, "updated": 0, "removed": 0, "kept": 0, "failed": 0 }
     }
   }
 }
@@ -706,7 +779,9 @@ Request: `POST /api/integrations/schedules/import`, header
 HTTP status: `200`. A `ScheduleImport` row is created with
 `status: "completed"` and one `ScheduleImportItem` (`created`). The
 response always carries `"preview": false` on the apply path
-(`route.ts:144`).
+(`route.ts:144`). **Phase 12:** the `confirmed` schedule also created
+one `available` `BookingSlot` for service `tu-van-1-1`, so a visitor
+can book 09:00–10:00 on 2026-11-20 right away.
 
 ### 9.2 Success — preview (`preview: true`)
 
@@ -725,9 +800,11 @@ Same request body plus `"preview": true`.
       "cancelled": 0,
       "failed": 0,
       "items": [
-        { "externalId": "EXCEL-001", "action": "updated" },
-        { "externalId": "EXCEL-002", "action": "created" }
-      ]
+        { "externalId": "EXCEL-001", "action": "updated", "slot": "none" },
+        { "externalId": "EXCEL-002", "action": "created", "slot": "created" }
+      ],
+      "serviceSlug": "tu-van-1-1",
+      "slots": { "created": 1, "moved": 0, "updated": 0, "removed": 0, "kept": 0, "failed": 0 }
     }
   }
 }
@@ -735,7 +812,9 @@ Same request body plus `"preview": true`.
 
 No `importId` is returned (nothing was stored), no rows are written, and
 no `ScheduleImport` row is created (D5). The response carries
-`"preview": true` (`route.ts:128`).
+`"preview": true` (`route.ts:128`). **Phase 12:** the preview also
+plans the slot sync — `EXCEL-002` would create one bookable slot,
+while `EXCEL-001` (`updated`, title-only change) would touch no slot.
 
 ### 9.3 Validation failed — `400 VALIDATION_FAILED`
 
@@ -820,9 +899,11 @@ result without re-applying:
       "cancelled": 0,
       "failed": 0,
       "items": [
-        { "externalId": "EXCEL-001", "action": "created" },
-        { "externalId": "EXCEL-002", "action": "created" }
-      ]
+        { "externalId": "EXCEL-001", "action": "created", "slot": "exists" },
+        { "externalId": "EXCEL-002", "action": "created", "slot": "exists" }
+      ],
+      "serviceSlug": "tu-van-1-1",
+      "slots": { "created": 0, "moved": 0, "updated": 0, "removed": 0, "kept": 2, "failed": 0 }
     }
   }
 }
@@ -833,6 +914,11 @@ Note the counts are the **original** counts (`created: 2`), not
 re-run the engine (D6). The `importId` is the same row id as the first
 apply. The replayed `items` come back sorted by `externalId` ascending
 (§8.2), which in this example coincides with payload order.
+**Phase 12 exception:** the slot part is *not* the stored summary —
+slot outcomes are not stored, so a replay recomputes the **current**
+slot state: the two slots already exist from the first apply, so the
+replay reports `slot: "exists"` / `slots.kept: 2` instead of
+`created: 2`.
 
 ### 9.6 Import-id conflict — `409 IMPORT_ID_CONFLICT`
 
@@ -929,7 +1015,14 @@ follow, not code.
    updated / unchanged / cancelled / failed counts and any per-item
    errors (e.g. `"already owned by another connection"` means that
    `externalId` belongs to a different connection — do not retry it
-   under this token; escalate to the site owner).
+   under this token; escalate to the site owner). **Phase 12:** also
+   report the slot part of the summary (`serviceSlug` + `slots` +
+   per-item `slot`): a `scheduled` / `confirmed` schedule creates a
+   bookable slot for the default booking service, so after a successful
+   import the customer can verify on the public booking page that the
+   imported times are bookable. If `slots.failed > 0`, report the
+   per-item `slotError` — the schedules still imported, but those times
+   are not bookable yet.
 
 ### 10.2 Respect `autoApply`
 

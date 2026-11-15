@@ -136,7 +136,7 @@ export async function POST(request: Request) {
         action: "schedule_import.apply",
         entityType: "ScheduleImport",
         entityId: importId,
-        summary: `Imported ${summary.total} schedule(s) via connection "${auth.connection.name}": ${summary.created} created, ${summary.updated} updated, ${summary.unchanged} unchanged, ${summary.cancelled} cancelled, ${summary.failed} failed.`,
+        summary: `Imported ${summary.total} schedule(s) via connection "${auth.connection.name}": ${summary.created} created, ${summary.updated} updated, ${summary.unchanged} unchanged, ${summary.cancelled} cancelled, ${summary.failed} failed. Slots: ${summary.slots.created} created, ${summary.slots.moved} moved, ${summary.slots.updated} updated, ${summary.slots.removed} removed, ${summary.slots.kept} kept, ${summary.slots.failed} failed.`,
       });
       return ok({ preview: false, importId, summary });
     } catch (error) {

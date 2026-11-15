@@ -29,6 +29,17 @@ const ACTION_LABELS: Record<string, string> = {
   failed: "Lỗi",
 };
 
+// Phase 12 — what the import did to the bookable slot for one schedule.
+const SLOT_LABELS: Record<string, string> = {
+  created: "Tạo khung giờ",
+  moved: "Dời khung giờ",
+  updated: "Đổi giờ kết thúc",
+  removed: "Xóa khung giờ",
+  kept: "Giữ khung giờ",
+  exists: "Đã có khung giờ",
+  failed: "Lỗi khung giờ",
+};
+
 function vnDatePlusDays(days: number): string {
   return utcToVnLocalParts(new Date(Date.now() + days * 24 * 60 * 60 * 1000)).date;
 }
@@ -238,6 +249,21 @@ export function ScheduleImportForm() {
             ))}
           </dl>
 
+          {/* Phase 12 — slot sync outcome: which imported times became
+              bookable. `serviceSlug` is the booking service the slots belong
+              to (the first active service); `slotsNote` explains a skip. */}
+          <p className="mt-3 text-[12.5px] text-muted" data-testid="preview-slots-summary">
+            Khung giờ đặt lịch
+            {summary.serviceSlug ? ` (dịch vụ ${summary.serviceSlug})` : ""}:{" "}
+            <span data-testid="preview-slots-created">{summary.slots.created}</span> tạo mới ·{" "}
+            <span data-testid="preview-slots-moved">{summary.slots.moved}</span> di chuyển ·{" "}
+            <span data-testid="preview-slots-updated">{summary.slots.updated}</span> đổi giờ kết thúc ·{" "}
+            <span data-testid="preview-slots-removed">{summary.slots.removed}</span> đã xóa ·{" "}
+            <span data-testid="preview-slots-kept">{summary.slots.kept}</span> giữ nguyên ·{" "}
+            <span data-testid="preview-slots-failed">{summary.slots.failed}</span> lỗi
+            {summary.slotsNote ? ` — ${summary.slotsNote}` : ""}
+          </p>
+
           <div className="mt-4">
             <DataTable
               columns={[
@@ -245,6 +271,7 @@ export function ScheduleImportForm() {
                 { key: "title", label: "Tiêu đề" },
                 { key: "time", label: "Thời gian" },
                 { key: "action", label: "Kết quả" },
+                { key: "slot", label: "Khung giờ" },
                 { key: "error", label: "Lỗi" },
               ]}
               rows={(preview?.previewItems ?? []).map((item) => ({
@@ -256,6 +283,12 @@ export function ScheduleImportForm() {
                     <span className="whitespace-nowrap text-[12px] tabular-nums">{timeRange(item)}</span>
                   ),
                   action: <StatusBadge status={item.action} label={ACTION_LABELS[item.action] ?? item.action} />,
+                  slot: (
+                    <span className="text-[12px]">
+                      {item.slot ? (SLOT_LABELS[item.slot] ?? item.slot) : "—"}
+                      {item.slotError ? ` — ${item.slotError}` : ""}
+                    </span>
+                  ),
                   error: <span className="text-[12px] text-danger">{item.error ?? "—"}</span>,
                 },
               }))}
