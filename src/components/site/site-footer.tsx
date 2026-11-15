@@ -1,1 +1,108 @@
-aW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IHsgbG9jYWxlSHJlZiwgdHlwZSBMb2NhbGUgfSBmcm9tICJAL2kxOG4vY29uZmlnIjsKaW1wb3J0IHR5cGUgeyBEaWN0aW9uYXJ5IH0gZnJvbSAiQC9pMThuIjsKaW1wb3J0IHsgbmVlZHNGdWxsUHJlZmV0Y2gsIHNpdGVOYXYgfSBmcm9tICJAL2RhdGEvbmF2aWdhdGlvbiI7CmltcG9ydCB7IFNvY2lhbExpbmtzLCB0eXBlIFNvY2lhbExpbmtJdGVtIH0gZnJvbSAiLi9zb2NpYWwtbGlua3MiOwppbXBvcnQgeyBUaGVtZVN3aXRjaGVyIH0gZnJvbSAiLi90aGVtZS1zd2l0Y2hlciI7CmltcG9ydCB7IExhbmd1YWdlU3dpdGNoZXIgfSBmcm9tICIuL2xhbmd1YWdlLXN3aXRjaGVyIjsKCmV4cG9ydCB0eXBlIEZvb3RlclByb3BzID0gewogIGxvY2FsZTogTG9jYWxlOwogIGRpY3Q6IERpY3Rpb25hcnk7CiAgc2l0ZU5hbWU6IHN0cmluZzsKICBmb290ZXJUZXh0OiBzdHJpbmc7CiAgZW1haWw6IHN0cmluZzsKICBsb2NhdGlvbjogc3RyaW5nOwogIHNvY2lhbHM6IFNvY2lhbExpbmtJdGVtW107CiAgeWVhcjogbnVtYmVyOwogIHNob3dEZW1vQmFkZ2U6IGJvb2xlYW47CiAgbmF2OiB7IGhvbWU6IHN0cmluZzsgYWJvdXQ6IHN0cmluZzsgcHJvamVjdHM6IHN0cmluZzsgYXJ0OiBzdHJpbmc7IGJsb2c6IHN0cmluZzsgYm9va2luZzogc3RyaW5nOyBjb250YWN0OiBzdHJpbmcgfTsKfTsKCmV4cG9ydCBmdW5jdGlvbiBTaXRlRm9vdGVyKHsKICBsb2NhbGUsCiAgZGljdCwKICBzaXRlTmFtZSwKICBmb290ZXJUZXh0LAogIGVtYWlsLAogIGxvY2F0aW9uLAogIHNvY2lhbHMsCiAgeWVhciwKICBzaG93RGVtb0JhZGdlLAogIG5hdiwKfTogRm9vdGVyUHJvcHMpIHsKICBjb25zdCBleHBsb3JlID0gc2l0ZU5hdihsb2NhbGUsIG5hdikuZmlsdGVyKChpdGVtKSA9PgogICAgWyJhYm91dCIsICJwcm9qZWN0cyIsICJhcnQiLCAiYmxvZyIsICJib29raW5nIl0uaW5jbHVkZXMoaXRlbS5rZXkpLAogICk7CgogIHJldHVybiAoCiAgICA8Zm9vdGVyIGNsYXNzTmFtZT0ibXQtMjQgYm9yZGVyLXQgYm9yZGVyLXQtcnVieSBiZy1zdXJmYWNlLW11dGVkLzYwIj4KICAgICAgPGRpdiBjbGFzc05hbWU9ImNvbnRhaW5lci1wYWdlIHB5LTE0IGxnOnB5LTIwIj4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtMTIgbGc6Z3JpZC1jb2xzLVsxLjM1ZnJfMC45ZnJfMS4wNWZyXzAuOTVmcl0iPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1heC13LXNtIj4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LVsxMXB4XSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMThlbV0gdGV4dC1tdXRlZCI+CiAgICAgICAgICAgICAge2RpY3QuaG9tZS5leWVicm93fSDigJQge25ldyBEYXRlKCkuZ2V0RnVsbFllYXIoKX0KICAgICAgICAgICAgPC9wPgogICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTUgdGV4dC0yeGwgbGVhZGluZy10aWdodCB0cmFja2luZy10aWdodCI+e3NpdGVOYW1lfTwvcD4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC00IHRleHQtc20gbGVhZGluZy1yZWxheGVkIHRleHQtbXV0ZWQiPntmb290ZXJUZXh0fTwvcD4KICAgICAgICAgICAge3Nob3dEZW1vQmFkZ2UgJiYgKAogICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iY2hpcCBtdC02IGJvcmRlci1kYXNoZWQiPntkaWN0LmZvb3Rlci5kZW1vQmFkZ2V9PC9zcGFuPgogICAgICAgICAgICApfQogICAgICAgICAgPC9kaXY+CgogICAgICAgICAgPGRpdj4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJsYWJlbCI+e2RpY3QuZm9vdGVyLmV4cGxvcmV9PC9wPgogICAgICAgICAgICA8dWwgY2xhc3NOYW1lPSJtdC00IHNwYWNlLXktMi41Ij4KICAgICAgICAgICAgICB7ZXhwbG9yZS5tYXAoKGl0ZW0pID0+ICgKICAgICAgICAgICAgICAgIDxsaSBrZXk9e2l0ZW0ua2V5fT4KICAgICAgICAgICAgICAgICAgPExpbmsKICAgICAgICAgICAgICAgICAgICBocmVmPXtpdGVtLmhyZWZ9CiAgICAgICAgICAgICAgICAgICAgcHJlZmV0Y2g9e25lZWRzRnVsbFByZWZldGNoKGl0ZW0ua2V5KSB8fCB1bmRlZmluZWR9CiAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJ1bmRlcmxpbmUtc3dlZXAgdGV4dC1zbSB0ZXh0LW11dGVkIGhvdmVyOnRleHQtYWNjZW50IgogICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAge2l0ZW0ubGFiZWx9CiAgICAgICAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAgICAgIDwvbGk+CiAgICAgICAgICAgICAgKSl9CiAgICAgICAgICAgIDwvdWw+CiAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICA8ZGl2PgogICAgICAgICAgICA8cCBjbGFzc05hbWU9ImxhYmVsIj57ZGljdC5mb290ZXIuY29udGFjdH08L3A+CiAgICAgICAgICAgIDx1bCBjbGFzc05hbWU9Im10LTQgc3BhY2UteS0yLjUgdGV4dC1zbSB0ZXh0LW11dGVkIj4KICAgICAgICAgICAgICA8bGk+CiAgICAgICAgICAgICAgICA8YSBocmVmPXtgbWFpbHRvOiR7ZW1haWx9YH0gY2xhc3NOYW1lPSJ1bmRlcmxpbmUtc3dlZXAgaG92ZXI6dGV4dC1hY2NlbnQiPgogICAgICAgICAgICAgICAgICB7ZW1haWx9CiAgICAgICAgICAgICAgICA8L2E+CiAgICAgICAgICAgICAgPC9saT4KICAgICAgICAgICAgICB7bG9jYXRpb24gJiYgPGxpPntsb2NhdGlvbn08L2xpPn0KICAgICAgICAgICAgICA8bGk+CiAgICAgICAgICAgICAgICA8TGluayBocmVmPXtsb2NhbGVIcmVmKGxvY2FsZSwgIi9jb250YWN0Iil9IGNsYXNzTmFtZT0idW5kZXJsaW5lLXN3ZWVwIGhvdmVyOnRleHQtYWNjZW50Ij4KICAgICAgICAgICAgICAgICAge2RpY3QuY29udGFjdC5mb3JtVGl0bGV9CiAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgPC9saT4KICAgICAgICAgICAgPC91bD4KICAgICAgICAgIDwvZGl2PgoKICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibGFiZWwiPntkaWN0LmZvb3Rlci5lbHNld2hlcmV9PC9wPgogICAgICAgICAgICA8U29jaWFsTGlua3MgbGlua3M9e3NvY2lhbHN9IGNsYXNzTmFtZT0ibXQtNCBnYXAtMS41IFsmX2FdOmgtOCBbJl9hXTp3LTgiIC8+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KCiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTE0IGZsZXggZmxleC1jb2wgZ2FwLTYgYm9yZGVyLXQgYm9yZGVyLWxpbmUgcHQtNiBzbTpmbGV4LXJvdyBzbTppdGVtcy1jZW50ZXIgc206anVzdGlmeS1iZXR3ZWVuIj4KICAgICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1bMTFweF0gdHJhY2tpbmctWzAuMDRlbV0gdGV4dC1tdXRlZCI+CiAgICAgICAgICAgIMKpIHt5ZWFyfSB7c2l0ZU5hbWV9LiB7ZGljdC5mb290ZXIucmlnaHRzfQogICAgICAgICAgPC9wPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0zIj4KICAgICAgICAgICAgPExhbmd1YWdlU3dpdGNoZXIgbG9jYWxlPXtsb2NhbGV9IGxhYmVsPXtkaWN0LmNvbW1vbi5sYW5ndWFnZX0gLz4KICAgICAgICAgICAgPFRoZW1lU3dpdGNoZXIKICAgICAgICAgICAgICBsYWJlbHM9e3sgdGhlbWU6IGRpY3QuY29tbW9uLnRoZW1lLCBsaWdodDogZGljdC5jb21tb24ubGlnaHQsIGRhcms6IGRpY3QuY29tbW9uLmRhcmsgfX0KICAgICAgICAgICAgLz4KCiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L2Zvb3Rlcj4KICApOwp9Cg==
+import Link from "next/link";
+import { localeHref, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n";
+import { needsFullPrefetch, siteNav } from "@/data/navigation";
+import { SocialLinks, type SocialLinkItem } from "./social-links";
+import { ThemeSwitcher } from "./theme-switcher";
+import { LanguageSwitcher } from "./language-switcher";
+
+export type FooterProps = {
+  locale: Locale;
+  dict: Dictionary;
+  siteName: string;
+  footerText: string;
+  email: string;
+  location: string;
+  socials: SocialLinkItem[];
+  year: number;
+  showDemoBadge: boolean;
+  nav: { home: string; about: string; projects: string; art: string; blog: string; booking: string; contact: string };
+};
+
+export function SiteFooter({
+  locale,
+  dict,
+  siteName,
+  footerText,
+  email,
+  location,
+  socials,
+  year,
+  showDemoBadge,
+  nav,
+}: FooterProps) {
+  const explore = siteNav(locale, nav).filter((item) =>
+    ["about", "projects", "art", "blog", "booking"].includes(item.key),
+  );
+
+  return (
+    <footer className="mt-24 border-t border-t-ruby bg-surface-muted/60">
+      <div className="container-page py-14 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.35fr_0.9fr_1.05fr_0.95fr]">
+          <div className="max-w-sm">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted">
+              {dict.home.eyebrow} — {new Date().getFullYear()}
+            </p>
+            <p className="mt-5 text-2xl leading-tight tracking-tight">{siteName}</p>
+            <p className="mt-4 text-sm leading-relaxed text-muted">{footerText}</p>
+            {showDemoBadge && (
+              <span className="chip mt-6 border-dashed">{dict.footer.demoBadge}</span>
+            )}
+          </div>
+
+          <div>
+            <p className="label">{dict.footer.explore}</p>
+            <ul className="mt-4 space-y-2.5">
+              {explore.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    prefetch={needsFullPrefetch(item.key) || undefined}
+                    className="underline-sweep text-sm text-muted hover:text-accent"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="label">{dict.footer.contact}</p>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+              <li>
+                <a href={`mailto:${email}`} className="underline-sweep hover:text-accent">
+                  {email}
+                </a>
+              </li>
+              {location && <li>{location}</li>}
+              <li>
+                <Link href={localeHref(locale, "/contact")} className="underline-sweep hover:text-accent">
+                  {dict.contact.formTitle}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="label">{dict.footer.elsewhere}</p>
+            <SocialLinks links={socials} className="mt-4 gap-1.5 [&_a]:h-8 [&_a]:w-8" />
+          </div>
+        </div>
+
+        <div className="mt-14 flex flex-col gap-6 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[11px] tracking-[0.04em] text-muted">
+            © {year} {siteName}. {dict.footer.rights}
+          </p>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher locale={locale} label={dict.common.language} />
+            <ThemeSwitcher
+              labels={{ theme: dict.common.theme, light: dict.common.light, dark: dict.common.dark }}
+            />
+
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
