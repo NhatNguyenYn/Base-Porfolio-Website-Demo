@@ -1,1 +1,305 @@
-InVzZSBjbGllbnQiOwoKaW1wb3J0IGR5bmFtaWMgZnJvbSAibmV4dC9keW5hbWljIjsKaW1wb3J0IHsgdXNlQ2FsbGJhY2ssIHVzZUVmZmVjdCwgdXNlUmVmLCB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKaW1wb3J0IHsgY3JlYXRlUG9ydGFsIH0gZnJvbSAicmVhY3QtZG9tIjsKaW1wb3J0IHR5cGUgeyBBcnR3b3JrQ2FyZERhdGEsIENvbGxlY3Rpb25EYXRhIH0gZnJvbSAiQC9kYXRhL2FydHdvcmtzIjsKaW1wb3J0IHsgR0FMTEVSWV9QRVJfUEFHRSB9IGZyb20gIkAvZGF0YS9nYWxsZXJ5IjsKaW1wb3J0IHR5cGUgeyBMb2NhbGUgfSBmcm9tICJAL2kxOG4vY29uZmlnIjsKaW1wb3J0IHsgY24gfSBmcm9tICJAL2xpYi91dGlscyI7CmltcG9ydCB7IEFydHdvcmtDYXJkIH0gZnJvbSAiLi9hcnR3b3JrLWNhcmQiOwoKLy8gVGhlIGxpZ2h0Ym94IGRpYWxvZyAoaW1hZ2Ugdmlld2VyLCBrZXlib2FyZCBuYXYsIGZvY3VzIHRyYXApIGxvYWRzIG9ubHkKLy8gd2hlbiBhIHZpc2l0b3Igb3BlbnMgYW4gYXJ0d29yaywgc28gdGhlIGdhbGxlcnkncyBpbml0aWFsIGJ1bmRsZSBzdGF5cwovLyBsaWdodC4gYHNzcjogZmFsc2VgIGtlZXBzIHRoZSBjaHVuayBvdXQgb2YgdGhlIHNlcnZlciByZW5kZXIgZW50aXJlbHk6Ci8vIHRoZSBkaWFsb2cgb25seSBldmVyIG1vdW50cyBjbGllbnQtc2lkZSwgYWZ0ZXIgYSBjbGljay4KY29uc3QgQXJ0TGlnaHRib3ggPSBkeW5hbWljKCgpID0+IGltcG9ydCgiLi9hcnQtbGlnaHRib3giKS50aGVuKChtb2QpID0+IG1vZC5BcnRMaWdodGJveCksIHsKICBzc3I6IGZhbHNlLAp9KTsKCmV4cG9ydCB0eXBlIEdhbGxlcnlMYWJlbHMgPSB7CiAgYWxsV29ya3M6IHN0cmluZzsKICBhbGxDb2xsZWN0aW9uczogc3RyaW5nOwogIGNvbGxlY3Rpb25zOiBzdHJpbmc7CiAgdmlld0Z1bGxzY3JlZW46IHN0cmluZzsKICBjbG9zZTogc3RyaW5nOwogIG5leHQ6IHN0cmluZzsKICBwcmV2aW91czogc3RyaW5nOwogIGRldGFpbHM6IHN0cmluZzsKICBtZWRpdW06IHN0cmluZzsKICBjcmVhdGVkOiBzdHJpbmc7CiAgY29sbGVjdGlvbjogc3RyaW5nOwogIGNhdGVnb3J5OiBzdHJpbmc7CiAgdmlld0FydHdvcms6IHN0cmluZzsKICBpbWFnZUFsdDogc3RyaW5nOwogIGNvdW50OiBzdHJpbmc7CiAgbG9hZGluZ01vcmU6IHN0cmluZzsKICBsb2FkRXJyb3I6IHN0cmluZzsKICByZXRyeTogc3RyaW5nOwogIHNob3dpbmdBbGw6IHN0cmluZzsKfTsKCnR5cGUgQXJ0d29ya1BhZ2VSZXNwb25zZSA9IHsKICBzdWNjZXNzOiBib29sZWFuOwogIGRhdGE6IEFydHdvcmtDYXJkRGF0YVtdOwogIG1ldGE/OiB7IHRvdGFsPzogbnVtYmVyOyBwYWdlPzogbnVtYmVyOyBwYWdlcz86IG51bWJlciB9Owp9OwoKLyoqCiAqIE9uZSBiYXRjaCBmcm9tIHRoZSBwdWJsaWMgYXJ0d29ya3MgQVBJIChgR0VUIC9hcGkvYXJ0d29ya3NgKS4gVGhlIEFQSQogKiBwYWdpbmF0ZXMgYXQgdGhlIGRhdGFiYXNlLCBzbyBhIGJhdGNoIGlzIGNoZWFwIGV2ZW4gd2l0aCAxMTcgYXJ0d29ya3MuCiAqLwphc3luYyBmdW5jdGlvbiBmZXRjaEFydHdvcmtQYWdlKAogIGxvY2FsZTogTG9jYWxlLAogIG9wdGlvbnM6IHsgY29sbGVjdGlvbj86IHN0cmluZzsgcGFnZTogbnVtYmVyOyBwZXJQYWdlOiBudW1iZXIgfSwKKTogUHJvbWlzZTx7IGl0ZW1zOiBBcnR3b3JrQ2FyZERhdGFbXTsgdG90YWw6IG51bWJlciB9PiB7CiAgY29uc3QgcGFyYW1zID0gbmV3IFVSTFNlYXJjaFBhcmFtcyh7CiAgICBsb2NhbGUsCiAgICBwYWdlOiBTdHJpbmcob3B0aW9ucy5wYWdlKSwKICAgIHBlclBhZ2U6IFN0cmluZyhvcHRpb25zLnBlclBhZ2UpLAogIH0pOwogIGlmIChvcHRpb25zLmNvbGxlY3Rpb24pIHBhcmFtcy5zZXQoImNvbGxlY3Rpb24iLCBvcHRpb25zLmNvbGxlY3Rpb24pOwogIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goYC9hcGkvYXJ0d29ya3M/JHtwYXJhbXMudG9TdHJpbmcoKX1gLCB7CiAgICBoZWFkZXJzOiB7IGFjY2VwdDogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgfSk7CiAgaWYgKCFyZXNwb25zZS5vaykgdGhyb3cgbmV3IEVycm9yKGBBcnR3b3JrcyByZXF1ZXN0IGZhaWxlZDogJHtyZXNwb25zZS5zdGF0dXN9YCk7CiAgY29uc3QgYm9keSA9IChhd2FpdCByZXNwb25zZS5qc29uKCkpIGFzIEFydHdvcmtQYWdlUmVzcG9uc2U7CiAgaWYgKCFib2R5LnN1Y2Nlc3MgfHwgIUFycmF5LmlzQXJyYXkoYm9keS5kYXRhKSkgdGhyb3cgbmV3IEVycm9yKCJVbmV4cGVjdGVkIGFydHdvcmtzIHJlc3BvbnNlIik7CiAgcmV0dXJuIHsgaXRlbXM6IGJvZHkuZGF0YSwgdG90YWw6IGJvZHkubWV0YT8udG90YWwgPz8gYm9keS5kYXRhLmxlbmd0aCB9Owp9CgovKioKICogR2FsbGVyeSB3aXRoIGluZmluaXRlIHNjcm9sbC4KICoKICogVGhlIHNlcnZlciByZW5kZXJzIG9ubHkgdGhlIGZpcnN0IGJhdGNoIChgYXJ0d29ya3NgLCBgcGVyUGFnZWAgY2FyZHMpOwogKiB0aGUgcmVzdCBsb2FkcyBhcyB0aGUgdmlzaXRvciBzY3JvbGxzLCBvbmUgYmF0Y2ggcGVyIEludGVyc2VjdGlvbk9ic2VydmVyCiAqIGhpdCwgZnJvbSB0aGUgcHVibGljIEFQSS4gVGhlIGZpcnN0IHBhaW50IGlzIHJlYWwgY29udGVudCwgZmFzdCDigJQgbmV2ZXIgYQogKiBwYWdlIG9mIHNrZWxldG9uIGNhcmRzLiBXaGlsZSBtb3JlIGxvYWRzLCBvbmx5IGEgc21hbGwgImxvYWRpbmciIGxpbmUKICogYXBwZWFycyBhdCB0aGUgYm90dG9tOyBhIGZhaWxlZCBiYXRjaCBrZWVwcyB0aGUgbG9hZGVkIGNhcmRzIGFuZCBvZmZlcnMgYQogKiByZXRyeSBpbnN0ZWFkIG9mIGJsYW5raW5nIHRoZSBnYWxsZXJ5LgogKgogKiBDb2xsZWN0aW9uIGZpbHRlcmluZyBpcyBzZXJ2ZXItc2lkZSB0b286IHN3aXRjaGluZyBjb2xsZWN0aW9ucyBmZXRjaGVzCiAqIHRoYXQgY29sbGVjdGlvbidzIGZpcnN0IGJhdGNoICh0aGUgbG9hZGVkIGNhcmRzIHN0YXkgdmlzaWJsZSB1bnRpbCB0aGUKICogbmV3IGJhdGNoIGFycml2ZXMpLiBUaGUgbGlnaHRib3ggcGFnZXMgdGhyb3VnaCB0aGUgY2FyZHMgbG9hZGVkIHNvIGZhci4KICovCmV4cG9ydCBmdW5jdGlvbiBBcnRHYWxsZXJ5KHsKICBhcnR3b3JrcywKICBjb2xsZWN0aW9ucywKICBsb2NhbGUsCiAgbGFiZWxzLAogIHRvdGFsLAogIHBlclBhZ2UgPSBHQUxMRVJZX1BFUl9QQUdFLAogIGNvbGxlY3Rpb24sCiAgbWF4SXRlbXMsCn06IHsKICBhcnR3b3JrczogQXJ0d29ya0NhcmREYXRhW107CiAgY29sbGVjdGlvbnM6IENvbGxlY3Rpb25EYXRhW107CiAgbG9jYWxlOiBMb2NhbGU7CiAgbGFiZWxzOiBHYWxsZXJ5TGFiZWxzOwogIC8qKiBWaXNpYmxlIGNhcmRzIGZvciB0aGUgaW5pdGlhbCB2aWV3IChhbGwsIG9yIHRoZSBwcmVzZXQgY29sbGVjdGlvbikuICovCiAgdG90YWw6IG51bWJlcjsKICAvKiogQ2FyZHMgcGVyIGJhdGNoLCBzZXJ2ZXIgYW5kIGNsaWVudCBhbGlrZS4gKi8KICBwZXJQYWdlPzogbnVtYmVyOwogIC8qKiBXaGVuIHNldCwgdGhlIGdhbGxlcnkgaXMgbG9ja2VkIHRvIHRoaXMgY29sbGVjdGlvbiAoY29sbGVjdGlvbiBwYWdlKS4gKi8KICBjb2xsZWN0aW9uPzogc3RyaW5nOwogIC8qKiBXaGVuIHNldCwgdGhlIGdhbGxlcnkgbmV2ZXIgbG9hZHMgcGFzdCB0aGlzIG1hbnkgY2FyZHMgKGhvbWVwYWdlIHByZXZpZXcpLiAqLwogIG1heEl0ZW1zPzogbnVtYmVyOwp9KSB7CiAgY29uc3QgW2l0ZW1zLCBzZXRJdGVtc10gPSB1c2VTdGF0ZTxBcnR3b3JrQ2FyZERhdGFbXT4oYXJ0d29ya3MpOwogIGNvbnN0IFthY3RpdmVDb2xsZWN0aW9uLCBzZXRBY3RpdmVDb2xsZWN0aW9uXSA9IHVzZVN0YXRlPHN0cmluZz4oY29sbGVjdGlvbiA/PyAiYWxsIik7CiAgY29uc3QgW3RvdGFsRm9yQWN0aXZlLCBzZXRUb3RhbEZvckFjdGl2ZV0gPSB1c2VTdGF0ZTxudW1iZXI+KHRvdGFsKTsKICBjb25zdCBbbmV4dFBhZ2UsIHNldE5leHRQYWdlXSA9IHVzZVN0YXRlKDIpOwogIGNvbnN0IFtsb2FkaW5nTW9yZSwgc2V0TG9hZGluZ01vcmVdID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFtmaWx0ZXJMb2FkaW5nLCBzZXRGaWx0ZXJMb2FkaW5nXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCBbZXJyb3IsIHNldEVycm9yXSA9IHVzZVN0YXRlPHN0cmluZyB8IG51bGw+KG51bGwpOwogIC8vIFdoYXQgdGhlIHJldHJ5IGJ1dHRvbiBzaG91bGQgcmUtcnVuOiB0aGUgYmF0Y2ggdGhhdCBqdXN0IGZhaWxlZC4KICBjb25zdCBbZmFpbGVkLCBzZXRGYWlsZWRdID0gdXNlU3RhdGU8eyBraW5kOiAibW9yZSIgfCAiZmlsdGVyIjsgc2x1Zzogc3RyaW5nOyBwYWdlOiBudW1iZXIgfSB8IG51bGw+KG51bGwpOwogIGNvbnN0IFtvcGVuSW5kZXgsIHNldE9wZW5JbmRleF0gPSB1c2VTdGF0ZTxudW1iZXIgfCBudWxsPihudWxsKTsKICBjb25zdCBbbW91bnRlZCwgc2V0TW91bnRlZF0gPSB1c2VTdGF0ZShmYWxzZSk7CiAgY29uc3Qgc2VudGluZWxSZWYgPSB1c2VSZWY8SFRNTERpdkVsZW1lbnQgfCBudWxsPihudWxsKTsKCiAgLy8gVGhlIGxpZ2h0Ym94IGlzIHBvcnRhbGxlZCB0byA8Ym9keT4gc28gbm8gYW5jZXN0b3IgdHJhbnNmb3JtLCBmaWx0ZXIgb3IKICAvLyBzdGFja2luZyBjb250ZXh0IGNhbiBjbGlwIGl0IG9yIHB1c2ggaXQgYmVuZWF0aCB0aGUgc3RpY2t5IGhlYWRlci4KICB1c2VFZmZlY3QoKCkgPT4gc2V0TW91bnRlZCh0cnVlKSwgW10pOwoKICBjb25zdCBidXN5ID0gbG9hZGluZ01vcmUgfHwgZmlsdGVyTG9hZGluZzsKICAvLyBBIGNhcHBlZCBnYWxsZXJ5IChob21lcGFnZSBwcmV2aWV3KSBuZXZlciBsb2FkcyBwYXN0IGl0cyBjYXAsIGV2ZW4KICAvLyB0aG91Z2ggbW9yZSBjYXJkcyBleGlzdCBvbiB0aGUgZnVsbCBnYWxsZXJ5IHBhZ2UuCiAgY29uc3QgZWZmZWN0aXZlVG90YWwgPSBNYXRoLm1pbih0b3RhbEZvckFjdGl2ZSwgbWF4SXRlbXMgPz8gTnVtYmVyLlBPU0lUSVZFX0lORklOSVRZKTsKICBjb25zdCBoYXNNb3JlID0gaXRlbXMubGVuZ3RoIDwgZWZmZWN0aXZlVG90YWw7CgogIGNvbnN0IGxvYWRQYWdlID0gdXNlQ2FsbGJhY2soCiAgICBhc3luYyAoc2x1Zzogc3RyaW5nLCBwYWdlOiBudW1iZXIsIHJlcGxhY2U6IGJvb2xlYW4pID0+IHsKICAgICAgY29uc3QgeyBpdGVtczogYmF0Y2gsIHRvdGFsOiBmcmVzaFRvdGFsIH0gPSBhd2FpdCBmZXRjaEFydHdvcmtQYWdlKGxvY2FsZSwgewogICAgICAgIGNvbGxlY3Rpb246IHNsdWcgPT09ICJhbGwiID8gdW5kZWZpbmVkIDogc2x1ZywKICAgICAgICBwYWdlLAogICAgICAgIHBlclBhZ2UsCiAgICAgIH0pOwogICAgICBzZXRUb3RhbEZvckFjdGl2ZShmcmVzaFRvdGFsKTsKICAgICAgaWYgKHJlcGxhY2UpIHsKICAgICAgICBzZXRJdGVtcyhiYXRjaCk7CiAgICAgICAgc2V0TmV4dFBhZ2UoMik7CiAgICAgIH0gZWxzZSB7CiAgICAgICAgc2V0SXRlbXMoKHByZXZpb3VzKSA9PiB7CiAgICAgICAgICBjb25zdCBzZWVuID0gbmV3IFNldChwcmV2aW91cy5tYXAoKGl0ZW0pID0+IGl0ZW0uaWQpKTsKICAgICAgICAgIHJldHVybiBbLi4ucHJldmlvdXMsIC4uLmJhdGNoLmZpbHRlcigoaXRlbSkgPT4gIXNlZW4uaGFzKGl0ZW0uaWQpKV07CiAgICAgICAgfSk7CiAgICAgICAgc2V0TmV4dFBhZ2UoKHByZXZpb3VzKSA9PiBwcmV2aW91cyArIDEpOwogICAgICB9CiAgICB9LAogICAgW2xvY2FsZSwgcGVyUGFnZV0sCiAgKTsKCiAgY29uc3QgbG9hZE1vcmUgPSB1c2VDYWxsYmFjayhhc3luYyAoKSA9PiB7CiAgICBpZiAobG9hZGluZ01vcmUgfHwgZmlsdGVyTG9hZGluZyB8fCAhaGFzTW9yZSkgcmV0dXJuOwogICAgc2V0TG9hZGluZ01vcmUodHJ1ZSk7CiAgICBzZXRFcnJvcihudWxsKTsKICAgIHNldEZhaWxlZChudWxsKTsKICAgIHRyeSB7CiAgICAgIGF3YWl0IGxvYWRQYWdlKGFjdGl2ZUNvbGxlY3Rpb24sIG5leHRQYWdlLCBmYWxzZSk7CiAgICB9IGNhdGNoIHsKICAgICAgc2V0RXJyb3IobGFiZWxzLmxvYWRFcnJvcik7CiAgICAgIHNldEZhaWxlZCh7IGtpbmQ6ICJtb3JlIiwgc2x1ZzogYWN0aXZlQ29sbGVjdGlvbiwgcGFnZTogbmV4dFBhZ2UgfSk7CiAgICB9IGZpbmFsbHkgewogICAgICBzZXRMb2FkaW5nTW9yZShmYWxzZSk7CiAgICB9CiAgfSwgW2xvYWRpbmdNb3JlLCBmaWx0ZXJMb2FkaW5nLCBoYXNNb3JlLCBsb2FkUGFnZSwgYWN0aXZlQ29sbGVjdGlvbiwgbmV4dFBhZ2UsIGxhYmVscy5sb2FkRXJyb3JdKTsKCiAgY29uc3QgY2hhbmdlQ29sbGVjdGlvbiA9IHVzZUNhbGxiYWNrKAogICAgYXN5bmMgKHNsdWc6IHN0cmluZywgZm9yY2UgPSBmYWxzZSkgPT4gewogICAgICBpZiAoKCFmb3JjZSAmJiBzbHVnID09PSBhY3RpdmVDb2xsZWN0aW9uKSB8fCBmaWx0ZXJMb2FkaW5nKSByZXR1cm47CiAgICAgIHNldEFjdGl2ZUNvbGxlY3Rpb24oc2x1Zyk7CiAgICAgIHNldEZpbHRlckxvYWRpbmcodHJ1ZSk7CiAgICAgIHNldEVycm9yKG51bGwpOwogICAgICBzZXRGYWlsZWQobnVsbCk7CiAgICAgIHRyeSB7CiAgICAgICAgYXdhaXQgbG9hZFBhZ2Uoc2x1ZywgMSwgdHJ1ZSk7CiAgICAgIH0gY2F0Y2ggewogICAgICAgIHNldEVycm9yKGxhYmVscy5sb2FkRXJyb3IpOwogICAgICAgIHNldEZhaWxlZCh7IGtpbmQ6ICJmaWx0ZXIiLCBzbHVnLCBwYWdlOiAxIH0pOwogICAgICB9IGZpbmFsbHkgewogICAgICAgIHNldEZpbHRlckxvYWRpbmcoZmFsc2UpOwogICAgICB9CiAgICB9LAogICAgW2FjdGl2ZUNvbGxlY3Rpb24sIGZpbHRlckxvYWRpbmcsIGxvYWRQYWdlLCBsYWJlbHMubG9hZEVycm9yXSwKICApOwoKICBjb25zdCByZXRyeSA9IHVzZUNhbGxiYWNrKGFzeW5jICgpID0+IHsKICAgIGlmICghZmFpbGVkKSByZXR1cm47CiAgICBpZiAoZmFpbGVkLmtpbmQgPT09ICJtb3JlIikgewogICAgICBhd2FpdCBsb2FkTW9yZSgpOwogICAgICByZXR1cm47CiAgICB9CiAgICBhd2FpdCBjaGFuZ2VDb2xsZWN0aW9uKGZhaWxlZC5zbHVnLCB0cnVlKTsKICB9LCBbZmFpbGVkLCBsb2FkTW9yZSwgY2hhbmdlQ29sbGVjdGlvbl0pOwoKICAvLyBTdGFydCBsb2FkaW5nIHRoZSBuZXh0IGJhdGNoIGJlZm9yZSB0aGUgdmlzaXRvciByZWFjaGVzIHRoZSBib3R0b20uCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGNvbnN0IHNlbnRpbmVsID0gc2VudGluZWxSZWYuY3VycmVudDsKICAgIGlmICghc2VudGluZWwgfHwgIWhhc01vcmUpIHJldHVybjsKICAgIGNvbnN0IG9ic2VydmVyID0gbmV3IEludGVyc2VjdGlvbk9ic2VydmVyKAogICAgICAoZW50cmllcykgPT4gewogICAgICAgIGlmIChlbnRyaWVzLnNvbWUoKGVudHJ5KSA9PiBlbnRyeS5pc0ludGVyc2VjdGluZykpIHZvaWQgbG9hZE1vcmUoKTsKICAgICAgfSwKICAgICAgeyByb290TWFyZ2luOiAiNjAwcHgiIH0sCiAgICApOwogICAgb2JzZXJ2ZXIub2JzZXJ2ZShzZW50aW5lbCk7CiAgICByZXR1cm4gKCkgPT4gb2JzZXJ2ZXIuZGlzY29ubmVjdCgpOwogIH0sIFtoYXNNb3JlLCBsb2FkTW9yZV0pOwoKICAvLyBUaGUgbGlnaHRib3ggcGFnZXMgdGhyb3VnaCB0aGUgY2FyZHMgbG9hZGVkIHNvIGZhci4KICBjb25zdCB2aXNpYmxlID0gaXRlbXM7CgogIGNvbnN0IGNsb3NlID0gdXNlQ2FsbGJhY2soKCkgPT4gc2V0T3BlbkluZGV4KG51bGwpLCBbXSk7CiAgY29uc3Qgc3RlcCA9IHVzZUNhbGxiYWNrKAogICAgKGRpcmVjdGlvbjogMSB8IC0xKSA9PiB7CiAgICAgIHNldE9wZW5JbmRleCgoY3VycmVudCkgPT4gewogICAgICAgIGlmIChjdXJyZW50ID09PSBudWxsIHx8IHZpc2libGUubGVuZ3RoID09PSAwKSByZXR1cm4gY3VycmVudDsKICAgICAgICByZXR1cm4gKGN1cnJlbnQgKyBkaXJlY3Rpb24gKyB2aXNpYmxlLmxlbmd0aCkgJSB2aXNpYmxlLmxlbmd0aDsKICAgICAgfSk7CiAgICB9LAogICAgW3Zpc2libGUubGVuZ3RoXSwKICApOwoKICBjb25zdCBvcGVuID0gb3BlbkluZGV4ICE9PSBudWxsID8gdmlzaWJsZVtvcGVuSW5kZXhdID8/IG51bGwgOiBudWxsOwoKICByZXR1cm4gKAogICAgPGRpdj4KICAgICAge2NvbGxlY3Rpb25zLmxlbmd0aCA+IDAgJiYgKAogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi04IGZsZXggZmxleC13cmFwIGl0ZW1zLWNlbnRlciBnYXAtMiBib3JkZXIteSBib3JkZXItbGluZSBweS00IiBhcmlhLWJ1c3k9e2ZpbHRlckxvYWRpbmcgfHwgdW5kZWZpbmVkfT4KICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0ibXItMiB0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTZlbV0gdGV4dC1tdXRlZCI+e2xhYmVscy5jb2xsZWN0aW9uc308L3NwYW4+CiAgICAgICAgICA8YnV0dG9uCiAgICAgICAgICAgIHR5cGU9ImJ1dHRvbiIKICAgICAgICAgICAgb25DbGljaz17KCkgPT4gdm9pZCBjaGFuZ2VDb2xsZWN0aW9uKCJhbGwiKX0KICAgICAgICAgICAgY2xhc3NOYW1lPXtjbigiY2hpcCB0cmFuc2l0aW9uLWNvbG9ycyIsIGFjdGl2ZUNvbGxlY3Rpb24gPT09ICJhbGwiICYmICJjaGlwLWFjdGl2ZSIpfQogICAgICAgICAgICBhcmlhLXByZXNzZWQ9e2FjdGl2ZUNvbGxlY3Rpb24gPT09ICJhbGwifQogICAgICAgICAgPgogICAgICAgICAgICB7bGFiZWxzLmFsbENvbGxlY3Rpb25zfQogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRhYnVsYXItbnVtcyBvcGFjaXR5LTYwIj57dG90YWx9PC9zcGFuPgogICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICB7Y29sbGVjdGlvbnMubWFwKChjb2xsZWN0aW9uSXRlbSkgPT4gKAogICAgICAgICAgICA8YnV0dG9uCiAgICAgICAgICAgICAga2V5PXtjb2xsZWN0aW9uSXRlbS5pZH0KICAgICAgICAgICAgICB0eXBlPSJidXR0b24iCiAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gdm9pZCBjaGFuZ2VDb2xsZWN0aW9uKGNvbGxlY3Rpb25JdGVtLnNsdWcpfQogICAgICAgICAgICAgIGNsYXNzTmFtZT17Y24oImNoaXAgdHJhbnNpdGlvbi1jb2xvcnMiLCBhY3RpdmVDb2xsZWN0aW9uID09PSBjb2xsZWN0aW9uSXRlbS5zbHVnICYmICJjaGlwLWFjdGl2ZSIpfQogICAgICAgICAgICAgIGFyaWEtcHJlc3NlZD17YWN0aXZlQ29sbGVjdGlvbiA9PT0gY29sbGVjdGlvbkl0ZW0uc2x1Z30KICAgICAgICAgICAgPgogICAgICAgICAgICAgIHtjb2xsZWN0aW9uSXRlbS5uYW1lfQogICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGFidWxhci1udW1zIG9wYWNpdHktNjAiPntjb2xsZWN0aW9uSXRlbS5jb3VudH08L3NwYW4+CiAgICAgICAgICAgIDwvYnV0dG9uPgogICAgICAgICAgKSl9CiAgICAgICAgPC9kaXY+CiAgICAgICl9CgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29sdW1ucy0xIGdhcC01IHNtOmNvbHVtbnMtMiB4bDpjb2x1bW5zLTMiPgogICAgICAgIHt2aXNpYmxlLm1hcCgoYXJ0d29yaywgaW5kZXgpID0+ICgKICAgICAgICAgIDxBcnR3b3JrQ2FyZAogICAgICAgICAgICBrZXk9e2FydHdvcmsuaWR9CiAgICAgICAgICAgIGFydHdvcms9e2FydHdvcmt9CiAgICAgICAgICAgIGxhYmVsPXtsYWJlbHMudmlld0Z1bGxzY3JlZW59CiAgICAgICAgICAgIG9uT3Blbj17KCkgPT4gc2V0T3BlbkluZGV4KGluZGV4KX0KICAgICAgICAgIC8+CiAgICAgICAgKSl9CiAgICAgIDwvZGl2PgoKICAgICAgey8qIFNlbnRpbmVsOiB0aGUgbmV4dCBiYXRjaCBzdGFydHMgbG9hZGluZyA2MDBweCBiZWZvcmUgaXQgaXMgbmVlZGVkLiAqL30KICAgICAgPGRpdiByZWY9e3NlbnRpbmVsUmVmfSBhcmlhLWhpZGRlbj0idHJ1ZSIgY2xhc3NOYW1lPSJoLXB4IiAvPgoKICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTEwIHRleHQtY2VudGVyIHRleHQtc20gdGV4dC1tdXRlZCI+CiAgICAgICAge2J1c3kgJiYgKAogICAgICAgICAgPHAgcm9sZT0ic3RhdHVzIj4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJza2VsZXRvbi1zaGltbWVyIG1yLTIgaW5saW5lLWJsb2NrIGgtMyB3LTMgcm91bmRlZC1mdWxsIGFsaWduLVstMXB4XSIgYXJpYS1oaWRkZW49InRydWUiIC8+CiAgICAgICAgICAgIHtsYWJlbHMubG9hZGluZ01vcmV9CiAgICAgICAgICA8L3A+CiAgICAgICAgKX0KICAgICAgICB7IWJ1c3kgJiYgZXJyb3IgJiYgKAogICAgICAgICAgPHAgcm9sZT0iYWxlcnQiPgogICAgICAgICAgICB7ZXJyb3J9eyIgIn0KICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIG9uQ2xpY2s9eygpID0+IHZvaWQgcmV0cnkoKX0gY2xhc3NOYW1lPSJ1bmRlcmxpbmUgdW5kZXJsaW5lLW9mZnNldC00IGhvdmVyOnRleHQtaW5rIj4KICAgICAgICAgICAgICB7bGFiZWxzLnJldHJ5fQogICAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICAgIDwvcD4KICAgICAgICApfQogICAgICAgIHshYnVzeSAmJiAhZXJyb3IgJiYgIWhhc01vcmUgJiYgaXRlbXMubGVuZ3RoID4gMCAmJiBpdGVtcy5sZW5ndGggPj0gdG90YWxGb3JBY3RpdmUgJiYgdG90YWxGb3JBY3RpdmUgPiBwZXJQYWdlICYmICgKICAgICAgICAgIDxwPgogICAgICAgICAgICB7bGFiZWxzLnNob3dpbmdBbGx9IMK3IHtpdGVtcy5sZW5ndGh9IHtsYWJlbHMuY291bnR9CiAgICAgICAgICA8L3A+CiAgICAgICAgKX0KICAgICAgPC9kaXY+CgogICAgICB7b3BlbiAmJiBtb3VudGVkICYmIGNyZWF0ZVBvcnRhbCgKICAgICAgICA8QXJ0TGlnaHRib3gKICAgICAgICAgIGFydHdvcms9e29wZW59CiAgICAgICAgICBpbmRleD17b3BlbkluZGV4ID8/IDB9CiAgICAgICAgICB0b3RhbD17dmlzaWJsZS5sZW5ndGh9CiAgICAgICAgICBsb2NhbGU9e2xvY2FsZX0KICAgICAgICAgIGxhYmVscz17bGFiZWxzfQogICAgICAgICAgb25DbG9zZT17Y2xvc2V9CiAgICAgICAgICBvblN0ZXA9e3N0ZXB9CiAgICAgICAgLz4sCiAgICAgICAgZG9jdW1lbnQuYm9keSwKICAgICAgKX0KICAgIDwvZGl2PgogICk7Cn0K
+"use client";
+
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import type { ArtworkCardData, CollectionData } from "@/data/artworks";
+import { GALLERY_PER_PAGE } from "@/data/gallery";
+import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/utils";
+import { ArtworkCard } from "./artwork-card";
+
+// The lightbox dialog (image viewer, keyboard nav, focus trap) loads only
+// when a visitor opens an artwork, so the gallery's initial bundle stays
+// light. `ssr: false` keeps the chunk out of the server render entirely:
+// the dialog only ever mounts client-side, after a click.
+const ArtLightbox = dynamic(() => import("./art-lightbox").then((mod) => mod.ArtLightbox), {
+  ssr: false,
+});
+
+export type GalleryLabels = {
+  allWorks: string;
+  allCollections: string;
+  collections: string;
+  viewFullscreen: string;
+  close: string;
+  next: string;
+  previous: string;
+  details: string;
+  medium: string;
+  created: string;
+  collection: string;
+  category: string;
+  viewArtwork: string;
+  imageAlt: string;
+  count: string;
+  loadingMore: string;
+  loadError: string;
+  retry: string;
+  showingAll: string;
+};
+
+type ArtworkPageResponse = {
+  success: boolean;
+  data: ArtworkCardData[];
+  meta?: { total?: number; page?: number; pages?: number };
+};
+
+/**
+ * One batch from the public artworks API (`GET /api/artworks`). The API
+ * paginates at the database, so a batch is cheap even with 117 artworks.
+ */
+async function fetchArtworkPage(
+  locale: Locale,
+  options: { collection?: string; page: number; perPage: number },
+): Promise<{ items: ArtworkCardData[]; total: number }> {
+  const params = new URLSearchParams({
+    locale,
+    page: String(options.page),
+    perPage: String(options.perPage),
+  });
+  if (options.collection) params.set("collection", options.collection);
+  const response = await fetch(`/api/artworks?${params.toString()}`, {
+    headers: { accept: "application/json" },
+  });
+  if (!response.ok) throw new Error(`Artworks request failed: ${response.status}`);
+  const body = (await response.json()) as ArtworkPageResponse;
+  if (!body.success || !Array.isArray(body.data)) throw new Error("Unexpected artworks response");
+  return { items: body.data, total: body.meta?.total ?? body.data.length };
+}
+
+/**
+ * Gallery with infinite scroll.
+ *
+ * The server renders only the first batch (`artworks`, `perPage` cards);
+ * the rest loads as the visitor scrolls, one batch per IntersectionObserver
+ * hit, from the public API. The first paint is real content, fast — never a
+ * page of skeleton cards. While more loads, only a small "loading" line
+ * appears at the bottom; a failed batch keeps the loaded cards and offers a
+ * retry instead of blanking the gallery.
+ *
+ * Collection filtering is server-side too: switching collections fetches
+ * that collection's first batch (the loaded cards stay visible until the
+ * new batch arrives). The lightbox pages through the cards loaded so far.
+ */
+export function ArtGallery({
+  artworks,
+  collections,
+  locale,
+  labels,
+  total,
+  perPage = GALLERY_PER_PAGE,
+  collection,
+  maxItems,
+}: {
+  artworks: ArtworkCardData[];
+  collections: CollectionData[];
+  locale: Locale;
+  labels: GalleryLabels;
+  /** Visible cards for the initial view (all, or the preset collection). */
+  total: number;
+  /** Cards per batch, server and client alike. */
+  perPage?: number;
+  /** When set, the gallery is locked to this collection (collection page). */
+  collection?: string;
+  /** When set, the gallery never loads past this many cards (homepage preview). */
+  maxItems?: number;
+}) {
+  const [items, setItems] = useState<ArtworkCardData[]>(artworks);
+  const [activeCollection, setActiveCollection] = useState<string>(collection ?? "all");
+  const [totalForActive, setTotalForActive] = useState<number>(total);
+  const [nextPage, setNextPage] = useState(2);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  // What the retry button should re-run: the batch that just failed.
+  const [failed, setFailed] = useState<{ kind: "more" | "filter"; slug: string; page: number } | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // The lightbox is portalled to <body> so no ancestor transform, filter or
+  // stacking context can clip it or push it beneath the sticky header.
+  useEffect(() => setMounted(true), []);
+
+  const busy = loadingMore || filterLoading;
+  // A capped gallery (homepage preview) never loads past its cap, even
+  // though more cards exist on the full gallery page.
+  const effectiveTotal = Math.min(totalForActive, maxItems ?? Number.POSITIVE_INFINITY);
+  const hasMore = items.length < effectiveTotal;
+
+  const loadPage = useCallback(
+    async (slug: string, page: number, replace: boolean) => {
+      const { items: batch, total: freshTotal } = await fetchArtworkPage(locale, {
+        collection: slug === "all" ? undefined : slug,
+        page,
+        perPage,
+      });
+      setTotalForActive(freshTotal);
+      if (replace) {
+        setItems(batch);
+        setNextPage(2);
+      } else {
+        setItems((previous) => {
+          const seen = new Set(previous.map((item) => item.id));
+          return [...previous, ...batch.filter((item) => !seen.has(item.id))];
+        });
+        setNextPage((previous) => previous + 1);
+      }
+    },
+    [locale, perPage],
+  );
+
+  const loadMore = useCallback(async () => {
+    if (loadingMore || filterLoading || !hasMore) return;
+    setLoadingMore(true);
+    setError(null);
+    setFailed(null);
+    try {
+      await loadPage(activeCollection, nextPage, false);
+    } catch {
+      setError(labels.loadError);
+      setFailed({ kind: "more", slug: activeCollection, page: nextPage });
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, filterLoading, hasMore, loadPage, activeCollection, nextPage, labels.loadError]);
+
+  const changeCollection = useCallback(
+    async (slug: string, force = false) => {
+      if ((!force && slug === activeCollection) || filterLoading) return;
+      setActiveCollection(slug);
+      setFilterLoading(true);
+      setError(null);
+      setFailed(null);
+      try {
+        await loadPage(slug, 1, true);
+      } catch {
+        setError(labels.loadError);
+        setFailed({ kind: "filter", slug, page: 1 });
+      } finally {
+        setFilterLoading(false);
+      }
+    },
+    [activeCollection, filterLoading, loadPage, labels.loadError],
+  );
+
+  const retry = useCallback(async () => {
+    if (!failed) return;
+    if (failed.kind === "more") {
+      await loadMore();
+      return;
+    }
+    await changeCollection(failed.slug, true);
+  }, [failed, loadMore, changeCollection]);
+
+  // Start loading the next batch before the visitor reaches the bottom.
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) void loadMore();
+      },
+      { rootMargin: "600px" },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
+
+  // The lightbox pages through the cards loaded so far.
+  const visible = items;
+
+  const close = useCallback(() => setOpenIndex(null), []);
+  const step = useCallback(
+    (direction: 1 | -1) => {
+      setOpenIndex((current) => {
+        if (current === null || visible.length === 0) return current;
+        return (current + direction + visible.length) % visible.length;
+      });
+    },
+    [visible.length],
+  );
+
+  const open = openIndex !== null ? visible[openIndex] ?? null : null;
+
+  return (
+    <div>
+      {collections.length > 0 && (
+        <div className="mb-8 flex flex-wrap items-center gap-2 border-y border-line py-4" aria-busy={filterLoading || undefined}>
+          <span className="mr-2 text-[10px] uppercase tracking-[0.16em] text-muted">{labels.collections}</span>
+          <button
+            type="button"
+            onClick={() => void changeCollection("all")}
+            className={cn("chip transition-colors", activeCollection === "all" && "chip-active")}
+            aria-pressed={activeCollection === "all"}
+          >
+            {labels.allCollections}
+            <span className="tabular-nums opacity-60">{total}</span>
+          </button>
+          {collections.map((collectionItem) => (
+            <button
+              key={collectionItem.id}
+              type="button"
+              onClick={() => void changeCollection(collectionItem.slug)}
+              className={cn("chip transition-colors", activeCollection === collectionItem.slug && "chip-active")}
+              aria-pressed={activeCollection === collectionItem.slug}
+            >
+              {collectionItem.name}
+              <span className="tabular-nums opacity-60">{collectionItem.count}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="columns-1 gap-5 sm:columns-2 xl:columns-3">
+        {visible.map((artwork, index) => (
+          <ArtworkCard
+            key={artwork.id}
+            artwork={artwork}
+            label={labels.viewFullscreen}
+            onOpen={() => setOpenIndex(index)}
+          />
+        ))}
+      </div>
+
+      {/* Sentinel: the next batch starts loading 600px before it is needed. */}
+      <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+
+      <div className="mt-10 text-center text-sm text-muted">
+        {busy && (
+          <p role="status">
+            <span className="skeleton-shimmer mr-2 inline-block h-3 w-3 rounded-full align-[-1px]" aria-hidden="true" />
+            {labels.loadingMore}
+          </p>
+        )}
+        {!busy && error && (
+          <p role="alert">
+            {error}{" "}
+            <button type="button" onClick={() => void retry()} className="underline underline-offset-4 hover:text-ink">
+              {labels.retry}
+            </button>
+          </p>
+        )}
+        {!busy && !error && !hasMore && items.length > 0 && items.length >= totalForActive && totalForActive > perPage && (
+          <p>
+            {labels.showingAll} · {items.length} {labels.count}
+          </p>
+        )}
+      </div>
+
+      {open && mounted && createPortal(
+        <ArtLightbox
+          artwork={open}
+          index={openIndex ?? 0}
+          total={visible.length}
+          locale={locale}
+          labels={labels}
+          onClose={close}
+          onStep={step}
+        />,
+        document.body,
+      )}
+    </div>
+  );
+}
