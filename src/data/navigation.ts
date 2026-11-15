@@ -1,1 +1,87 @@
-aW1wb3J0IHsgbG9jYWxlSHJlZiwgdHlwZSBMb2NhbGUgfSBmcm9tICJAL2kxOG4vY29uZmlnIjsKaW1wb3J0IHR5cGUgeyBEaWN0aW9uYXJ5IH0gZnJvbSAiQC9pMThuIjsKCi8qKgogKiBDZW50cmFsIHJvdXRlIGNvbmZpZ3VyYXRpb24gZm9yIHRoZSBwdWJsaWMgc2l0ZS4gQWRkaW5nIGEgcGFnZSBtZWFucyBhZGRpbmcKICogb25lIGVudHJ5IGhlcmUg4oCUIHRoZSBoZWFkZXIsIGZvb3RlciBhbmQgbW9iaWxlIG1lbnUgYWxsIHJlYWQgZnJvbSBpdC4KICovCmV4cG9ydCB0eXBlIE5hdktleSA9ICJob21lIiB8ICJhYm91dCIgfCAicHJvamVjdHMiIHwgImFydCIgfCAiYmxvZyIgfCAiYm9va2luZyIgfCAiY29udGFjdCI7CgpleHBvcnQgY29uc3QgbmF2UGF0aHM6IFJlY29yZDxOYXZLZXksIHN0cmluZz4gPSB7CiAgaG9tZTogIi8iLAogIGFib3V0OiAiL2Fib3V0IiwKICBwcm9qZWN0czogIi9wcm9qZWN0cyIsCiAgYXJ0OiAiL2FydCIsCiAgYmxvZzogIi9ibG9nIiwKICBib29raW5nOiAiL2RhdC1saWNoLWtoYW8tc2F0IiwKICBjb250YWN0OiAiL2NvbnRhY3QiLAp9OwoKY29uc3QgTkFWX09SREVSOiBOYXZLZXlbXSA9IFsiaG9tZSIsICJhYm91dCIsICJwcm9qZWN0cyIsICJibG9nIiwgImFydCIsICJib29raW5nIiwgImNvbnRhY3QiXTsKCi8qKgogKiBXaGljaCBuYXZpZ2F0aW9uIGVudHJpZXMgYSB2aXNpdG9yIGNhbiBzZWUuIExhYmVscyBsaXZlIGluIHRoZSBkaWN0aW9uYXJpZXMKICogYW5kIHBhdGhzIGluIGBuYXZQYXRoc2AsIHNvIHRoaXMgbWFwIG5ldmVyIGRlcGVuZHMgb24gbGFuZ3VhZ2Ugb3IgVVJMIGFuZCBpcwogKiBzYWZlIHRvIG1vdmUgdG8gdGhlIGRhdGFiYXNlIGxhdGVyIChhbiBhZG1pbiBOYXZpZ2F0aW9uIE1hbmFnZW1lbnQgc2NyZWVuIGNhbgogKiBsb2FkIHRoZSBzYW1lIHNoYXBlIHdpdGhvdXQgdG91Y2hpbmcgdGhlIGNvbXBvbmVudHMpLgogKgogKiBIaWRkZW4gZW50cmllcyBrZWVwIHRoZWlyIHBhZ2UsIGRhdGEsIEFQSSBhbmQgQ01TIHNjcmVlbjsgb25seSB0aGUgbWVudSBsaW5rCiAqIGlzIG9taXR0ZWQuIERpcmVjdCB2aXNpdHMgYW5kIGBtYXRjaGVzTmF2YCBhcmUgdW5hZmZlY3RlZC4KICovCmV4cG9ydCB0eXBlIE5hdlZpc2liaWxpdHkgPSBSZWNvcmQ8TmF2S2V5LCBib29sZWFuPjsKCmV4cG9ydCBjb25zdCBuYXZWaXNpYmlsaXR5OiBOYXZWaXNpYmlsaXR5ID0gewogIGhvbWU6IHRydWUsCiAgYWJvdXQ6IHRydWUsCiAgcHJvamVjdHM6IGZhbHNlLAogIGFydDogdHJ1ZSwKICBibG9nOiB0cnVlLAogIGJvb2tpbmc6IHRydWUsCiAgY29udGFjdDogdHJ1ZSwKfTsKCmV4cG9ydCB0eXBlIE5hdkl0ZW0gPSB7IGtleTogTmF2S2V5OyBocmVmOiBzdHJpbmc7IGxhYmVsOiBzdHJpbmcgfTsKCi8qKiBWaXNpYmxlIGtleXMgaW4gbWVudSBvcmRlciwgZGVyaXZlZCBmcm9tIHRoZSBzaW5nbGUgdmlzaWJpbGl0eSBtYXAuICovCmV4cG9ydCBmdW5jdGlvbiB2aXNpYmxlTmF2S2V5cyh2aXNpYmlsaXR5OiBOYXZWaXNpYmlsaXR5ID0gbmF2VmlzaWJpbGl0eSk6IE5hdktleVtdIHsKICByZXR1cm4gTkFWX09SREVSLmZpbHRlcigoa2V5KSA9PiB2aXNpYmlsaXR5W2tleV0pOwp9CgovKioKICogSGVhZGVyLCBtb2JpbGUgZHJhd2VyIGFuZCBmb290ZXIgYWxsIGNhbGwgdGhpcyBmdW5jdGlvbiwgc28gYSBoaWRkZW4gZW50cnkKICogZGlzYXBwZWFycyBldmVyeXdoZXJlIGF0IG9uY2UgYW5kIHRoZSBvcmRlciBzdGF5cyBzaGFyZWQuCiAqLwpleHBvcnQgZnVuY3Rpb24gc2l0ZU5hdigKICBsb2NhbGU6IExvY2FsZSwKICBuYXY6IFBpY2s8RGljdGlvbmFyeVsibmF2Il0sIE5hdktleT4sCiAgdmlzaWJpbGl0eTogTmF2VmlzaWJpbGl0eSA9IG5hdlZpc2liaWxpdHksCik6IE5hdkl0ZW1bXSB7CiAgcmV0dXJuIHZpc2libGVOYXZLZXlzKHZpc2liaWxpdHkpLm1hcCgoa2V5KSA9PiAoewogICAga2V5LAogICAgaHJlZjogbG9jYWxlSHJlZihsb2NhbGUsIG5hdlBhdGhzW2tleV0gPT09ICIvIiA/ICIiIDogbmF2UGF0aHNba2V5XSksCiAgICBsYWJlbDogbmF2W2tleV0sCiAgfSkpOwp9CgovKiogYHBhdGhgIGlzIHRoZSBsb2NhbGUtc3RyaXBwZWQgcGF0aG5hbWUuICovCmV4cG9ydCBmdW5jdGlvbiBtYXRjaGVzTmF2KGtleTogTmF2S2V5LCBwYXRoOiBzdHJpbmcpOiBib29sZWFuIHsKICBpZiAoa2V5ID09PSAiaG9tZSIpIHJldHVybiBwYXRoID09PSAiLyIgfHwgcGF0aCA9PT0gIiI7CiAgcmV0dXJuIHBhdGguc3RhcnRzV2l0aChuYXZQYXRoc1trZXldKTsKfQoKLyoqCiAqIE5hdiBlbnRyaWVzIHdob3NlIHBhZ2VzIHN0YXkgZHluYW1pYyDigJQgYmxvZyByZWFkcyBzZWFyY2ggcGFyYW1zLCBib29raW5nCiAqIG11c3Qgc2hvdyBmcmVzaCBzbG90cyDigJQgc28gdGhlIGRlZmF1bHQgcHJlZmV0Y2ggd291bGQgb25seSBmZXRjaCB0aGUKICogbG9hZGluZyBzaGVsbC4gVGhlaXIgbGlua3MgcGFzcyBgcHJlZmV0Y2g9e3RydWV9YCB0byBmZXRjaCB0aGUgZnVsbCByb3V0ZQogKiBpbiB0aGUgYmFja2dyb3VuZCBpbnN0ZWFkOyBhIGZ1bGx5LXByZWZldGNoZWQgcm91dGUgc3RheXMgaW4gdGhlIGNsaWVudAogKiByb3V0ZXIgY2FjaGUgZm9yIHVwIHRvIDUgbWludXRlcywgc28gYSBjbGljayBmcm9tIHRoZSBob21lcGFnZSBpcwogKiBpbnN0YW50LiBJU1IgcGFnZXMgKGhvbWUsIGFydCwgYWJvdXQsIGNvbnRhY3QpIGFscmVhZHkgcHJlZmV0Y2ggaW4gZnVsbAogKiBieSBkZWZhdWx0IGFuZCBuZWVkIG5vIG92ZXJyaWRlLgogKi8KZXhwb3J0IGZ1bmN0aW9uIG5lZWRzRnVsbFByZWZldGNoKGtleTogTmF2S2V5KTogYm9vbGVhbiB7CiAgcmV0dXJuIGtleSA9PT0gImJsb2ciIHx8IGtleSA9PT0gImJvb2tpbmciOwp9CgpleHBvcnQgZnVuY3Rpb24gbmF2SHJlZihsb2NhbGU6IExvY2FsZSwgcGF0aDogc3RyaW5nKTogc3RyaW5nIHsKICByZXR1cm4gbG9jYWxlSHJlZihsb2NhbGUsIHBhdGgpOwp9Cg==
+import { localeHref, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n";
+
+/**
+ * Central route configuration for the public site. Adding a page means adding
+ * one entry here — the header, footer and mobile menu all read from it.
+ */
+export type NavKey = "home" | "about" | "projects" | "art" | "blog" | "booking" | "contact";
+
+export const navPaths: Record<NavKey, string> = {
+  home: "/",
+  about: "/about",
+  projects: "/projects",
+  art: "/art",
+  blog: "/blog",
+  booking: "/dat-lich-khao-sat",
+  contact: "/contact",
+};
+
+const NAV_ORDER: NavKey[] = ["home", "about", "projects", "blog", "art", "booking", "contact"];
+
+/**
+ * Which navigation entries a visitor can see. Labels live in the dictionaries
+ * and paths in `navPaths`, so this map never depends on language or URL and is
+ * safe to move to the database later (an admin Navigation Management screen can
+ * load the same shape without touching the components).
+ *
+ * Hidden entries keep their page, data, API and CMS screen; only the menu link
+ * is omitted. Direct visits and `matchesNav` are unaffected.
+ */
+export type NavVisibility = Record<NavKey, boolean>;
+
+export const navVisibility: NavVisibility = {
+  home: true,
+  about: true,
+  projects: false,
+  art: true,
+  blog: true,
+  booking: true,
+  contact: true,
+};
+
+export type NavItem = { key: NavKey; href: string; label: string };
+
+/** Visible keys in menu order, derived from the single visibility map. */
+export function visibleNavKeys(visibility: NavVisibility = navVisibility): NavKey[] {
+  return NAV_ORDER.filter((key) => visibility[key]);
+}
+
+/**
+ * Header, mobile drawer and footer all call this function, so a hidden entry
+ * disappears everywhere at once and the order stays shared.
+ */
+export function siteNav(
+  locale: Locale,
+  nav: Pick<Dictionary["nav"], NavKey>,
+  visibility: NavVisibility = navVisibility,
+): NavItem[] {
+  return visibleNavKeys(visibility).map((key) => ({
+    key,
+    href: localeHref(locale, navPaths[key] === "/" ? "" : navPaths[key]),
+    label: nav[key],
+  }));
+}
+
+/** `path` is the locale-stripped pathname. */
+export function matchesNav(key: NavKey, path: string): boolean {
+  if (key === "home") return path === "/" || path === "";
+  return path.startsWith(navPaths[key]);
+}
+
+/**
+ * Nav entries whose pages stay dynamic — blog reads search params, booking
+ * must show fresh slots — so the default prefetch would only fetch the
+ * loading shell. Their links pass `prefetch={true}` to fetch the full route
+ * in the background instead; a fully-prefetched route stays in the client
+ * router cache for up to 5 minutes, so a click from the homepage is
+ * instant. ISR pages (home, art, about, contact) already prefetch in full
+ * by default and need no override.
+ */
+export function needsFullPrefetch(key: NavKey): boolean {
+  return key === "blog" || key === "booking";
+}
+
+export function navHref(locale: Locale, path: string): string {
+  return localeHref(locale, path);
+}
