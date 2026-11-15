@@ -1,1 +1,164 @@
-aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgeyBoZWFkZXJzIH0gZnJvbSAibmV4dC9oZWFkZXJzIjsKaW1wb3J0IHsgbm90Rm91bmQgfSBmcm9tICJuZXh0L25hdmlnYXRpb24iOwppbXBvcnQgeyBnZXREaWN0aW9uYXJ5IH0gZnJvbSAiQC9pMThuIjsKaW1wb3J0IHsgaXNMb2NhbGUsIGxvY2FsZUhyZWYsIHR5cGUgTG9jYWxlIH0gZnJvbSAiQC9pMThuL2NvbmZpZyI7CmltcG9ydCB7IGdldENvbGxlY3Rpb24sIGxpc3RBcnR3b3JrU2x1Z3MgfSBmcm9tICJAL2RhdGEvYXJ0d29ya3MiOwppbXBvcnQgeyBnZXRTZXR0aW5ncyB9IGZyb20gIkAvZGF0YS9zZXR0aW5ncyI7CmltcG9ydCB7IGdldFNvY2lhbExpbmtzIH0gZnJvbSAiQC9kYXRhL3NvY2lhbCI7CmltcG9ydCB7IGdldENvbGxlY3Rpb25Mb2NhbGVzIH0gZnJvbSAiQC9zZXJ2ZXIvcXVlcmllcy9hcnR3b3JrcyI7CmltcG9ydCB7IGJ1aWxkUGFnZU1ldGFkYXRhLCBjYW5vbmljYWxVcmwsIHNvY2lhbEltYWdlLCB4SGFuZGxlRnJvbVNvY2lhbHMgfSBmcm9tICJAL2xpYi9zZW8iOwppbXBvcnQgeyBzZXJpYWxpemVKc29uTGQgfSBmcm9tICJAL2xpYi9qc29uLWxkIjsKaW1wb3J0IHsgYnVpbGRCcmVhZGNydW1iU2NoZW1hLCBidWlsZEl0ZW1MaXN0U2NoZW1hIH0gZnJvbSAiQC9saWIvc3RydWN0dXJlZC1kYXRhIjsKaW1wb3J0IHsgQnJlYWRjcnVtYnMgfSBmcm9tICJAL2NvbXBvbmVudHMvc2l0ZS9icmVhZGNydW1icyI7CmltcG9ydCB7IHByaXNtYSB9IGZyb20gIkAvc2VydmVyL2RiIjsKaW1wb3J0IHsgUGFnZUhlcm8gfSBmcm9tICJAL2NvbXBvbmVudHMvc2l0ZS9wYWdlLWhlcm8iOwppbXBvcnQgeyBBcnRHYWxsZXJ5IH0gZnJvbSAiQC9jb21wb25lbnRzL3NpdGUvYXJ0LWdhbGxlcnkiOwppbXBvcnQgeyBHQUxMRVJZX1BFUl9QQUdFIH0gZnJvbSAiQC9kYXRhL2dhbGxlcnkiOwoKLy8gVGhlIEdpdEh1YiBQYWdlcyBkZW1vIGJ1aWxkIHJld3JpdGVzIHRoaXMgdG8gImZvcmNlLXN0YXRpYyIKLy8gKHNlZSAuZ2l0aHViL3dvcmtmbG93cy9wYWdlcy55bWwpOyB0aGUgZnVsbC1zdGFjayBidWlsZCBrZWVwcyBpdCBkeW5hbWljLgpleHBvcnQgY29uc3QgZHluYW1pYyA9ICJmb3JjZS1keW5hbWljIjsKCi8vIFN0YXRpYy1leHBvcnQgYnVpbGQgKEdpdEh1YiBQYWdlcyBkZW1vKTogZW51bWVyYXRlIGV2ZXJ5IHB1YmxpYyBjb2xsZWN0aW9uIHNsdWcKLy8gc28gaXRzIHBhZ2UgY2FuIHByZXJlbmRlci4gSWdub3JlZCBieSB0aGUgZHluYW1pYyBidWlsZC4KZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlU3RhdGljUGFyYW1zKCkgewogIGNvbnN0IHJvd3MgPSBhd2FpdCBwcmlzbWEuYXJ0d29ya0NvbGxlY3Rpb24uZmluZE1hbnkoewogICAgd2hlcmU6IHsgdmlzaWJpbGl0eTogInB1YmxpYyIsIGRlbGV0ZWRBdDogbnVsbCB9LAogICAgc2VsZWN0OiB7IHNsdWc6IHRydWUgfSwKICB9KTsKICByZXR1cm4gcm93cy5tYXAoKHJvdykgPT4gKHsgc2x1Zzogcm93LnNsdWcgfSkpOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2VuZXJhdGVNZXRhZGF0YSh7CiAgcGFyYW1zLAp9OiB7CiAgcGFyYW1zOiBQcm9taXNlPHsgbG9jYWxlOiBzdHJpbmc7IHNsdWc6IHN0cmluZyB9PjsKfSk6IFByb21pc2U8TWV0YWRhdGE+IHsKICBjb25zdCB7IGxvY2FsZTogcmF3LCBzbHVnIH0gPSBhd2FpdCBwYXJhbXM7CiAgaWYgKCFpc0xvY2FsZShyYXcpKSByZXR1cm4ge307CiAgY29uc3QgZGljdCA9IGdldERpY3Rpb25hcnkocmF3KTsKICBjb25zdCBzZXR0aW5ncyA9IGF3YWl0IGdldFNldHRpbmdzKCk7CiAgY29uc3QgeyBjb2xsZWN0aW9uIH0gPSBhd2FpdCBnZXRDb2xsZWN0aW9uKHNsdWcsIHJhdyk7CiAgaWYgKCFjb2xsZWN0aW9uKSB7CiAgICByZXR1cm4gYnVpbGRQYWdlTWV0YWRhdGEoewogICAgICBsb2NhbGU6IHJhdywKICAgICAgcGF0aDogYC9hcnQvY29sbGVjdGlvbnMvJHtzbHVnfWAsCiAgICAgIHRpdGxlOiBkaWN0Lm5vdEZvdW5kLnRpdGxlLAogICAgICBkZXNjcmlwdGlvbjogZGljdC5ub3RGb3VuZC50ZXh0LAogICAgICBzaXRlTmFtZTogc2V0dGluZ3Muc2l0ZU5hbWUsCiAgICAgIG5vaW5kZXg6IHRydWUsCiAgICB9KTsKICB9CiAgY29uc3QgYXZhaWxhYmxlID0gYXdhaXQgZ2V0Q29sbGVjdGlvbkxvY2FsZXMoc2x1Zyk7CiAgY29uc3QgeEhhbmRsZSA9IHhIYW5kbGVGcm9tU29jaWFscyhhd2FpdCBnZXRTb2NpYWxMaW5rcygpKTsKICByZXR1cm4gYnVpbGRQYWdlTWV0YWRhdGEoewogICAgbG9jYWxlOiByYXcsCiAgICBwYXRoOiBgL2FydC9jb2xsZWN0aW9ucy8ke3NsdWd9YCwKICAgIHRpdGxlOiBjb2xsZWN0aW9uLm5hbWUsCiAgICBkZXNjcmlwdGlvbjogY29sbGVjdGlvbi5kZXNjcmlwdGlvbiwKICAgIHNpdGVOYW1lOiBzZXR0aW5ncy5zaXRlTmFtZSwKICAgIGF2YWlsYWJsZUxvY2FsZXM6IGF2YWlsYWJsZSwKICAgIGltYWdlOiBjb2xsZWN0aW9uLmNvdmVyCiAgICAgID8gc29jaWFsSW1hZ2UoY29sbGVjdGlvbi5jb3Zlci51cmwsIGNvbGxlY3Rpb24uY292ZXIuYWx0IHx8IGNvbGxlY3Rpb24ubmFtZSwgY29sbGVjdGlvbi5jb3Zlci53aWR0aCwgY29sbGVjdGlvbi5jb3Zlci5oZWlnaHQpCiAgICAgIDogbnVsbCwKICAgIHR3aXR0ZXJTaXRlOiB4SGFuZGxlLAogICAgdHdpdHRlckNyZWF0b3I6IHhIYW5kbGUsCiAgICBmYXZpY29uVXJsOiBzZXR0aW5ncy5mYXZpY29uPy51cmwsCiAgfSk7Cn0KCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIENvbGxlY3Rpb25QYWdlKHsKICBwYXJhbXMsCn06IHsKICBwYXJhbXM6IFByb21pc2U8eyBsb2NhbGU6IHN0cmluZzsgc2x1Zzogc3RyaW5nIH0+Owp9KSB7CiAgY29uc3QgeyBsb2NhbGU6IHJhdywgc2x1ZyB9ID0gYXdhaXQgcGFyYW1zOwogIGlmICghaXNMb2NhbGUocmF3KSkgbm90Rm91bmQoKTsKICBjb25zdCBsb2NhbGU6IExvY2FsZSA9IHJhdzsKICBjb25zdCBkaWN0ID0gZ2V0RGljdGlvbmFyeShsb2NhbGUpOwogIGNvbnN0IG5vbmNlID0gKGF3YWl0IGhlYWRlcnMoKSkuZ2V0KCJ4LW5vbmNlIikgPz8gdW5kZWZpbmVkOwoKICBjb25zdCB7IGNvbGxlY3Rpb24sIGFydHdvcmtzLCB0b3RhbCB9ID0gYXdhaXQgZ2V0Q29sbGVjdGlvbihzbHVnLCBsb2NhbGUsIHsgbGltaXQ6IEdBTExFUllfUEVSX1BBR0UgfSk7CiAgaWYgKCFjb2xsZWN0aW9uKSBub3RGb3VuZCgpOwogIGNvbnN0IHNsdWdzID0gYXdhaXQgbGlzdEFydHdvcmtTbHVncyhsb2NhbGUsIHsgY29sbGVjdGlvbjogc2x1ZyB9KTsKICBjb25zdCBhcnRIcmVmID0gbG9jYWxlSHJlZihsb2NhbGUsICIvYXJ0Iik7CiAgY29uc3QgY29sbGVjdGlvbkhyZWYgPSBgJHthcnRIcmVmfS9jb2xsZWN0aW9ucy8ke2NvbGxlY3Rpb24uc2x1Z31gOwogIGNvbnN0IGNydW1icyA9IFsKICAgIHsgbmFtZTogZGljdC5uYXYuaG9tZSwgaHJlZjogbG9jYWxlSHJlZihsb2NhbGUsICIvIikgfSwKICAgIHsgbmFtZTogZGljdC5hcnQubGFiZWwsIGhyZWY6IGFydEhyZWYgfSwKICAgIHsgbmFtZTogY29sbGVjdGlvbi5uYW1lLCBocmVmOiBjb2xsZWN0aW9uSHJlZiB9LAogIF07CiAgY29uc3QganNvbkxkID0gewogICAgIkBjb250ZXh0IjogImh0dHBzOi8vc2NoZW1hLm9yZyIsCiAgICAiQGdyYXBoIjogWwogICAgICBidWlsZEJyZWFkY3J1bWJTY2hlbWEoY3J1bWJzKSwKICAgICAgYnVpbGRJdGVtTGlzdFNjaGVtYSh7CiAgICAgICAgaWQ6IGAke2Nhbm9uaWNhbFVybChsb2NhbGUsIGAvYXJ0L2NvbGxlY3Rpb25zLyR7Y29sbGVjdGlvbi5zbHVnfWApfSNhcnR3b3Jrc2AsCiAgICAgICAgaXRlbXM6IHNsdWdzLm1hcCgoYXJ0d29yaykgPT4gKHsKICAgICAgICAgIG5hbWU6IGFydHdvcmsudGl0bGUsCiAgICAgICAgICB1cmw6IGAvJHtsb2NhbGV9L2FydC8ke2FydHdvcmsuc2x1Z31gLAogICAgICAgIH0pKSwKICAgICAgfSksCiAgICBdLAogIH07CgogIHJldHVybiAoCiAgICA8PgogICAgICA8c2NyaXB0CiAgICAgICAgdHlwZT0iYXBwbGljYXRpb24vbGQranNvbiIKICAgICAgICBub25jZT17bm9uY2V9CiAgICAgICAgc3VwcHJlc3NIeWRyYXRpb25XYXJuaW5nCiAgICAgICAgZGFuZ2Vyb3VzbHlTZXRJbm5lckhUTUw9e3sgX19odG1sOiBzZXJpYWxpemVKc29uTGQoanNvbkxkKSB9fQogICAgICAvPgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyLXBhZ2UgcHQtMTAiPgogICAgICAgIDxCcmVhZGNydW1icyBpdGVtcz17Y3J1bWJzfSBsYWJlbD17ZGljdC5jb21tb24uYnJlYWRjcnVtYn0gLz4KICAgICAgPC9kaXY+CgogICAgICA8UGFnZUhlcm8KICAgICAgICBsYWJlbD17ZGljdC5hcnQuY29sbGVjdGlvbnN9CiAgICAgICAgdGl0bGU9e2NvbGxlY3Rpb24ubmFtZX0KICAgICAgICBkZXNjcmlwdGlvbj17Y29sbGVjdGlvbi5kZXNjcmlwdGlvbn0KICAgICAgICBtZXRhPXtbeyBsYWJlbDogZGljdC5hcnQuYWxsV29ya3MsIHZhbHVlOiBTdHJpbmcoY29sbGVjdGlvbi5jb3VudCkucGFkU3RhcnQoMiwgIjAiKSB9XX0KICAgICAgLz4KCiAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT0iY29udGFpbmVyLXBhZ2UgcGItMjQiPgogICAgICAgIHthcnR3b3Jrcy5sZW5ndGggPiAwID8gKAogICAgICAgICAgPEFydEdhbGxlcnkKICAgICAgICAgICAgYXJ0d29ya3M9e2FydHdvcmtzfQogICAgICAgICAgICBjb2xsZWN0aW9ucz17W119CiAgICAgICAgICAgIGxvY2FsZT17bG9jYWxlfQogICAgICAgICAgICB0b3RhbD17dG90YWx9CiAgICAgICAgICAgIHBlclBhZ2U9e0dBTExFUllfUEVSX1BBR0V9CiAgICAgICAgICAgIGNvbGxlY3Rpb249e2NvbGxlY3Rpb24uc2x1Z30KICAgICAgICAgICAgbGFiZWxzPXt7CiAgICAgICAgICAgICAgYWxsV29ya3M6IGRpY3QuYXJ0LmFsbFdvcmtzLAogICAgICAgICAgICAgIGFsbENvbGxlY3Rpb25zOiBkaWN0LmFydC5hbGxDb2xsZWN0aW9ucywKICAgICAgICAgICAgICBjb2xsZWN0aW9uczogZGljdC5hcnQuY29sbGVjdGlvbnMsCiAgICAgICAgICAgICAgdmlld0Z1bGxzY3JlZW46IGRpY3QuY29tbW9uLnZpZXdGdWxsc2NyZWVuLAogICAgICAgICAgICAgIGNsb3NlOiBkaWN0LmNvbW1vbi5jbG9zZUxhYmVsLAogICAgICAgICAgICAgIG5leHQ6IGRpY3QuY29tbW9uLm5leHRJbWFnZSwKICAgICAgICAgICAgICBwcmV2aW91czogZGljdC5jb21tb24ucHJldkltYWdlLAogICAgICAgICAgICAgIGRldGFpbHM6IGRpY3QuYXJ0LmRldGFpbHMsCiAgICAgICAgICAgICAgbWVkaXVtOiBkaWN0LmNvbW1vbi5tZWRpdW0sCiAgICAgICAgICAgICAgY3JlYXRlZDogZGljdC5jb21tb24uY3JlYXRlZCwKICAgICAgICAgICAgICBjb2xsZWN0aW9uOiBkaWN0LmNvbW1vbi5jb2xsZWN0aW9uLAogICAgICAgICAgICAgIGNhdGVnb3J5OiBkaWN0LmNvbW1vbi5jYXRlZ29yeSwKICAgICAgICAgICAgICB2aWV3QXJ0d29yazogZGljdC5jb21tb24udmlld0FydHdvcmssCiAgICAgICAgICAgICAgaW1hZ2VBbHQ6IGRpY3QuYXJ0LmltYWdlQWx0LAogICAgICAgICAgICAgIGNvdW50OiBkaWN0LmFydC5jb2xsZWN0aW9uQ291bnQsCiAgICAgICAgICAgICAgbG9hZGluZ01vcmU6IGRpY3QuYXJ0LmxvYWRpbmdNb3JlLAogICAgICAgICAgICAgIGxvYWRFcnJvcjogZGljdC5hcnQubG9hZEVycm9yLAogICAgICAgICAgICAgIHJldHJ5OiBkaWN0LmFydC5yZXRyeSwKICAgICAgICAgICAgICBzaG93aW5nQWxsOiBkaWN0LmFydC5zaG93aW5nQWxsLAogICAgICAgICAgICB9fQogICAgICAgICAgLz4KICAgICAgICApIDogKAogICAgICAgICAgPHAgY2xhc3NOYW1lPSJib3JkZXIgYm9yZGVyLWRhc2hlZCBib3JkZXItbGluZSBweC02IHB5LTE2IHRleHQtY2VudGVyIHRleHQtc20gdGV4dC1tdXRlZCI+CiAgICAgICAgICAgIHtkaWN0LmFydC5lbXB0eVRpdGxlfQogICAgICAgICAgPC9wPgogICAgICAgICl9CiAgICAgIDwvc2VjdGlvbj4KICAgIDwvPgogICk7Cn0K
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { getDictionary } from "@/i18n";
+import { isLocale, localeHref, type Locale } from "@/i18n/config";
+import { getCollection, listArtworkSlugs } from "@/data/artworks";
+import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
+import { getCollectionLocales } from "@/server/queries/artworks";
+import { buildPageMetadata, canonicalUrl, socialImage, xHandleFromSocials } from "@/lib/seo";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildItemListSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { prisma } from "@/server/db";
+import { PageHero } from "@/components/site/page-hero";
+import { ArtGallery } from "@/components/site/art-gallery";
+import { GALLERY_PER_PAGE } from "@/data/gallery";
+
+// The GitHub Pages demo build rewrites this to "force-static"
+// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
+export const dynamic = "force-dynamic";
+
+// Static-export build (GitHub Pages demo): enumerate every public collection slug
+// so its page can prerender. Ignored by the dynamic build.
+export async function generateStaticParams() {
+  const rows = await prisma.artworkCollection.findMany({
+    where: { visibility: "public", deletedAt: null },
+    select: { slug: true },
+  });
+  return rows.map((row) => ({ slug: row.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale: raw, slug } = await params;
+  if (!isLocale(raw)) return {};
+  const dict = getDictionary(raw);
+  const settings = await getSettings();
+  const { collection } = await getCollection(slug, raw);
+  if (!collection) {
+    return buildPageMetadata({
+      locale: raw,
+      path: `/art/collections/${slug}`,
+      title: dict.notFound.title,
+      description: dict.notFound.text,
+      siteName: settings.siteName,
+      noindex: true,
+    });
+  }
+  const available = await getCollectionLocales(slug);
+  const xHandle = xHandleFromSocials(await getSocialLinks());
+  return buildPageMetadata({
+    locale: raw,
+    path: `/art/collections/${slug}`,
+    title: collection.name,
+    description: collection.description,
+    siteName: settings.siteName,
+    availableLocales: available,
+    image: collection.cover
+      ? socialImage(collection.cover.url, collection.cover.alt || collection.name, collection.cover.width, collection.cover.height)
+      : null,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
+  });
+}
+
+export default async function CollectionPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}) {
+  const { locale: raw, slug } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale: Locale = raw;
+  const dict = getDictionary(locale);
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
+  const { collection, artworks, total } = await getCollection(slug, locale, { limit: GALLERY_PER_PAGE });
+  if (!collection) notFound();
+  const slugs = await listArtworkSlugs(locale, { collection: slug });
+  const artHref = localeHref(locale, "/art");
+  const collectionHref = `${artHref}/collections/${collection.slug}`;
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.art.label, href: artHref },
+    { name: collection.name, href: collectionHref },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildItemListSchema({
+        id: `${canonicalUrl(locale, `/art/collections/${collection.slug}`)}#artworks`,
+        items: slugs.map((artwork) => ({
+          name: artwork.title,
+          url: `/${locale}/art/${artwork.slug}`,
+        })),
+      }),
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-10">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
+
+      <PageHero
+        label={dict.art.collections}
+        title={collection.name}
+        description={collection.description}
+        meta={[{ label: dict.art.allWorks, value: String(collection.count).padStart(2, "0") }]}
+      />
+
+      <section className="container-page pb-24">
+        {artworks.length > 0 ? (
+          <ArtGallery
+            artworks={artworks}
+            collections={[]}
+            locale={locale}
+            total={total}
+            perPage={GALLERY_PER_PAGE}
+            collection={collection.slug}
+            labels={{
+              allWorks: dict.art.allWorks,
+              allCollections: dict.art.allCollections,
+              collections: dict.art.collections,
+              viewFullscreen: dict.common.viewFullscreen,
+              close: dict.common.closeLabel,
+              next: dict.common.nextImage,
+              previous: dict.common.prevImage,
+              details: dict.art.details,
+              medium: dict.common.medium,
+              created: dict.common.created,
+              collection: dict.common.collection,
+              category: dict.common.category,
+              viewArtwork: dict.common.viewArtwork,
+              imageAlt: dict.art.imageAlt,
+              count: dict.art.collectionCount,
+              loadingMore: dict.art.loadingMore,
+              loadError: dict.art.loadError,
+              retry: dict.art.retry,
+              showingAll: dict.art.showingAll,
+            }}
+          />
+        ) : (
+          <p className="border border-dashed border-line px-6 py-16 text-center text-sm text-muted">
+            {dict.art.emptyTitle}
+          </p>
+        )}
+      </section>
+    </>
+  );
+}
