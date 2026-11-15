@@ -1,1 +1,132 @@
-aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgeyBub3RGb3VuZCB9IGZyb20gIm5leHQvbmF2aWdhdGlvbiI7CmltcG9ydCB7IGdldERpY3Rpb25hcnkgfSBmcm9tICJAL2kxOG4iOwppbXBvcnQgeyBpc0xvY2FsZSwgbG9jYWxlSHJlZiwgdHlwZSBMb2NhbGUgfSBmcm9tICJAL2kxOG4vY29uZmlnIjsKaW1wb3J0IHsgZ2V0UHJvZmlsZSB9IGZyb20gIkAvZGF0YS9wcm9maWxlIjsKaW1wb3J0IHsgZ2V0U29jaWFsTGlua3MgfSBmcm9tICJAL2RhdGEvc29jaWFsIjsKaW1wb3J0IHsgZ2V0U2V0dGluZ3MgfSBmcm9tICJAL2RhdGEvc2V0dGluZ3MiOwppbXBvcnQgeyBidWlsZFBhZ2VNZXRhZGF0YSwgeEhhbmRsZUZyb21Tb2NpYWxzIH0gZnJvbSAiQC9saWIvc2VvIjsKaW1wb3J0IHsgc2VyaWFsaXplSnNvbkxkIH0gZnJvbSAiQC9saWIvanNvbi1sZCI7CmltcG9ydCB7IGJ1aWxkQnJlYWRjcnVtYlNjaGVtYSB9IGZyb20gIkAvbGliL3N0cnVjdHVyZWQtZGF0YSI7CmltcG9ydCB7IEJyZWFkY3J1bWJzIH0gZnJvbSAiQC9jb21wb25lbnRzL3NpdGUvYnJlYWRjcnVtYnMiOwppbXBvcnQgeyBQYWdlSGVybyB9IGZyb20gIkAvY29tcG9uZW50cy9zaXRlL3BhZ2UtaGVybyI7CmltcG9ydCB7IENvbnRhY3RTZWN0aW9uIH0gZnJvbSAiQC9jb21wb25lbnRzL3NpdGUvY29udGFjdC1zZWN0aW9uIjsKaW1wb3J0IHsgU29jaWFsTGlua3MgfSBmcm9tICJAL2NvbXBvbmVudHMvc2l0ZS9zb2NpYWwtbGlua3MiOwppbXBvcnQgeyBSZXZlYWwgfSBmcm9tICJAL2NvbXBvbmVudHMvdWkvcmV2ZWFsIjsKCi8vIElTUjogcmV2YWxpZGF0ZXMgZXZlcnkgNjBzIHNvIHRoZSBlZGdlIGNhbiBzZXJ2ZSB0aGUgcGFnZSBhbmQgPExpbms+Ci8vIHByZWZldGNoIGNhY2hlcyB0aGUgZnVsbCBSU0MgcGF5bG9hZCAoc2VlIHRoZSBsYXlvdXQgZm9yIHRoZSByYXRpb25hbGUKLy8gYW5kIHRoZSBDU1Agbm9uY2Ugbm90ZSkuIFRoZSBHaXRIdWIgUGFnZXMgZGVtbyBidWlsZCByZXdyaXRlcyB0aGlzIHRvCi8vICJmb3JjZS1zdGF0aWMiIChzZWUgLmdpdGh1Yi93b3JrZmxvd3MvcGFnZXMueW1sKS4KZXhwb3J0IGNvbnN0IHJldmFsaWRhdGUgPSA2MDsKCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZW5lcmF0ZU1ldGFkYXRhKHsgcGFyYW1zIH06IHsgcGFyYW1zOiBQcm9taXNlPHsgbG9jYWxlOiBzdHJpbmcgfT4gfSk6IFByb21pc2U8TWV0YWRhdGE+IHsKICBjb25zdCB7IGxvY2FsZTogcmF3IH0gPSBhd2FpdCBwYXJhbXM7CiAgaWYgKCFpc0xvY2FsZShyYXcpKSByZXR1cm4ge307CiAgY29uc3QgZGljdCA9IGdldERpY3Rpb25hcnkocmF3KTsKICBjb25zdCBzZXR0aW5ncyA9IGF3YWl0IGdldFNldHRpbmdzKCk7CiAgY29uc3QgeEhhbmRsZSA9IHhIYW5kbGVGcm9tU29jaWFscyhhd2FpdCBnZXRTb2NpYWxMaW5rcygpKTsKICByZXR1cm4gYnVpbGRQYWdlTWV0YWRhdGEoewogICAgbG9jYWxlOiByYXcsCiAgICBwYXRoOiAiL2NvbnRhY3QiLAogICAgdGl0bGU6IGRpY3QuY29udGFjdC50aXRsZSwKICAgIGRlc2NyaXB0aW9uOiBkaWN0LmNvbnRhY3QuZGVzY3JpcHRpb24sCiAgICBzaXRlTmFtZTogc2V0dGluZ3Muc2l0ZU5hbWUsCiAgICB0d2l0dGVyU2l0ZTogeEhhbmRsZSwKICAgIHR3aXR0ZXJDcmVhdG9yOiB4SGFuZGxlLAogICAgZmF2aWNvblVybDogc2V0dGluZ3MuZmF2aWNvbj8udXJsLAogIH0pOwp9CgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBDb250YWN0UGFnZSh7IHBhcmFtcyB9OiB7IHBhcmFtczogUHJvbWlzZTx7IGxvY2FsZTogc3RyaW5nIH0+IH0pIHsKICBjb25zdCB7IGxvY2FsZTogcmF3IH0gPSBhd2FpdCBwYXJhbXM7CiAgaWYgKCFpc0xvY2FsZShyYXcpKSBub3RGb3VuZCgpOwogIGNvbnN0IGxvY2FsZTogTG9jYWxlID0gcmF3OwogIGNvbnN0IGRpY3QgPSBnZXREaWN0aW9uYXJ5KGxvY2FsZSk7CgogIGNvbnN0IFtzZXR0aW5ncywgcHJvZmlsZSwgc29jaWFsc10gPSBhd2FpdCBQcm9taXNlLmFsbChbZ2V0U2V0dGluZ3MoKSwgZ2V0UHJvZmlsZSgpLCBnZXRTb2NpYWxMaW5rcygpXSk7CiAgY29uc3QgY29udGVudCA9IHByb2ZpbGU/LnRyYW5zbGF0aW9ucy5maW5kKChpdGVtKSA9PiBpdGVtLmxvY2FsZSA9PT0gbG9jYWxlKSA/PyBudWxsOwogIGNvbnN0IGVtYWlsID0gcHJvZmlsZT8uZW1haWwgfHwgc2V0dGluZ3MuY29udGFjdEVtYWlsOwogIGNvbnN0IGxvY2F0aW9uID0gc2V0dGluZ3MuY29udGFjdExvY2F0aW9uIHx8IHByb2ZpbGU/LmxvY2F0aW9uIHx8ICIiOwogIGNvbnN0IGNydW1icyA9IFsKICAgIHsgbmFtZTogZGljdC5uYXYuaG9tZSwgaHJlZjogbG9jYWxlSHJlZihsb2NhbGUsICIvIikgfSwKICAgIHsgbmFtZTogZGljdC5jb250YWN0LmxhYmVsLCBocmVmOiBsb2NhbGVIcmVmKGxvY2FsZSwgIi9jb250YWN0IikgfSwKICBdOwogIGNvbnN0IGpzb25MZCA9IHsKICAgICJAY29udGV4dCI6ICJodHRwczovL3NjaGVtYS5vcmciLAogICAgIkBncmFwaCI6IFtidWlsZEJyZWFkY3J1bWJTY2hlbWEoY3J1bWJzKV0sCiAgfTsKCiAgcmV0dXJuICgKICAgIDw+CiAgICAgIDxzY3JpcHQKICAgICAgICB0eXBlPSJhcHBsaWNhdGlvbi9sZCtqc29uIgogICAgICAgIHN1cHByZXNzSHlkcmF0aW9uV2FybmluZwogICAgICAgIGRhbmdlcm91c2x5U2V0SW5uZXJIVE1MPXt7IF9faHRtbDogc2VyaWFsaXplSnNvbkxkKGpzb25MZCkgfX0KICAgICAgLz4KICAgICAgPGRpdiBjbGFzc05hbWU9ImNvbnRhaW5lci1wYWdlIHB0LTgiPgogICAgICAgIDxCcmVhZGNydW1icyBpdGVtcz17Y3J1bWJzfSBsYWJlbD17ZGljdC5jb21tb24uYnJlYWRjcnVtYn0gLz4KICAgICAgPC9kaXY+CiAgICAgIDxQYWdlSGVybwogICAgICAgIGxhYmVsPXtkaWN0LmNvbnRhY3QubGFiZWx9CiAgICAgICAgdGl0bGU9e2RpY3QuY29udGFjdC50aXRsZX0KICAgICAgICBkZXNjcmlwdGlvbj17ZGljdC5jb250YWN0LmRlc2NyaXB0aW9ufQogICAgICAgIG1ldGE9e1sKICAgICAgICAgIHsgbGFiZWw6IGRpY3QuY29udGFjdC5hdmFpbGFiaWxpdHlMYWJlbCwgdmFsdWU6IHByb2ZpbGU/LmF2YWlsYWJsZUZvcldvcmsgPT09IGZhbHNlID8gZGljdC5ob21lLnVuYXZhaWxhYmxlIDogZGljdC5ob21lLmF2YWlsYWJpbGl0eSB9LAogICAgICAgIF19CiAgICAgIC8+CgogICAgICA8c2VjdGlvbiBjbGFzc05hbWU9ImNvbnRhaW5lci1wYWdlIHBiLTI0Ij4KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtMTIgbGc6Z3JpZC1jb2xzLTEyIGxnOmdhcC0xNiI+CiAgICAgICAgICA8UmV2ZWFsIGNsYXNzTmFtZT0ibGc6Y29sLXNwYW4tNSI+CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJzcGFjZS15LTgiPgogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJib3JkZXItdCBib3JkZXItbGluZSBwdC01Ij4KICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1bMTBweF0gdXBwZXJjYXNlIHRyYWNraW5nLVswLjE2ZW1dIHRleHQtbXV0ZWQiPntkaWN0LmNvbnRhY3QuZW1haWxMYWJlbH08L3A+CiAgICAgICAgICAgICAgICA8YQogICAgICAgICAgICAgICAgICBocmVmPXtgbWFpbHRvOiR7ZW1haWx9YH0KICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJzZXJpZi1hY2NlbnQgbXQtMyBpbmxpbmUtYmxvY2sgdGV4dC1bY2xhbXAoMS4zcmVtLDIuNHZ3LDEuOXJlbSldIGxlYWRpbmctdGlnaHQgdW5kZXJsaW5lIGRlY29yYXRpb24tbGluZS1zdHJvbmcgZGVjb3JhdGlvbi0xIHVuZGVybGluZS1vZmZzZXQtOCB0cmFuc2l0aW9uLWNvbG9ycyBob3Zlcjp0ZXh0LWFjY2VudCIKICAgICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgICAge2VtYWlsfQogICAgICAgICAgICAgICAgPC9hPgogICAgICAgICAgICAgIDwvZGl2PgoKICAgICAgICAgICAgICB7bG9jYXRpb24gJiYgKAogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImJvcmRlci10IGJvcmRlci1saW5lIHB0LTUiPgogICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy1bMC4xNmVtXSB0ZXh0LW11dGVkIj57ZGljdC5jb250YWN0LmxvY2F0aW9uTGFiZWx9PC9wPgogICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTMgdGV4dC1bMTVweF0iPntsb2NhdGlvbn08L3A+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICApfQoKICAgICAgICAgICAgICB7Y29udGVudD8udGl0bGUgJiYgKAogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImJvcmRlci10IGJvcmRlci1saW5lIHB0LTUiPgogICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtWzEwcHhdIHVwcGVyY2FzZSB0cmFja2luZy1bMC4xNmVtXSB0ZXh0LW11dGVkIj57ZGljdC5jb21tb24ucm9sZX08L3A+CiAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0ibXQtMyB0ZXh0LVsxNXB4XSI+e2NvbnRlbnQudGl0bGV9PC9wPgogICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgKX0KCiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImJvcmRlci10IGJvcmRlci1saW5lIHB0LTUiPgogICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTZlbV0gdGV4dC1tdXRlZCI+e2RpY3QuY29udGFjdC5zb2NpYWxMYWJlbH08L3A+CiAgICAgICAgICAgICAgICA8U29jaWFsTGlua3MgbGlua3M9e3NvY2lhbHN9IGNsYXNzTmFtZT0ibXQtNCIgLz4KICAgICAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImJvcmRlci10IGJvcmRlci1saW5lIHB0LTUiPgogICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTZlbV0gdGV4dC1tdXRlZCI+e2RpY3QuY29udGFjdC5hdmFpbGFiaWxpdHlMYWJlbH08L3A+CiAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTMgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIgdGV4dC1bMTRweF0iPgogICAgICAgICAgICAgICAgICA8c3BhbgogICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YGgtMS41IHctMS41IHJvdW5kZWQtZnVsbCAke3Byb2ZpbGU/LmF2YWlsYWJsZUZvcldvcmsgPT09IGZhbHNlID8gImJnLW11dGVkIiA6ICJiZy1hY2NlbnQifWB9CiAgICAgICAgICAgICAgICAgICAgYXJpYS1oaWRkZW49InRydWUiCiAgICAgICAgICAgICAgICAgIC8+CiAgICAgICAgICAgICAgICAgIHtwcm9maWxlPy5hdmFpbGFibGVGb3JXb3JrID09PSBmYWxzZSA/IGRpY3QuaG9tZS51bmF2YWlsYWJsZSA6IGRpY3QuaG9tZS5hdmFpbGFiaWxpdHl9CiAgICAgICAgICAgICAgICA8L3A+CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgPC9SZXZlYWw+CgogICAgICAgICAgPFJldmVhbCBkZWxheT17ODB9IGNsYXNzTmFtZT0ibGc6Y29sLXNwYW4tNyI+CiAgICAgICAgICAgIDxDb250YWN0U2VjdGlvbiBkaWN0PXtkaWN0fSBlbWFpbD17ZW1haWx9IGxvY2FsZT17bG9jYWxlfSAvPgogICAgICAgICAgPC9SZXZlYWw+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvc2VjdGlvbj4KICAgIDwvPgogICk7Cn0K
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getDictionary } from "@/i18n";
+import { isLocale, localeHref, type Locale } from "@/i18n/config";
+import { getProfile } from "@/data/profile";
+import { getSocialLinks } from "@/data/social";
+import { getSettings } from "@/data/settings";
+import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { PageHero } from "@/components/site/page-hero";
+import { ContactSection } from "@/components/site/contact-section";
+import { SocialLinks } from "@/components/site/social-links";
+import { Reveal } from "@/components/ui/reveal";
+
+// ISR: revalidates every 60s so the edge can serve the page and <Link>
+// prefetch caches the full RSC payload (see the layout for the rationale
+// and the CSP nonce note). The GitHub Pages demo build rewrites this to
+// "force-static" (see .github/workflows/pages.yml).
+export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) return {};
+  const dict = getDictionary(raw);
+  const settings = await getSettings();
+  const xHandle = xHandleFromSocials(await getSocialLinks());
+  return buildPageMetadata({
+    locale: raw,
+    path: "/contact",
+    title: dict.contact.title,
+    description: dict.contact.description,
+    siteName: settings.siteName,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
+  });
+}
+
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale: Locale = raw;
+  const dict = getDictionary(locale);
+
+  const [settings, profile, socials] = await Promise.all([getSettings(), getProfile(), getSocialLinks()]);
+  const content = profile?.translations.find((item) => item.locale === locale) ?? null;
+  const email = profile?.email || settings.contactEmail;
+  const location = settings.contactLocation || profile?.location || "";
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.contact.label, href: localeHref(locale, "/contact") },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [buildBreadcrumbSchema(crumbs)],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
+      <PageHero
+        label={dict.contact.label}
+        title={dict.contact.title}
+        description={dict.contact.description}
+        meta={[
+          { label: dict.contact.availabilityLabel, value: profile?.availableForWork === false ? dict.home.unavailable : dict.home.availability },
+        ]}
+      />
+
+      <section className="container-page pb-24">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <Reveal className="lg:col-span-5">
+            <div className="space-y-8">
+              <div className="border-t border-line pt-5">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{dict.contact.emailLabel}</p>
+                <a
+                  href={`mailto:${email}`}
+                  className="serif-accent mt-3 inline-block text-[clamp(1.3rem,2.4vw,1.9rem)] leading-tight underline decoration-line-strong decoration-1 underline-offset-8 transition-colors hover:text-accent"
+                >
+                  {email}
+                </a>
+              </div>
+
+              {location && (
+                <div className="border-t border-line pt-5">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{dict.contact.locationLabel}</p>
+                  <p className="mt-3 text-[15px]">{location}</p>
+                </div>
+              )}
+
+              {content?.title && (
+                <div className="border-t border-line pt-5">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{dict.common.role}</p>
+                  <p className="mt-3 text-[15px]">{content.title}</p>
+                </div>
+              )}
+
+              <div className="border-t border-line pt-5">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{dict.contact.socialLabel}</p>
+                <SocialLinks links={socials} className="mt-4" />
+              </div>
+
+              <div className="border-t border-line pt-5">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{dict.contact.availabilityLabel}</p>
+                <p className="mt-3 flex items-center gap-2 text-[14px]">
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${profile?.availableForWork === false ? "bg-muted" : "bg-accent"}`}
+                    aria-hidden="true"
+                  />
+                  {profile?.availableForWork === false ? dict.home.unavailable : dict.home.availability}
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={80} className="lg:col-span-7">
+            <ContactSection dict={dict} email={email} locale={locale} />
+          </Reveal>
+        </div>
+      </section>
+    </>
+  );
+}
