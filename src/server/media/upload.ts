@@ -39,11 +39,11 @@ export function maxUploadBytes(): number {
 export async function storeImage(file: File, alt: string): Promise<MediaView> {
   const declared = ALLOWED_TYPES[file.type];
   if (!declared) {
-    throw new UploadError("TYPE", `${file.name}: only JPG, PNG, WebP, AVIF or GIF are accepted.`);
+    throw new UploadError("TYPE", `${file.name}: chỉ chấp nhận JPG, PNG, WebP, AVIF hoặc GIF.`);
   }
-  if (file.size === 0) throw new UploadError("EMPTY", `${file.name} is empty.`);
+  if (file.size === 0) throw new UploadError("EMPTY", `${file.name} trống, không có nội dung.`);
   if (file.size > maxUploadBytes()) {
-    throw new UploadError("SIZE", `${file.name} is larger than ${Math.round(maxUploadBytes() / (1024 * 1024))} MB.`);
+    throw new UploadError("SIZE", `${file.name} lớn hơn ${Math.round(maxUploadBytes() / (1024 * 1024))} MB.`);
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -59,13 +59,13 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
     // HTML is rejected here rather than stored and served. (Sharp reports
     // AVIF as "heif"; normalizeFormat maps it back to "avif".)
     if (normalizeFormat(metadata.format) !== declared.format) {
-      throw new UploadError("TYPE", `${file.name}: file content does not match its declared type.`);
+      throw new UploadError("TYPE", `${file.name}: nội dung file không khớp với định dạng đã khai báo.`);
     }
     width = metadata.width ?? null;
     height = metadata.height ?? null;
   } catch (error) {
     if (error instanceof UploadError) throw error;
-    throw new UploadError("CORRUPT", `${file.name} is not a readable image.`);
+    throw new UploadError("CORRUPT", `${file.name} không phải là ảnh đọc được.`);
   }
 
   // Optimize: resize to at most 1600px on the longest edge and recompress.
@@ -76,7 +76,7 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
     optimized = await optimizeImage(buffer, file.type);
   } catch (error) {
     if (error instanceof OptimizeError) {
-      throw new UploadError("CORRUPT", `${file.name} is not a readable image.`);
+      throw new UploadError("CORRUPT", `${file.name} không phải là ảnh đọc được.`);
     }
     throw error;
   }

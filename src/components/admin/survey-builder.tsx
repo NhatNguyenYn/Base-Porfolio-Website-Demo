@@ -81,8 +81,14 @@ export function SurveyBuilder({ survey }: { survey: SurveyForAdmin }) {
   } | null>(null);
 
   const [deleteState, deleteAction] = useActionState(deleteQuestionAction, initialActionState);
-  const [duplicateState, duplicateAction] = useActionState(duplicateQuestionAction, initialActionState);
-  const [reorderState, reorderAction] = useActionState(reorderQuestionsAction, initialActionState);
+  const [duplicateState, duplicateAction, duplicatePending] = useActionState(
+    duplicateQuestionAction,
+    initialActionState,
+  );
+  const [reorderState, reorderAction, reorderPending] = useActionState(
+    reorderQuestionsAction,
+    initialActionState,
+  );
   const [sectionState, sectionAction] = useActionState(saveSectionAction, initialActionState);
 
   useEffect(() => {
@@ -139,7 +145,7 @@ export function SurveyBuilder({ survey }: { survey: SurveyForAdmin }) {
             <button
               type="button"
               onClick={() => moveQuestion(question.id, -1)}
-              disabled={index === 0}
+              disabled={index === 0 || reorderPending}
               className="rounded-full border border-line px-2 py-1 text-[11px] disabled:opacity-40"
               aria-label="Đưa câu hỏi lên trên"
             >
@@ -148,7 +154,7 @@ export function SurveyBuilder({ survey }: { survey: SurveyForAdmin }) {
             <button
               type="button"
               onClick={() => moveQuestion(question.id, 1)}
-              disabled={index === group.length - 1}
+              disabled={index === group.length - 1 || reorderPending}
               className="rounded-full border border-line px-2 py-1 text-[11px] disabled:opacity-40"
               aria-label="Đưa câu hỏi xuống dưới"
             >
@@ -166,9 +172,10 @@ export function SurveyBuilder({ survey }: { survey: SurveyForAdmin }) {
               <input type="hidden" name="surveyId" value={survey.id} />
               <button
                 type="submit"
-                className="rounded-full border border-line px-2.5 py-1 text-[10.5px] text-muted transition-colors hover:border-ink hover:text-ink"
+                disabled={duplicatePending}
+                className="rounded-full border border-line px-2.5 py-1 text-[10.5px] text-muted transition-colors hover:border-ink hover:text-ink disabled:opacity-40"
               >
-                Nhân bản
+                {duplicatePending ? "Đang nhân bản…" : "Nhân bản"}
               </button>
             </form>
             <form action={deleteAction}>

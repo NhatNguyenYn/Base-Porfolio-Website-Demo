@@ -223,14 +223,14 @@ describe("Phase 9D #8 upload throttle on the Server Action", () => {
     const fd = new FormData();
     fd.set("files", new File(["x"], "test.png", { type: "image/png" }));
     const result = await uploadMediaAction({ ok: false, message: "" }, fd);
-    expect(result).toEqual({ ok: false, message: "Too many uploads. Try again later." });
+    expect(result).toEqual({ ok: false, message: "Tải lên quá nhiều lần. Vui lòng thử lại sau." });
   });
 
   it("lets an unthrottled user through to validation", async () => {
     const user = await makeUser(uniqueEmail("uploader2"));
     await createSession(user.id);
     const result = await uploadMediaAction({ ok: false, message: "" }, new FormData());
-    expect(result).toEqual({ ok: false, message: "Choose at least one image." });
+    expect(result).toEqual({ ok: false, message: "Hãy chọn ít nhất một ảnh." });
   });
 });
 

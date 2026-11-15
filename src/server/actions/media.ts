@@ -29,14 +29,14 @@ export async function uploadMediaAction(_prev: UploadState, formData: FormData):
   // Action cannot be used to bypass the API limit.
   const limit = rateLimit(`media:${user.id}`, 60, 60 * 60 * 1000);
   if (!limit.ok) {
-    return { ok: false, message: "Too many uploads. Try again later." };
+    return { ok: false, message: "Tải lên quá nhiều lần. Vui lòng thử lại sau." };
   }
 
   const entries = formData.getAll("files").filter((entry): entry is File => entry instanceof File);
   const alt = getString(formData, "alt");
 
-  if (entries.length === 0) return { ok: false, message: "Choose at least one image." };
-  if (entries.length > 10) return { ok: false, message: "Upload up to 10 images at a time." };
+  if (entries.length === 0) return { ok: false, message: "Hãy chọn ít nhất một ảnh." };
+  if (entries.length > 10) return { ok: false, message: "Mỗi lần tải lên tối đa 10 ảnh." };
 
   const created: MediaView[] = [];
 
@@ -46,7 +46,7 @@ export async function uploadMediaAction(_prev: UploadState, formData: FormData):
     } catch (error) {
       if (error instanceof UploadError) return { ok: false, message: error.message };
       console.error("[media] upload failed", error);
-      return { ok: false, message: "Could not store the image. Please try again." };
+      return { ok: false, message: "Không lưu được ảnh. Vui lòng thử lại." };
     }
   }
 
@@ -60,7 +60,7 @@ export async function uploadMediaAction(_prev: UploadState, formData: FormData):
   revalidatePath("/admin/media");
   return {
     ok: true,
-    message: `${created.length} image${created.length > 1 ? "s" : ""} uploaded.`,
+    message: "Tải ảnh lên hoàn tất",
     files: created,
   };
 }

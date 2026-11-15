@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useActionState, useEffect, useRef, useState } from "react";
-import { ImagePlus, Upload, X } from "lucide-react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import { ImagePlus, Loader2, Upload, X } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
 import { assetUrl } from "@/lib/asset";
 import { useFocusTrap } from "@/lib/focus-trap";
@@ -38,8 +38,31 @@ export function MediaPicker({
     ok: false,
     message: "",
   } satisfies UploadState);
+  // No <form> here on purpose: this picker lives inside the page's own
+  // <form> (settings, artwork, article, …) and HTML drops a nested <form>
+  // tag, which used to make the "Tải lên" button submit the outer form
+  // instead of uploading. The upload is dispatched imperatively instead.
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [hasFile, setHasFile] = useState(false);
+  const [localError, setLocalError] = useState("");
   const processedRef = useRef("");
   const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  function handleUpload() {
+    const files = Array.from(inputRef.current?.files ?? []);
+    if (files.length === 0) {
+      setLocalError("Hãy chọn ít nhất một ảnh.");
+      return;
+    }
+    setLocalError("");
+    const formData = new FormData();
+    for (const file of files) formData.append("files", file);
+    // The dispatch must run inside a transition, otherwise useActionState's
+    // pending flag never flips and the button shows no "uploading" state.
+    startTransition(() => {
+      uploadAction(formData);
+    });
+  }
 
   // Shared focus trap: Tab cycles inside the dialog, Escape closes it, and
   // focus returns to the trigger that opened it.
@@ -51,6 +74,10 @@ export function MediaPicker({
     const signature = files.map((file) => file.id).join(",");
     if (processedRef.current === signature) return;
     processedRef.current = signature;
+
+    // Clear the picker so the same file can be uploaded again if needed.
+    if (inputRef.current) inputRef.current.value = "";
+    setHasFile(false);
 
     setItems((previous) => [...files, ...previous.filter((item) => !files.some((file) => file.id === item.id))]);
     setSelected((previous) =>
@@ -219,25 +246,52 @@ export function MediaPicker({
             </div>
 
             <div className="border-b border-line p-4">
-              <form action={uploadAction} className="flex flex-wrap items-end gap-2">
+              <div className="flex flex-wrap items-end gap-2">
                 <label className="flex-1">
                   <span className="field-label">Tải ảnh mới</span>
                   <input
+                    ref={inputRef}
                     type="file"
                     name="files"
                     accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
                     multiple
-                    required
+                    onChange={(event) => {
+                      setHasFile((event.target.files?.length ?? 0) > 0);
+                      setLocalError("");
+                    }}
                     className="block w-full text-[11px] text-muted file:mr-3 file:rounded-full file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-[11px] file:text-primary-fg"
                   />
                 </label>
-                <button type="submit" className="btn btn-primary btn-sm" disabled={uploading}>
-                  <Upload size={12} aria-hidden="true" />
-                  {uploading ? "Đang tải…" : "Tải lên"}
+                <button
+                  type="button"
+                  onClick={handleUpload}
+                  className="btn btn-primary btn-sm"
+                  disabled={uploading || !hasFile}
+                >
+                  {uploading ? (
+                    <Loader2 size={12} aria-hidden="true" className="animate-spin" />
+                  ) : (
+                    <Upload size={12} aria-hidden="true" />
+                  )}
+                  {uploading ? "Đang tải ảnh lên…" : "Tải lên"}
                 </button>
-              </form>
-              {uploadState.message && (
-                <p className={`mt-2 text-[11px] ${uploadState.ok ? "text-success" : "text-danger"}`}>
+              </div>
+              {uploading && (
+                <p role="status" className="mt-2 flex items-center gap-1.5 text-[11px] text-muted">
+                  <Loader2 size={12} aria-hidden="true" className="animate-spin" />
+                  Đang tải ảnh lên…
+                </p>
+              )}
+              {!uploading && localError && (
+                <p role="alert" className="mt-2 text-[11px] text-danger">
+                  {localError}
+                </p>
+              )}
+              {!uploading && !localError && uploadState.message && (
+                <p
+                  role={uploadState.ok ? "status" : "alert"}
+                  className={`mt-2 text-[11px] ${uploadState.ok ? "text-success" : "text-danger"}`}
+                >
                   {uploadState.message}
                 </p>
               )}
