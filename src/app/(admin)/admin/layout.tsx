@@ -1,1 +1,23 @@
-aW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gIm5leHQiOwppbXBvcnQgIkAvYXBwL2dsb2JhbHMuY3NzIjsKaW1wb3J0IHsgZm9udFZhcmlhYmxlcyB9IGZyb20gIkAvYXBwL2ZvbnRzIjsKaW1wb3J0IHsgVGhlbWVTY3JpcHQgfSBmcm9tICJAL2NvbXBvbmVudHMvc2l0ZS90aGVtZS1zY3JpcHQiOwoKZXhwb3J0IGNvbnN0IGR5bmFtaWMgPSAiZm9yY2UtZHluYW1pYyI7CgpleHBvcnQgY29uc3QgbWV0YWRhdGE6IE1ldGFkYXRhID0gewogIHRpdGxlOiAiUXXhuqNuIHRy4buLIOKAlCBUaHUgSMOgIFJ1YnkiLAogIHJvYm90czogeyBpbmRleDogZmFsc2UsIGZvbGxvdzogZmFsc2UgfSwKfTsKCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIEFkbWluUm9vdExheW91dCh7IGNoaWxkcmVuIH06IHsgY2hpbGRyZW46IFJlYWN0LlJlYWN0Tm9kZSB9KSB7CiAgcmV0dXJuICgKICAgIDxodG1sIGxhbmc9InZpIiBjbGFzc05hbWU9e2ZvbnRWYXJpYWJsZXN9IHN1cHByZXNzSHlkcmF0aW9uV2FybmluZz4KICAgICAgPGhlYWQ+CiAgICAgICAgey8qIFN0YXRpYyB0aGVtZSBib290c3RyYXAgKHB1YmxpYy90aGVtZS1pbml0LmpzKTogbm8gQ1NQIG5vbmNlIG5lZWRlZC4gKi99CiAgICAgICAgPFRoZW1lU2NyaXB0IGRlZmF1bHRUaGVtZT0ibGlnaHQiIC8+CiAgICAgIDwvaGVhZD4KICAgICAgPGJvZHkgY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4gYmctYmFja2dyb3VuZCB0ZXh0LWluayI+e2NoaWxkcmVufTwvYm9keT4KICAgIDwvaHRtbD4KICApOwp9Cg==
+import type { Metadata } from "next";
+import "@/app/globals.css";
+import { fontVariables } from "@/app/fonts";
+import { ThemeScript } from "@/components/site/theme-script";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Quản trị — Thu Hà Ruby",
+  robots: { index: false, follow: false },
+};
+
+export default async function AdminRootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="vi" className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* Static theme bootstrap (public/theme-init.js): no CSP nonce needed. */}
+        <ThemeScript defaultTheme="light" />
+      </head>
+      <body className="min-h-screen bg-background text-ink">{children}</body>
+    </html>
+  );
+}
