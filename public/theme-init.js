@@ -1,1 +1,28 @@
-LyoqCiAqIFRoZW1lIGJvb3RzdHJhcCwgbG9hZGVkIGFzIGEgcGxhaW4gc2FtZS1vcmlnaW4gc2NyaXB0IGZyb20gPGhlYWQ+IHNvIGl0CiAqIHJ1bnMgYmVmb3JlIGZpcnN0IHBhaW50IChubyBmbGFzaCBvZiB0aGUgd3JvbmcgcGFsZXR0ZSkuCiAqCiAqIEl0IHVzZWQgdG8gYmUgYW4gaW5saW5lIHNjcmlwdCBzdGFtcGVkIHdpdGggdGhlIHBlci1yZXF1ZXN0IENTUCBub25jZSwKICogd2hpY2ggZm9yY2VkIGV2ZXJ5IHB1YmxpYyBwYWdlIHRvIHJlbmRlciBkeW5hbWljYWxseSAodGhlIG5vbmNlIGlzIHJlYWQKICogdGhyb3VnaCBoZWFkZXJzKCkpLiBBcyBhIHN0YXRpYyBmaWxlIGl0IG5lZWRzIG5vIG5vbmNlIOKAlCBgc2NyaXB0LXNyYwogKiAnc2VsZidgIGFsbG93cyBpdCDigJQgc28gcHVibGljIGNvbnRlbnQgcGFnZXMgY2FuIGJlIElTUi9zdGF0aWMuCiAqIGBkYXRhLWRlZmF1bHQtdGhlbWVgIGNhcnJpZXMgdGhlIENNUyBkZWZhdWx0OyBhIHN0b3JlZCB2aXNpdG9yCiAqIHByZWZlcmVuY2UgaW4gbG9jYWxTdG9yYWdlIHdpbnMgb3ZlciBpdC4KICovCihmdW5jdGlvbiAoKSB7CiAgZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmNsYXNzTGlzdC5hZGQoImpzIik7CiAgdHJ5IHsKICAgIHZhciBzdG9yZWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgicHMtdGhlbWUiKTsKICAgIC8vIG5leHQvc2NyaXB0IG1heSByZWxvY2F0ZSB0aGUgdGFnOyBmYWxsIGJhY2sgdG8gYSBxdWVyeSBpZgogICAgLy8gZG9jdW1lbnQuY3VycmVudFNjcmlwdCBpcyB1bmF2YWlsYWJsZSBhdCBleGVjdXRpb24gdGltZS4KICAgIHZhciB0YWcgPSBkb2N1bWVudC5jdXJyZW50U2NyaXB0IHx8IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJ3NjcmlwdFtkYXRhLWRlZmF1bHQtdGhlbWVdJyk7CiAgICB2YXIgZmFsbGJhY2sgPSAodGFnICYmIHRhZy5nZXRBdHRyaWJ1dGUoImRhdGEtZGVmYXVsdC10aGVtZSIpKSB8fCAic3lzdGVtIjsKICAgIHZhciBwcmVmZXJlbmNlID0gc3RvcmVkIHx8IGZhbGxiYWNrOwogICAgdmFyIHN5c3RlbURhcmsgPSB3aW5kb3cubWF0Y2hNZWRpYSgiKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSIpLm1hdGNoZXM7CiAgICB2YXIgdGhlbWUgPSBwcmVmZXJlbmNlID09PSAic3lzdGVtIiA/IChzeXN0ZW1EYXJrID8gImRhcmsiIDogImxpZ2h0IikgOiBwcmVmZXJlbmNlOwogICAgZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LnNldEF0dHJpYnV0ZSgiZGF0YS10aGVtZSIsIHRoZW1lKTsKICAgIGRvY3VtZW50LmRvY3VtZW50RWxlbWVudC5zdHlsZS5jb2xvclNjaGVtZSA9IHRoZW1lOwogIH0gY2F0Y2ggKGVycm9yKSB7CiAgICBkb2N1bWVudC5kb2N1bWVudEVsZW1lbnQuc2V0QXR0cmlidXRlKCJkYXRhLXRoZW1lIiwgImxpZ2h0Iik7CiAgfQp9KSgpOwo=
+/**
+ * Theme bootstrap, loaded as a plain same-origin script from <head> so it
+ * runs before first paint (no flash of the wrong palette).
+ *
+ * It used to be an inline script stamped with the per-request CSP nonce,
+ * which forced every public page to render dynamically (the nonce is read
+ * through headers()). As a static file it needs no nonce — `script-src
+ * 'self'` allows it — so public content pages can be ISR/static.
+ * `data-default-theme` carries the CMS default; a stored visitor
+ * preference in localStorage wins over it.
+ */
+(function () {
+  document.documentElement.classList.add("js");
+  try {
+    var stored = localStorage.getItem("ps-theme");
+    // next/script may relocate the tag; fall back to a query if
+    // document.currentScript is unavailable at execution time.
+    var tag = document.currentScript || document.querySelector('script[data-default-theme]');
+    var fallback = (tag && tag.getAttribute("data-default-theme")) || "system";
+    var preference = stored || fallback;
+    var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var theme = preference === "system" ? (systemDark ? "dark" : "light") : preference;
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.colorScheme = theme;
+  } catch (error) {
+    document.documentElement.setAttribute("data-theme", "light");
+  }
+})();
