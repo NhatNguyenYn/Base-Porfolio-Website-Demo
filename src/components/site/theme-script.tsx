@@ -1,1 +1,39 @@
-InVzZSBjbGllbnQiOwoKaW1wb3J0IHsgdXNlRWZmZWN0IH0gZnJvbSAicmVhY3QiOwppbXBvcnQgeyBhc3NldFVybCB9IGZyb20gIkAvbGliL2Fzc2V0IjsKCmNvbnN0IFRIRU1FX0tFWSA9ICJwcy10aGVtZSI7CgovKioKICogQXBwbGllcyB0aGUgc3RvcmVkIHRoZW1lIGJlZm9yZSBwYWludCB0byBhdm9pZCBhIGZsYXNoIG9mIHRoZSB3cm9uZyBwYWxldHRlLgogKiBGYWxscyBiYWNrIHRvIHRoZSBDTVMgZGVmYXVsdCB0aGVtZSB3aGVuIHRoZSB2aXNpdG9yIGhhcyBubyBwcmVmZXJlbmNlLgogKgogKiBUaGUgYm9vdHN0cmFwIGl0c2VsZiBsaXZlcyBpbiBgcHVibGljL3RoZW1lLWluaXQuanNgIChhIHBsYWluIHNhbWUtb3JpZ2luCiAqIHNjcmlwdCwgYWxsb3dlZCBieSBgc2NyaXB0LXNyYyAnc2VsZidgIHdpdGggbm8gbm9uY2UpIHNvIHRoaXMgbGF5b3V0IOKAlAogKiBhbmQgdGhlIElTUiBwYWdlcyB1bmRlciBpdCDigJQgbmV2ZXIgbmVlZCB0aGUgcGVyLXJlcXVlc3QgQ1NQIG5vbmNlLiBJdCBpcwogKiBpbnRlbnRpb25hbGx5IGEgc3luY2hyb25vdXMgPHNjcmlwdD4gaW4gPGhlYWQ+OiB0aGUgdGhlbWUgbXVzdCBhcHBseQogKiBiZWZvcmUgZmlyc3QgcGFpbnQsIGFuZCBuZXh0L3NjcmlwdCdzIGJlZm9yZUludGVyYWN0aXZlIHdhcm5zIHVuZGVyIHRoZQogKiBBcHAgUm91dGVyIGxpbnQgcnVsZSwgc28gdGhlIHN5bmMtc2NyaXB0IHJ1bGUgaXMgZGlzYWJsZWQgaGVyZSBieSBkZXNpZ24uCiAqLwpleHBvcnQgZnVuY3Rpb24gVGhlbWVTY3JpcHQoewogIGRlZmF1bHRUaGVtZSwKfTogewogIGRlZmF1bHRUaGVtZTogImxpZ2h0IiB8ICJkYXJrIiB8ICJzeXN0ZW0iOwp9KSB7CiAgcmV0dXJuICgKICAgIC8vIGVzbGludC1kaXNhYmxlLW5leHQtbGluZSBAbmV4dC9uZXh0L25vLXN5bmMtc2NyaXB0cwogICAgPHNjcmlwdCBzcmM9e2Fzc2V0VXJsKCIvdGhlbWUtaW5pdC5qcyIpfSBkYXRhLWRlZmF1bHQtdGhlbWU9e2RlZmF1bHRUaGVtZX0gLz4KICApOwp9CgpleHBvcnQgZnVuY3Rpb24gdXNlVGhlbWVTeW5jKCkgewogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBjb25zdCByb290ID0gZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50OwogICAgaWYgKCFyb290LmdldEF0dHJpYnV0ZSgiZGF0YS10aGVtZSIpKSB7CiAgICAgIHJvb3Quc2V0QXR0cmlidXRlKCJkYXRhLXRoZW1lIiwgImxpZ2h0Iik7CiAgICB9CiAgfSwgW10pOwp9CgpleHBvcnQgeyBUSEVNRV9LRVkgfTsK
+"use client";
+
+import { useEffect } from "react";
+import { assetUrl } from "@/lib/asset";
+
+const THEME_KEY = "ps-theme";
+
+/**
+ * Applies the stored theme before paint to avoid a flash of the wrong palette.
+ * Falls back to the CMS default theme when the visitor has no preference.
+ *
+ * The bootstrap itself lives in `public/theme-init.js` (a plain same-origin
+ * script, allowed by `script-src 'self'` with no nonce) so this layout —
+ * and the ISR pages under it — never need the per-request CSP nonce. It is
+ * intentionally a synchronous <script> in <head>: the theme must apply
+ * before first paint, and next/script's beforeInteractive warns under the
+ * App Router lint rule, so the sync-script rule is disabled here by design.
+ */
+export function ThemeScript({
+  defaultTheme,
+}: {
+  defaultTheme: "light" | "dark" | "system";
+}) {
+  return (
+    // eslint-disable-next-line @next/next/no-sync-scripts
+    <script src={assetUrl("/theme-init.js")} data-default-theme={defaultTheme} />
+  );
+}
+
+export function useThemeSync() {
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!root.getAttribute("data-theme")) {
+      root.setAttribute("data-theme", "light");
+    }
+  }, []);
+}
+
+export { THEME_KEY };
