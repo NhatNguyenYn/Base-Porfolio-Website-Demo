@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import type { ArtworkCardData } from "@/data/artworks";
@@ -8,6 +7,7 @@ import type { Locale } from "@/i18n/config";
 import { localeHref } from "@/i18n/config";
 import { assetUrl } from "@/lib/asset";
 import { formatDate } from "@/lib/utils";
+import { SkeletonImage } from "@/components/site/skeleton-image";
 import { useFocusTrap } from "@/lib/focus-trap";
 
 /**
@@ -119,12 +119,13 @@ export function ArtLightbox({
       <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 py-3 sm:px-10">
         {open.image ? (
           <div className="relative h-full w-full">
-            <Image
+            <SkeletonImage
               src={assetUrl(open.image.url)}
               alt={open.image.alt || open.title}
               fill
               sizes="100vw"
               priority
+              skeletonClassName="skeleton-shimmer-dark"
               className="object-contain"
             />
           </div>

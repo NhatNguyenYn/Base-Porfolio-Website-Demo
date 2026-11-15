@@ -13,8 +13,9 @@ import sharp, { type Metadata, type OutputInfo } from "sharp";
  * - The optimized version is only adopted when it is actually smaller than
  *   the input. Already-optimized files (e.g. the compressed batches) are
  *   returned unchanged, so re-uploading them is idempotent.
- * - A 16px WebP blur placeholder is generated for `next/image`
- *   `placeholder="blur"`; it never fails the optimization itself.
+ * - A 16px WebP blur placeholder is still generated (legacy: the UI used
+ *   `placeholder="blur"` until the skeleton loading frame replaced it);
+ *   it never fails the optimization itself.
  */
 
 export const MAX_IMAGE_DIMENSION = 1600;
