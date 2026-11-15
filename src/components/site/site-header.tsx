@@ -1,1 +1,237 @@
-InVzZSBjbGllbnQiOwoKaW1wb3J0IExpbmsgZnJvbSAibmV4dC9saW5rIjsKaW1wb3J0IEltYWdlIGZyb20gIm5leHQvaW1hZ2UiOwppbXBvcnQgeyB1c2VQYXRobmFtZSB9IGZyb20gIm5leHQvbmF2aWdhdGlvbiI7CmltcG9ydCB7IHVzZUVmZmVjdCwgdXNlUmVmLCB1c2VTdGF0ZSB9IGZyb20gInJlYWN0IjsKaW1wb3J0IHsgY3JlYXRlUG9ydGFsIH0gZnJvbSAicmVhY3QtZG9tIjsKaW1wb3J0IHsgbG9jYWxlSHJlZiwgc3RyaXBMb2NhbGUsIHR5cGUgTG9jYWxlIH0gZnJvbSAiQC9pMThuL2NvbmZpZyI7CmltcG9ydCB7IG1hdGNoZXNOYXYsIG5lZWRzRnVsbFByZWZldGNoLCBzaXRlTmF2IH0gZnJvbSAiQC9kYXRhL25hdmlnYXRpb24iOwppbXBvcnQgeyBhc3NldFVybCB9IGZyb20gIkAvbGliL2Fzc2V0IjsKaW1wb3J0IHsgY24gfSBmcm9tICJAL2xpYi91dGlscyI7CmltcG9ydCB0eXBlIHsgTWVkaWFWaWV3IH0gZnJvbSAiQC9zZXJ2ZXIvcXVlcmllcy90eXBlcyI7CmltcG9ydCB7IExhbmd1YWdlU3dpdGNoZXIgfSBmcm9tICIuL2xhbmd1YWdlLXN3aXRjaGVyIjsKaW1wb3J0IHsgVGhlbWVTd2l0Y2hlciB9IGZyb20gIi4vdGhlbWUtc3dpdGNoZXIiOwppbXBvcnQgeyBTb2NpYWxMaW5rcywgdHlwZSBTb2NpYWxMaW5rSXRlbSB9IGZyb20gIi4vc29jaWFsLWxpbmtzIjsKCmV4cG9ydCB0eXBlIEhlYWRlclByb3BzID0gewogIGxvY2FsZTogTG9jYWxlOwogIHNpdGVOYW1lOiBzdHJpbmc7CiAgbG9nbzogTWVkaWFWaWV3IHwgbnVsbDsKICBuYXY6IHsgaG9tZTogc3RyaW5nOyBhYm91dDogc3RyaW5nOyBwcm9qZWN0czogc3RyaW5nOyBhcnQ6IHN0cmluZzsgYmxvZzogc3RyaW5nOyBib29raW5nOiBzdHJpbmc7IGNvbnRhY3Q6IHN0cmluZzsgbWVudTogc3RyaW5nOyBjbG9zZTogc3RyaW5nIH07CiAgdGhlbWVMYWJlbHM6IHsgdGhlbWU6IHN0cmluZzsgbGlnaHQ6IHN0cmluZzsgZGFyazogc3RyaW5nIH07CiAgbGFuZ3VhZ2VMYWJlbDogc3RyaW5nOwogIHNvY2lhbHM6IFNvY2lhbExpbmtJdGVtW107CiAgZW1haWw6IHN0cmluZzsKfTsKCmV4cG9ydCBmdW5jdGlvbiBTaXRlSGVhZGVyKHsgbG9jYWxlLCBzaXRlTmFtZSwgbG9nbywgbmF2LCB0aGVtZUxhYmVscywgbGFuZ3VhZ2VMYWJlbCwgc29jaWFscywgZW1haWwgfTogSGVhZGVyUHJvcHMpIHsKICBjb25zdCBwYXRobmFtZSA9IHVzZVBhdGhuYW1lKCk7CiAgY29uc3QgW29wZW4sIHNldE9wZW5dID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFtzY3JvbGxlZCwgc2V0U2Nyb2xsZWRdID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFttb3VudGVkLCBzZXRNb3VudGVkXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCB0cmlnZ2VyUmVmID0gdXNlUmVmPEhUTUxCdXR0b25FbGVtZW50IHwgbnVsbD4obnVsbCk7CiAgLy8gU2V0IHdoZW4gdGhlIG1lbnUgaXMgY2xvc2VkIHZpYSBFc2NhcGUgb3IgdGhlIHRvZ2dsZSBidXR0b24sIHNvIGZvY3VzCiAgLy8gcmV0dXJucyB0byB0aGUgdHJpZ2dlci4gQ2xvc2luZyBieSBmb2xsb3dpbmcgYSBsaW5rIChuYXZpZ2F0aW9uKSBtdXN0CiAgLy8gbm90IHN0ZWFsIGZvY3VzIGJhY2suCiAgY29uc3QgcmV0dXJuRm9jdXNSZWYgPSB1c2VSZWYoZmFsc2UpOwoKICAvLyBUaGUgbW9iaWxlIHBhbmVsIGlzIHBvcnRhbGxlZCB0byA8Ym9keT46IHRoZSBoZWFkZXIgY2FycmllcyBhCiAgLy8gYmFja2Ryb3AtZmlsdGVyIHdoZW4gc2Nyb2xsZWQsIHdoaWNoIHdvdWxkIG90aGVyd2lzZSBiZWNvbWUgdGhlCiAgLy8gY29udGFpbmluZyBibG9jayBmb3IgaXRzIGZpeGVkIHBvc2l0aW9uaW5nIGFuZCBjb2xsYXBzZSBpdC4KICB1c2VFZmZlY3QoKCkgPT4gc2V0TW91bnRlZCh0cnVlKSwgW10pOwoKICBjb25zdCB7IHBhdGggfSA9IHN0cmlwTG9jYWxlKHBhdGhuYW1lIHx8ICIvIik7CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICAvLyByQUYtZ2F0ZWQgbGlrZSBQYXJhbGxheDogYSBzY3JvbGwgYnVyc3Qgc2NoZWR1bGVzIGF0IG1vc3Qgb25lIHN0YXRlCiAgICAvLyB1cGRhdGUgcGVyIGZyYW1lIGluc3RlYWQgb2Ygb25lIHBlciBzY3JvbGwgZXZlbnQuCiAgICBsZXQgZnJhbWUgPSAwOwogICAgY29uc3QgdXBkYXRlID0gKCkgPT4gewogICAgICBmcmFtZSA9IDA7CiAgICAgIHNldFNjcm9sbGVkKHdpbmRvdy5zY3JvbGxZID4gOCk7CiAgICB9OwogICAgY29uc3Qgb25TY3JvbGwgPSAoKSA9PiB7CiAgICAgIGlmICghZnJhbWUpIGZyYW1lID0gd2luZG93LnJlcXVlc3RBbmltYXRpb25GcmFtZSh1cGRhdGUpOwogICAgfTsKICAgIG9uU2Nyb2xsKCk7CiAgICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigic2Nyb2xsIiwgb25TY3JvbGwsIHsgcGFzc2l2ZTogdHJ1ZSB9KTsKICAgIHJldHVybiAoKSA9PiB7CiAgICAgIHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCJzY3JvbGwiLCBvblNjcm9sbCk7CiAgICAgIGlmIChmcmFtZSkgd2luZG93LmNhbmNlbEFuaW1hdGlvbkZyYW1lKGZyYW1lKTsKICAgIH07CiAgfSwgW10pOwoKICAvLyBFc2NhcGUgY2xvc2VzIHRoZSBtb2JpbGUgbWVudSBhbmQgcmV0dXJucyBmb2N1cyB0byB0aGUgbWVudSBidXR0b24uCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGlmICghb3BlbikgcmV0dXJuOwogICAgY29uc3Qgb25LZXlEb3duID0gKGV2ZW50OiBLZXlib2FyZEV2ZW50KSA9PiB7CiAgICAgIGlmIChldmVudC5rZXkgPT09ICJFc2NhcGUiKSB7CiAgICAgICAgcmV0dXJuRm9jdXNSZWYuY3VycmVudCA9IHRydWU7CiAgICAgICAgc2V0T3BlbihmYWxzZSk7CiAgICAgIH0KICAgIH07CiAgICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigia2V5ZG93biIsIG9uS2V5RG93bik7CiAgICByZXR1cm4gKCkgPT4gd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoImtleWRvd24iLCBvbktleURvd24pOwogIH0sIFtvcGVuIF0pOwoKICB1c2VFZmZlY3QoKCkgPT4gewogICAgaWYgKCFvcGVuICYmIHJldHVybkZvY3VzUmVmLmN1cnJlbnQpIHsKICAgICAgcmV0dXJuRm9jdXNSZWYuY3VycmVudCA9IGZhbHNlOwogICAgICB0cmlnZ2VyUmVmLmN1cnJlbnQ/LmZvY3VzKCk7CiAgICB9CiAgfSwgW29wZW5dKTsKCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGlmICghb3BlbikgcmV0dXJuOwogICAgY29uc3QgcHJldmlvdXMgPSBkb2N1bWVudC5ib2R5LnN0eWxlLm92ZXJmbG93OwogICAgZG9jdW1lbnQuYm9keS5zdHlsZS5vdmVyZmxvdyA9ICJoaWRkZW4iOwogICAgcmV0dXJuICgpID0+IHsKICAgICAgZG9jdW1lbnQuYm9keS5zdHlsZS5vdmVyZmxvdyA9IHByZXZpb3VzOwogICAgfTsKICB9LCBbb3Blbl0pOwoKICB1c2VFZmZlY3QoKCkgPT4gewogICAgc2V0T3BlbihmYWxzZSk7CiAgfSwgW3BhdGhuYW1lXSk7CgogIGNvbnN0IGl0ZW1zID0gc2l0ZU5hdihsb2NhbGUsIG5hdik7CiAgLy8gVGhlIHByaW1hcnkgQ1RBIHJlcGVhdHMgQ29udGFjdDsga2VlcCBpdCBpbiBzeW5jIHdpdGggdGhlIHZpc2liaWxpdHkgbWFwCiAgLy8gc28gaGlkaW5nIENvbnRhY3QgbGF0ZXIgZG9lcyBub3QgbGVhdmUgYSBzdHJheSBsaW5rIGJlaGluZC4KICBjb25zdCBjb250YWN0VmlzaWJsZSA9IGl0ZW1zLnNvbWUoKGl0ZW0pID0+IGl0ZW0ua2V5ID09PSAiY29udGFjdCIpOwoKICBjb25zdCBtb25vZ3JhbSA9IHNpdGVOYW1lCiAgICAuc3BsaXQoL1xzKy8pCiAgICAuZmlsdGVyKEJvb2xlYW4pCiAgICAuc2xpY2UoMCwgMikKICAgIC5tYXAoKHdvcmQpID0+IHdvcmRbMF0/LnRvVXBwZXJDYXNlKCkpCiAgICAuam9pbigiIik7CgogIHJldHVybiAoCiAgICA8aGVhZGVyCiAgICAgIGNsYXNzTmFtZT17Y24oCiAgICAgICAgInN0aWNreSB0b3AtMCB6LTUwIHRyYW5zaXRpb24tY29sb3JzIGR1cmF0aW9uLTMwMCIsCiAgICAgICAgc2Nyb2xsZWQgfHwgb3BlbgogICAgICAgICAgPyAiYm9yZGVyLWIgYm9yZGVyLWxpbmUgYmctYmFja2dyb3VuZC85MCBiYWNrZHJvcC1ibHVyLXhsIgogICAgICAgICAgOiAiYm9yZGVyLWIgYm9yZGVyLXRyYW5zcGFyZW50IGJnLWJhY2tncm91bmQvMCIsCiAgICAgICl9CiAgICA+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJjb250YWluZXItcGFnZSBmbGV4IGgtWzcwcHhdIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gZ2FwLTYiPgogICAgICAgIDxMaW5rIGhyZWY9e2xvY2FsZUhyZWYobG9jYWxlKX0gY2xhc3NOYW1lPSJncm91cCBmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMyI+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InJlbGF0aXZlIGdyaWQgaC04IHctOCBwbGFjZS1pdGVtcy1jZW50ZXIgYm9yZGVyIGJvcmRlci1saW5lLXN0cm9uZyB0ZXh0LVsxMXB4XSBmb250LXNlbWlib2xkIHRyYWNraW5nLXRpZ2h0IHRyYW5zaXRpb24tY29sb3JzIGdyb3VwLWhvdmVyOmJvcmRlci1pbmsiPgogICAgICAgICAgICB7bG9nbyA/ICgKICAgICAgICAgICAgICA8SW1hZ2UKICAgICAgICAgICAgICAgIHNyYz17YXNzZXRVcmwobG9nby51cmwpfQogICAgICAgICAgICAgICAgYWx0PXtsb2dvLmFsdCB8fCBzaXRlTmFtZX0KICAgICAgICAgICAgICAgIGZpbGwKICAgICAgICAgICAgICAgIHNpemVzPSIzMnB4IgogICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJvYmplY3QtY292ZXIiCiAgICAgICAgICAgICAgLz4KICAgICAgICAgICAgKSA6ICgKICAgICAgICAgICAgICBtb25vZ3JhbSB8fCAiVEgiCiAgICAgICAgICAgICl9CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iYWJzb2x1dGUgLXJpZ2h0LVszcHhdIC10b3AtWzNweF0gaC0xLjUgdy0xLjUgYmctcnVieS1icmlnaHQiIGFyaWEtaGlkZGVuPSJ0cnVlIiAvPgogICAgICAgICAgPC9zcGFuPgogICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJoaWRkZW4gZm9udC1zZXJpZiB0ZXh0LVsxN3B4XSBsZWFkaW5nLW5vbmUgdHJhY2tpbmctWzAuMDFlbV0gdGV4dC1hY2NlbnQgc206YmxvY2siPntzaXRlTmFtZX08L3NwYW4+CiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InNyLW9ubHkgc206aGlkZGVuIj57c2l0ZU5hbWV9PC9zcGFuPgogICAgICAgIDwvTGluaz4KCiAgICAgICAgPG5hdiBjbGFzc05hbWU9ImhpZGRlbiBpdGVtcy1jZW50ZXIgZ2FwLTcgbGc6ZmxleCIgYXJpYS1sYWJlbD17bmF2Lm1lbnV9PgogICAgICAgICAge2l0ZW1zLm1hcCgoaXRlbSkgPT4gewogICAgICAgICAgICBjb25zdCBhY3RpdmUgPSBtYXRjaGVzTmF2KGl0ZW0ua2V5LCBwYXRoKTsKICAgICAgICAgICAgcmV0dXJuICgKICAgICAgICAgICAgICA8TGluawogICAgICAgICAgICAgICAga2V5PXtpdGVtLmhyZWZ9CiAgICAgICAgICAgICAgICBocmVmPXtpdGVtLmhyZWZ9CiAgICAgICAgICAgICAgICBwcmVmZXRjaD17bmVlZHNGdWxsUHJlZmV0Y2goaXRlbS5rZXkpIHx8IHVuZGVmaW5lZH0KICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17Y24oCiAgICAgICAgICAgICAgICAgICJ1bmRlcmxpbmUtc3dlZXAgdGV4dC1bMTNweF0gdHJhbnNpdGlvbi1jb2xvcnMiLAogICAgICAgICAgICAgICAgICBhY3RpdmUgPyAidGV4dC1hY2NlbnQiIDogInRleHQtbXV0ZWQgaG92ZXI6dGV4dC1pbmsiLAogICAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgICAgIGRhdGEtYWN0aXZlPXthY3RpdmUgPyAidHJ1ZSIgOiB1bmRlZmluZWR9CiAgICAgICAgICAgICAgICBhcmlhLWN1cnJlbnQ9e2FjdGl2ZSA/ICJwYWdlIiA6IHVuZGVmaW5lZH0KICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICB7aXRlbS5sYWJlbH0KICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICk7CiAgICAgICAgICB9KX0KICAgICAgICA8L25hdj4KCiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJoaWRkZW4gc206YmxvY2siPgogICAgICAgICAgICA8TGFuZ3VhZ2VTd2l0Y2hlciBsb2NhbGU9e2xvY2FsZX0gbGFiZWw9e2xhbmd1YWdlTGFiZWx9IC8+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxUaGVtZVN3aXRjaGVyIGxhYmVscz17dGhlbWVMYWJlbHN9IC8+CiAgICAgICAgICB7Y29udGFjdFZpc2libGUgJiYgKAogICAgICAgICAgICA8TGluayBocmVmPXtsb2NhbGVIcmVmKGxvY2FsZSwgIi9jb250YWN0Iil9IGNsYXNzTmFtZT0iYnRuIGJ0bi1wcmltYXJ5IGJ0bi1zbSBtbC0xIGhpZGRlbiBsZzppbmxpbmUtZmxleCI+CiAgICAgICAgICAgICAge25hdi5jb250YWN0fQogICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICApfQogICAgICAgICAgPGJ1dHRvbgogICAgICAgICAgICB0eXBlPSJidXR0b24iCiAgICAgICAgICAgIHJlZj17dHJpZ2dlclJlZn0KICAgICAgICAgICAgb25DbGljaz17KCkgPT4gewogICAgICAgICAgICAgIGlmIChvcGVuKSByZXR1cm5Gb2N1c1JlZi5jdXJyZW50ID0gdHJ1ZTsKICAgICAgICAgICAgICBzZXRPcGVuKCh2YWx1ZSkgPT4gIXZhbHVlKTsKICAgICAgICAgICAgfX0KICAgICAgICAgICAgYXJpYS1leHBhbmRlZD17b3Blbn0KICAgICAgICAgICAgYXJpYS1sYWJlbD17b3BlbiA/IG5hdi5jbG9zZSA6IG5hdi5tZW51fQogICAgICAgICAgICBjbGFzc05hbWU9Im1sLTEgZ3JpZCBoLTkgdy05IHBsYWNlLWl0ZW1zLWNlbnRlciByb3VuZGVkLWZ1bGwgYm9yZGVyIGJvcmRlci1saW5lIHRleHQtaW5rIHRyYW5zaXRpb24tY29sb3JzIGhvdmVyOmJvcmRlci1saW5lLXN0cm9uZyBsZzpoaWRkZW4iCiAgICAgICAgICA+CiAgICAgICAgICAgIHtvcGVuID8gKAogICAgICAgICAgICAgIDxzdmcgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2VXaWR0aD0iMS42IiBhcmlhLWhpZGRlbj0idHJ1ZSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNSA1bDE0IDE0TTE5IDUgNSAxOSIgLz4KICAgICAgICAgICAgICA8L3N2Zz4KICAgICAgICAgICAgKSA6ICgKICAgICAgICAgICAgICA8c3ZnIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlV2lkdGg9IjEuNiIgYXJpYS1oaWRkZW49InRydWUiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTMgN2gxOE0zIDEyaDE4TTMgMTdoMTIiIC8+CiAgICAgICAgICAgICAgPC9zdmc+CiAgICAgICAgICAgICl9CiAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CgogICAgICB7b3BlbiAmJiBtb3VudGVkICYmIGNyZWF0ZVBvcnRhbCgKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibW9iaWxlLXBhbmVsIGZpeGVkIGluc2V0LXgtMCB0b3AtWzcwcHhdIGJvdHRvbS0wIHotNDAgb3ZlcmZsb3cteS1hdXRvIGJvcmRlci10IGJvcmRlci1saW5lIGJnLWJhY2tncm91bmQgbGc6aGlkZGVuIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJjb250YWluZXItcGFnZSBmbGV4IG1pbi1oLWZ1bGwgZmxleC1jb2wganVzdGlmeS1iZXR3ZWVuIHB5LTgiPgogICAgICAgICAgICA8bmF2IGNsYXNzTmFtZT0iZmxleCBmbGV4LWNvbCIgYXJpYS1sYWJlbD17bmF2Lm1lbnV9PgogICAgICAgICAgICAgIHtpdGVtcy5tYXAoKGl0ZW0sIGluZGV4KSA9PiB7CiAgICAgICAgICAgICAgICBjb25zdCBhY3RpdmUgPSBtYXRjaGVzTmF2KGl0ZW0ua2V5LCBwYXRoKTsKICAgICAgICAgICAgICAgIHJldHVybiAoCiAgICAgICAgICAgICAgICAgIDxMaW5rCiAgICAgICAgICAgICAgICAgICAga2V5PXtpdGVtLmhyZWZ9CiAgICAgICAgICAgICAgICAgICAgaHJlZj17aXRlbS5ocmVmfQogICAgICAgICAgICAgICAgICAgIHByZWZldGNoPXtuZWVkc0Z1bGxQcmVmZXRjaChpdGVtLmtleSkgfHwgdW5kZWZpbmVkfQogICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17Y24oCiAgICAgICAgICAgICAgICAgICAgICAiZmxleCBpdGVtcy1iYXNlbGluZSBqdXN0aWZ5LWJldHdlZW4gYm9yZGVyLWIgYm9yZGVyLWxpbmUgcHktNCB0ZXh0LTJ4bCB0cmFja2luZy10aWdodCB0cmFuc2l0aW9uLWNvbG9ycyIsCiAgICAgICAgICAgICAgICAgICAgICBhY3RpdmUgPyAidGV4dC1hY2NlbnQiIDogInRleHQtbXV0ZWQiLAogICAgICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgICAgICA8c3Bhbj57aXRlbS5sYWJlbH08L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LVsxMHB4XSB0cmFja2luZy1bMC4yZW1dIHRleHQtbXV0ZWQiPntTdHJpbmcoaW5kZXggKyAxKS5wYWRTdGFydCgyLCAiMCIpfTwvc3Bhbj4KICAgICAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICAgICAgKTsKICAgICAgICAgICAgICB9KX0KICAgICAgICAgICAgPC9uYXY+CgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMTAgc3BhY2UteS02Ij4KICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTMgc206aGlkZGVuIj4KICAgICAgICAgICAgICAgIDxMYW5ndWFnZVN3aXRjaGVyIGxvY2FsZT17bG9jYWxlfSBsYWJlbD17bGFuZ3VhZ2VMYWJlbH0gLz4KICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICA8U29jaWFsTGlua3MgbGlua3M9e3NvY2lhbHN9IC8+CiAgICAgICAgICAgICAgPGEgaHJlZj17YG1haWx0bzoke2VtYWlsfWB9IGNsYXNzTmFtZT0iYmxvY2sgdGV4dC1zbSB0ZXh0LW11dGVkIHVuZGVybGluZSB1bmRlcmxpbmUtb2Zmc2V0LTQiPgogICAgICAgICAgICAgICAge2VtYWlsfQogICAgICAgICAgICAgIDwvYT4KICAgICAgICAgICAgICB7Y29udGFjdFZpc2libGUgJiYgKAogICAgICAgICAgICAgICAgPExpbmsgaHJlZj17bG9jYWxlSHJlZihsb2NhbGUsICIvY29udGFjdCIpfSBjbGFzc05hbWU9ImJ0biBidG4tcHJpbWFyeSB3LWZ1bGwiPgogICAgICAgICAgICAgICAgICB7bmF2LmNvbnRhY3R9CiAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4sCiAgICAgICAgZG9jdW1lbnQuYm9keSwKICAgICAgKX0KICAgIDwvaGVhZGVyPgogICk7Cn0K
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { localeHref, stripLocale, type Locale } from "@/i18n/config";
+import { matchesNav, needsFullPrefetch, siteNav } from "@/data/navigation";
+import { assetUrl } from "@/lib/asset";
+import { cn } from "@/lib/utils";
+import type { MediaView } from "@/server/queries/types";
+import { LanguageSwitcher } from "./language-switcher";
+import { ThemeSwitcher } from "./theme-switcher";
+import { SocialLinks, type SocialLinkItem } from "./social-links";
+
+export type HeaderProps = {
+  locale: Locale;
+  siteName: string;
+  logo: MediaView | null;
+  nav: { home: string; about: string; projects: string; art: string; blog: string; booking: string; contact: string; menu: string; close: string };
+  themeLabels: { theme: string; light: string; dark: string };
+  languageLabel: string;
+  socials: SocialLinkItem[];
+  email: string;
+};
+
+export function SiteHeader({ locale, siteName, logo, nav, themeLabels, languageLabel, socials, email }: HeaderProps) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  // Set when the menu is closed via Escape or the toggle button, so focus
+  // returns to the trigger. Closing by following a link (navigation) must
+  // not steal focus back.
+  const returnFocusRef = useRef(false);
+
+  // The mobile panel is portalled to <body>: the header carries a
+  // backdrop-filter when scrolled, which would otherwise become the
+  // containing block for its fixed positioning and collapse it.
+  useEffect(() => setMounted(true), []);
+
+  const { path } = stripLocale(pathname || "/");
+
+  useEffect(() => {
+    // rAF-gated like Parallax: a scroll burst schedules at most one state
+    // update per frame instead of one per scroll event.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 8);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  // Escape closes the mobile menu and returns focus to the menu button.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        returnFocusRef.current = true;
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open ]);
+
+  useEffect(() => {
+    if (!open && returnFocusRef.current) {
+      returnFocusRef.current = false;
+      triggerRef.current?.focus();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const items = siteNav(locale, nav);
+  // The primary CTA repeats Contact; keep it in sync with the visibility map
+  // so hiding Contact later does not leave a stray link behind.
+  const contactVisible = items.some((item) => item.key === "contact");
+
+  const monogram = siteName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-50 transition-colors duration-300",
+        scrolled || open
+          ? "border-b border-line bg-background/90 backdrop-blur-xl"
+          : "border-b border-transparent bg-background/0",
+      )}
+    >
+      <div className="container-page flex h-[70px] items-center justify-between gap-6">
+        <Link href={localeHref(locale)} className="group flex items-center gap-3">
+          <span className="relative grid h-8 w-8 place-items-center border border-line-strong text-[11px] font-semibold tracking-tight transition-colors group-hover:border-ink">
+            {logo ? (
+              <Image
+                src={assetUrl(logo.url)}
+                alt={logo.alt || siteName}
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
+            ) : (
+              monogram || "TH"
+            )}
+            <span className="absolute -right-[3px] -top-[3px] h-1.5 w-1.5 bg-ruby-bright" aria-hidden="true" />
+          </span>
+          <span className="hidden font-serif text-[17px] leading-none tracking-[0.01em] text-accent sm:block">{siteName}</span>
+          <span className="sr-only sm:hidden">{siteName}</span>
+        </Link>
+
+        <nav className="hidden items-center gap-7 lg:flex" aria-label={nav.menu}>
+          {items.map((item) => {
+            const active = matchesNav(item.key, path);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                prefetch={needsFullPrefetch(item.key) || undefined}
+                className={cn(
+                  "underline-sweep text-[13px] transition-colors",
+                  active ? "text-accent" : "text-muted hover:text-ink",
+                )}
+                data-active={active ? "true" : undefined}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block">
+            <LanguageSwitcher locale={locale} label={languageLabel} />
+          </div>
+          <ThemeSwitcher labels={themeLabels} />
+          {contactVisible && (
+            <Link href={localeHref(locale, "/contact")} className="btn btn-primary btn-sm ml-1 hidden lg:inline-flex">
+              {nav.contact}
+            </Link>
+          )}
+          <button
+            type="button"
+            ref={triggerRef}
+            onClick={() => {
+              if (open) returnFocusRef.current = true;
+              setOpen((value) => !value);
+            }}
+            aria-expanded={open}
+            aria-label={open ? nav.close : nav.menu}
+            className="ml-1 grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-line-strong lg:hidden"
+          >
+            {open ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                <path d="M5 5l14 14M19 5 5 19" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                <path d="M3 7h18M3 12h18M3 17h12" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {open && mounted && createPortal(
+        <div className="mobile-panel fixed inset-x-0 top-[70px] bottom-0 z-40 overflow-y-auto border-t border-line bg-background lg:hidden">
+          <div className="container-page flex min-h-full flex-col justify-between py-8">
+            <nav className="flex flex-col" aria-label={nav.menu}>
+              {items.map((item, index) => {
+                const active = matchesNav(item.key, path);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    prefetch={needsFullPrefetch(item.key) || undefined}
+                    className={cn(
+                      "flex items-baseline justify-between border-b border-line py-4 text-2xl tracking-tight transition-colors",
+                      active ? "text-accent" : "text-muted",
+                    )}
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-[10px] tracking-[0.2em] text-muted">{String(index + 1).padStart(2, "0")}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="mt-10 space-y-6">
+              <div className="flex items-center gap-3 sm:hidden">
+                <LanguageSwitcher locale={locale} label={languageLabel} />
+              </div>
+              <SocialLinks links={socials} />
+              <a href={`mailto:${email}`} className="block text-sm text-muted underline underline-offset-4">
+                {email}
+              </a>
+              {contactVisible && (
+                <Link href={localeHref(locale, "/contact")} className="btn btn-primary w-full">
+                  {nav.contact}
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body,
+      )}
+    </header>
+  );
+}
