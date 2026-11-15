@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { localeHref, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
-import { siteNav } from "@/data/navigation";
+import { needsFullPrefetch, siteNav } from "@/data/navigation";
 import { SocialLinks, type SocialLinkItem } from "./social-links";
 import { ThemeSwitcher } from "./theme-switcher";
 import { LanguageSwitcher } from "./language-switcher";
@@ -55,7 +55,11 @@ export function SiteFooter({
             <ul className="mt-4 space-y-2.5">
               {explore.map((item) => (
                 <li key={item.key}>
-                  <Link href={item.href} className="underline-sweep text-sm text-muted hover:text-accent">
+                  <Link
+                    href={item.href}
+                    prefetch={needsFullPrefetch(item.key) || undefined}
+                    className="underline-sweep text-sm text-muted hover:text-accent"
+                  >
                     {item.label}
                   </Link>
                 </li>

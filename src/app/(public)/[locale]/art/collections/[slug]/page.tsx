@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
-import { getCollection } from "@/data/artworks";
+import { getCollection, listArtworkSlugs } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
 import { getSocialLinks } from "@/data/social";
 import { getCollectionLocales } from "@/server/queries/artworks";
@@ -14,6 +14,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { prisma } from "@/server/db";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
+import { GALLERY_PER_PAGE } from "@/data/gallery";
 
 // The GitHub Pages demo build rewrites this to "force-static"
 // (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
@@ -78,8 +79,9 @@ export default async function CollectionPage({
   const dict = getDictionary(locale);
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
-  const { collection, artworks } = await getCollection(slug, locale);
+  const { collection, artworks, total } = await getCollection(slug, locale, { limit: GALLERY_PER_PAGE });
   if (!collection) notFound();
+  const slugs = await listArtworkSlugs(locale, { collection: slug });
   const artHref = localeHref(locale, "/art");
   const collectionHref = `${artHref}/collections/${collection.slug}`;
   const crumbs = [
@@ -93,7 +95,7 @@ export default async function CollectionPage({
       buildBreadcrumbSchema(crumbs),
       buildItemListSchema({
         id: `${canonicalUrl(locale, `/art/collections/${collection.slug}`)}#artworks`,
-        items: artworks.map((artwork) => ({
+        items: slugs.map((artwork) => ({
           name: artwork.title,
           url: `/${locale}/art/${artwork.slug}`,
         })),
@@ -126,6 +128,9 @@ export default async function CollectionPage({
             artworks={artworks}
             collections={[]}
             locale={locale}
+            total={total}
+            perPage={GALLERY_PER_PAGE}
+            collection={collection.slug}
             labels={{
               allWorks: dict.art.allWorks,
               allCollections: dict.art.allCollections,
@@ -142,6 +147,10 @@ export default async function CollectionPage({
               viewArtwork: dict.common.viewArtwork,
               imageAlt: dict.art.imageAlt,
               count: dict.art.collectionCount,
+              loadingMore: dict.art.loadingMore,
+              loadError: dict.art.loadError,
+              retry: dict.art.retry,
+              showingAll: dict.art.showingAll,
             }}
           />
         ) : (

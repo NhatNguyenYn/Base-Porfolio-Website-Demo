@@ -262,6 +262,8 @@ export default async function ArtworkPage({
               artworks={siblings}
               collections={[]}
               locale={locale}
+              total={siblings.length}
+              maxItems={siblings.length}
               labels={{
                 allWorks: dict.art.allWorks,
                 allCollections: dict.art.allCollections,
@@ -278,6 +280,10 @@ export default async function ArtworkPage({
                 viewArtwork: dict.common.viewArtwork,
                 imageAlt: dict.art.imageAlt,
                 count: dict.art.collectionCount,
+                loadingMore: dict.art.loadingMore,
+                loadError: dict.art.loadError,
+                retry: dict.art.retry,
+                showingAll: dict.art.showingAll,
               }}
             />
           </div>

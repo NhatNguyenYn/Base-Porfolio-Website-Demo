@@ -1,5 +1,5 @@
-import { listArtworks } from "@/server/queries/artworks";
-import { fail, ok, paginate, publicCache, readPagination, resolveLocale, withApi } from "@/lib/api";
+import { countArtworks, listArtworks } from "@/server/queries/artworks";
+import { fail, ok, publicCache, readPagination, resolveLocale, withApi } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -10,13 +10,21 @@ export async function GET(request: Request) {
     if (!locale) return fail("INVALID_LOCALE", "locale must be one of vi, en.", 400);
 
     const { page, perPage } = readPagination(params, 24);
-    const artworks = await listArtworks(locale, {
+    const filters = {
       collection: params.get("collection") ?? undefined,
       category: params.get("category") ?? undefined,
       featuredOnly: params.get("featured") === "true",
+    };
+    // Paginate at the database: the gallery asks for one batch at a time
+    // instead of all 117 rows (see listArtworks).
+    const total = await countArtworks(locale, filters);
+    const pages = Math.max(1, Math.ceil(total / perPage));
+    const safePage = Math.min(page, pages);
+    const artworks = await listArtworks(locale, {
+      ...filters,
+      limit: perPage,
+      offset: (safePage - 1) * perPage,
     });
-
-    const { items, meta } = paginate(artworks, page, perPage);
-    return ok(items, { ...meta, locale }, publicCache);
+    return ok(artworks, { page: safePage, perPage, total, pages, locale }, publicCache);
   });
 }

@@ -1,39 +1,30 @@
 "use client";
 
 import { useEffect } from "react";
+import { assetUrl } from "@/lib/asset";
 
 const THEME_KEY = "ps-theme";
 
 /**
  * Applies the stored theme before paint to avoid a flash of the wrong palette.
  * Falls back to the CMS default theme when the visitor has no preference.
+ *
+ * The bootstrap itself lives in `public/theme-init.js` (a plain same-origin
+ * script, allowed by `script-src 'self'` with no nonce) so this layout —
+ * and the ISR pages under it — never need the per-request CSP nonce. It is
+ * intentionally a synchronous <script> in <head>: the theme must apply
+ * before first paint, and next/script's beforeInteractive warns under the
+ * App Router lint rule, so the sync-script rule is disabled here by design.
  */
 export function ThemeScript({
   defaultTheme,
-  nonce,
 }: {
   defaultTheme: "light" | "dark" | "system";
-  nonce?: string;
 }) {
-  const script = `
-(function() {
-  document.documentElement.classList.add("js");
-  try {
-    var stored = localStorage.getItem("${THEME_KEY}");
-    var preference = stored || "${defaultTheme}";
-    var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var theme = preference === "system" ? (systemDark ? "dark" : "light") : preference;
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.colorScheme = theme;
-  } catch (error) {
-    document.documentElement.setAttribute("data-theme", "light");
-  }
-})();
-`;
-  // Browsers hide the nonce content attribute after parsing (`getAttribute`
-  // returns ""), so React would report a hydration mismatch. The nonce is
-  // still enforced by CSP; only the attribute diff is suppressed.
-  return <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: script }} />;
+  return (
+    // eslint-disable-next-line @next/next/no-sync-scripts
+    <script src={assetUrl("/theme-init.js")} data-default-theme={defaultTheme} />
+  );
 }
 
 export function useThemeSync() {

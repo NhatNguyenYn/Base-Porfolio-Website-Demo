@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { localeHref, stripLocale, type Locale } from "@/i18n/config";
-import { matchesNav, siteNav } from "@/data/navigation";
+import { matchesNav, needsFullPrefetch, siteNav } from "@/data/navigation";
 import { assetUrl } from "@/lib/asset";
 import { cn } from "@/lib/utils";
 import type { MediaView } from "@/server/queries/types";
@@ -143,6 +143,7 @@ export function SiteHeader({ locale, siteName, logo, nav, themeLabels, languageL
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={needsFullPrefetch(item.key) || undefined}
                 className={cn(
                   "underline-sweep text-[13px] transition-colors",
                   active ? "text-accent" : "text-muted hover:text-ink",
@@ -200,6 +201,7 @@ export function SiteHeader({ locale, siteName, logo, nav, themeLabels, languageL
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch={needsFullPrefetch(item.key) || undefined}
                     className={cn(
                       "flex items-baseline justify-between border-b border-line py-4 text-2xl tracking-tight transition-colors",
                       active ? "text-accent" : "text-muted",

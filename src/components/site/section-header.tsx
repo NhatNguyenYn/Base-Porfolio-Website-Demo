@@ -15,7 +15,9 @@ export function SectionHeader({
   label: string;
   title: React.ReactNode;
   description?: string;
-  action?: { href: string; label: string };
+  /** Optional CTA; `prefetch` forces a full background prefetch for routes
+      that stay dynamic (blog, booking) — see needsFullPrefetch. */
+  action?: { href: string; label: string; prefetch?: boolean };
   className?: string;
   tone?: "default" | "inverse";
 }) {
@@ -59,6 +61,7 @@ export function SectionHeader({
         {action && (
           <Link
             href={action.href}
+            prefetch={action.prefetch || undefined}
             className={cn("link-arrow shrink-0", tone === "inverse" ? "text-white" : "text-ink")}
           >
             {action.label}

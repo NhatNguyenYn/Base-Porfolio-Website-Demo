@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { alternateLocale, isLocale, localeHref, type Locale } from "@/i18n/config";
@@ -22,9 +21,11 @@ import { Reveal } from "@/components/ui/reveal";
 import { SocialLinks } from "@/components/site/social-links";
 import { UntranslatedNotice } from "@/components/site/untranslated-notice";
 
-// The GitHub Pages demo build rewrites this to "force-static"
-// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
-export const dynamic = "force-dynamic";
+// ISR: revalidates every 60s so the edge can serve the page and <Link>
+// prefetch caches the full RSC payload (see the layout for the rationale
+// and the CSP nonce note). The GitHub Pages demo build rewrites this to
+// "force-static" (see .github/workflows/pages.yml).
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
@@ -133,7 +134,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const groupLabel = (key: string) =>
     (dict.about.skillsGroups as Record<string, string>)[key] ?? key;
 
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const crumbs = [
     { name: dict.nav.home, href: localeHref(locale, "/") },
     { name: dict.about.label, href: localeHref(locale, "/about") },
@@ -147,7 +147,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     <>
       <script
         type="application/ld+json"
-        nonce={nonce}
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />

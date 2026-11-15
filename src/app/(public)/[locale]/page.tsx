@@ -5,7 +5,7 @@ import { isLocale, localeHref, type Locale } from "@/i18n/config";
 import { getSettings } from "@/data/settings";
 import { getProfile } from "@/data/profile";
 import { getSocialLinks } from "@/data/social";
-import { listArtworks } from "@/data/artworks";
+import { countArtworks, listArtworks } from "@/data/artworks";
 import { getFeaturedArticle, listArticles } from "@/data/articles";
 import { DEFAULT_SETTINGS } from "@/data/settings";
 import { loadSection } from "@/lib/services/safe-data";
@@ -22,9 +22,11 @@ import { SkeletonImage } from "@/components/site/skeleton-image";
 import { SocialLinks } from "@/components/site/social-links";
 import { parseInterests } from "@/lib/interests";
 
-// The GitHub Pages demo build rewrites this to "force-static"
-// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
-export const dynamic = "force-dynamic";
+// ISR: revalidates every 60s so the edge can serve the page and <Link>
+// prefetch caches the full RSC payload (see the layout for the rationale
+// and the CSP nonce note). The GitHub Pages demo build rewrites this to
+// "force-static" (see .github/workflows/pages.yml).
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
@@ -55,11 +57,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(locale);
 
   // Sections load independently: a failing gallery must never blank the page.
-  const [settings, profile, socials, artworks, featuredArticle, latestArticles] = await Promise.all([
+  // The gallery only needs 6 cards — fetch exactly 6 at the database, not
+  // all 117 rows, and count the total separately for the stat rail.
+  const [settings, profile, socials, artworks, artworkTotal, featuredArticle, latestArticles] = await Promise.all([
       loadSection("settings", getSettings, { ...DEFAULT_SETTINGS, logo: null, favicon: null }),
       loadSection("profile", getProfile, null),
       loadSection("socials", getSocialLinks, []),
-      loadSection("artworks", () => listArtworks(locale), []),
+      loadSection("artworks", () => listArtworks(locale, { limit: 6 }), []),
+      loadSection("artworkCount", () => countArtworks(locale), 0),
       loadSection("featured-article", () => getFeaturedArticle(locale), null),
       loadSection("articles", () => listArticles(locale, { perPage: 4 }), {
         items: [],
@@ -121,7 +126,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <p className="mt-8 max-w-lg text-[0.975rem] leading-[1.8] text-muted">{intro}</p>
 
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link href={bookingHref} className="btn btn-primary">
+                <Link href={bookingHref} prefetch className="btn btn-primary">
                   {dict.home.bookingCta}
                 </Link>
               </div>
@@ -185,7 +190,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Reveal delay={160}>
           <dl className="mt-16 grid grid-cols-2 gap-y-8 border-y border-line py-7 sm:grid-cols-3">
             {[
-              { label: dict.home.stats.artworks, value: artworks.length },
+              { label: dict.home.stats.artworks, value: artworkTotal },
               { label: dict.home.stats.articles, value: latestArticles.total },
               { label: dict.home.focusLabel, value: null, text: content?.title ?? title },
             ].map((item) => (
@@ -261,6 +266,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 artworks={galleryPreview}
                 collections={[]}
                 locale={locale}
+                total={artworkTotal}
+                perPage={6}
+                maxItems={6}
                 labels={{
                   allWorks: dict.art.allWorks,
                   allCollections: dict.art.allCollections,
@@ -277,6 +285,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   viewArtwork: dict.common.viewArtwork,
                   imageAlt: dict.art.imageAlt,
                   count: dict.art.collectionCount,
+                  loadingMore: dict.art.loadingMore,
+                  loadError: dict.art.loadError,
+                  retry: dict.art.retry,
+                  showingAll: dict.art.showingAll,
                 }}
               />
             </div>
@@ -294,7 +306,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           index="03"
           label={dict.home.blogLabel}
           title={dict.home.blogTitle}
-          action={{ href: blogHref, label: dict.home.blogCta }}
+          action={{ href: blogHref, label: dict.home.blogCta, prefetch: true }}
         />
 
         {featuredArticle ? (
@@ -321,7 +333,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </Reveal>
               ))}
               <div className="border-t border-line pt-6">
-                <Link href={blogHref} className="link-arrow text-muted hover:text-ink">
+                <Link href={blogHref} prefetch className="link-arrow text-muted hover:text-ink">
                   {dict.home.blogCta}
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                     <path d="M5 12h14M13 6l6 6-6 6" />
@@ -343,14 +355,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           index="04"
           label={dict.home.bookingLabel}
           title={dict.home.bookingTitle}
-          action={{ href: bookingHref, label: dict.home.bookingCta }}
+          action={{ href: bookingHref, label: dict.home.bookingCta, prefetch: true }}
         />
         <Reveal className="mt-10">
           <p className="max-w-2xl text-[clamp(1.2rem,2vw,1.6rem)] leading-[1.55] tracking-[-0.01em]">
             {dict.home.bookingText}
           </p>
           <div className="mt-8">
-            <Link href={bookingHref} className="btn btn-primary">
+            <Link href={bookingHref} prefetch className="btn btn-primary">
               {dict.home.bookingCta}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                 <path d="M5 12h14M13 6l6 6-6 6" />

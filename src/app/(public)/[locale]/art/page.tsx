@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getDictionary } from "@/i18n";
 import { isLocale, localeHref, type Locale } from "@/i18n/config";
-import { listArtworks, listCollections } from "@/data/artworks";
+import { countArtworks, listArtworks, listArtworkSlugs, listCollections } from "@/data/artworks";
 import { getSettings } from "@/data/settings";
 import { getSocialLinks } from "@/data/social";
 import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
@@ -16,11 +15,14 @@ import { buildBreadcrumbSchema, buildCollectionPageSchema, buildItemListSchema }
 import { Breadcrumbs } from "@/components/site/breadcrumbs";
 import { PageHero } from "@/components/site/page-hero";
 import { ArtGallery } from "@/components/site/art-gallery";
+import { GALLERY_PER_PAGE } from "@/data/gallery";
 import { Reveal } from "@/components/ui/reveal";
 
-// The GitHub Pages demo build rewrites this to "force-static"
-// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
-export const dynamic = "force-dynamic";
+// ISR: revalidates every 60s so the edge can serve the page and <Link>
+// prefetch caches the full RSC payload (see the layout for the rationale
+// and the CSP nonce note). The GitHub Pages demo build rewrites this to
+// "force-static" (see .github/workflows/pages.yml).
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
@@ -46,9 +48,15 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
   const locale: Locale = raw;
   const dict = getDictionary(locale);
 
-  const [artworks, collections] = await Promise.all([listArtworks(locale), listCollections(locale)]);
+  const [artworks, total, slugs, collections] = await Promise.all([
+    listArtworks(locale, { limit: GALLERY_PER_PAGE }),
+    countArtworks(locale),
+    // Light slug list for the JSON-LD ItemList: the gallery only holds the
+    // first batch, but the structured data still describes every work.
+    listArtworkSlugs(locale),
+    listCollections(locale),
+  ]);
   const artHref = localeHref(locale, "/art");
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const crumbs = [
     { name: dict.nav.home, href: localeHref(locale, "/") },
     { name: dict.art.label, href: artHref },
@@ -60,7 +68,7 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
       buildCollectionPageSchema({ pageUrl: artHref, name: dict.art.title, description: dict.art.description }),
       buildItemListSchema({
         id: `${absoluteUrl(artHref)}#artworks`,
-        items: artworks.map((artwork) => ({ name: artwork.title, url: `${artHref}/${artwork.slug}` })),
+        items: slugs.map((artwork) => ({ name: artwork.title, url: `${artHref}/${artwork.slug}` })),
       }),
     ],
   };
@@ -69,7 +77,6 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
     <>
       <script
         type="application/ld+json"
-        nonce={nonce}
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
@@ -81,7 +88,7 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
         title={dict.art.title}
         description={dict.art.description}
         meta={[
-          { label: dict.art.allWorks, value: String(artworks.length).padStart(2, "0") },
+          { label: dict.art.allWorks, value: String(total).padStart(2, "0") },
           ...(collections.length
             ? [{ label: dict.art.collections, value: String(collections.length).padStart(2, "0") }]
             : []),
@@ -134,6 +141,8 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
             artworks={artworks}
             collections={collections}
             locale={locale}
+            total={total}
+            perPage={GALLERY_PER_PAGE}
             labels={{
               allWorks: dict.art.allWorks,
               allCollections: dict.art.allCollections,
@@ -150,6 +159,10 @@ export default async function ArtPage({ params }: { params: Promise<{ locale: st
               viewArtwork: dict.common.viewArtwork,
               imageAlt: dict.art.imageAlt,
               count: dict.art.collectionCount,
+              loadingMore: dict.art.loadingMore,
+              loadError: dict.art.loadError,
+              retry: dict.art.retry,
+              showingAll: dict.art.showingAll,
             }}
           />
         ) : (

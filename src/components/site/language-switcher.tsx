@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { localeShort, locales, stripLocale, type Locale } from "@/i18n/config";
 
-export function LanguageSwitcher({
+function LanguageSwitcherInner({
   locale,
   label,
 }: {
@@ -47,5 +48,45 @@ export function LanguageSwitcher({
         </Link>
       ))}
     </div>
+  );
+}
+
+/**
+ * `useSearchParams()` needs a Suspense boundary on static/ISR pages —
+ * without one, prerendering the page fails the build. The fallback renders
+ * the same pill shape (plain labels, no links) so the header never shifts
+ * while the real switcher hydrates.
+ */
+export function LanguageSwitcher({
+  locale,
+  label,
+}: {
+  locale: Locale;
+  label: string;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="flex items-center gap-0.5 rounded-full border border-line p-0.5"
+          role="group"
+          aria-label={label}
+          aria-hidden="true"
+        >
+          {locales.map((item) => (
+            <span
+              key={item}
+              className={`rounded-full px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] ${
+                item === locale ? "bg-primary text-primary-fg" : "text-muted"
+              }`}
+            >
+              {localeShort[item]}
+            </span>
+          ))}
+        </div>
+      }
+    >
+      <LanguageSwitcherInner locale={locale} label={label} />
+    </Suspense>
   );
 }

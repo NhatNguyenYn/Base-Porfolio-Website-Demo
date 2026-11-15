@@ -69,6 +69,19 @@ export function matchesNav(key: NavKey, path: string): boolean {
   return path.startsWith(navPaths[key]);
 }
 
+/**
+ * Nav entries whose pages stay dynamic — blog reads search params, booking
+ * must show fresh slots — so the default prefetch would only fetch the
+ * loading shell. Their links pass `prefetch={true}` to fetch the full route
+ * in the background instead; a fully-prefetched route stays in the client
+ * router cache for up to 5 minutes, so a click from the homepage is
+ * instant. ISR pages (home, art, about, contact) already prefetch in full
+ * by default and need no override.
+ */
+export function needsFullPrefetch(key: NavKey): boolean {
+  return key === "blog" || key === "booking";
+}
+
 export function navHref(locale: Locale, path: string): string {
   return localeHref(locale, path);
 }

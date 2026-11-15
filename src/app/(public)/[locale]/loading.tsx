@@ -1,13 +1,13 @@
 /**
  * Instant navigation feedback for the public site.
  *
- * Every public page is force-dynamic: a nav click waits for the server
- * (layout context + page queries against Neon) before the new page can
- * render, and without a loading boundary the old page just sits frozen
- * for 1–2s, which reads as a dead click. This skeleton renders
+ * Dynamic pages (blog list, booking, detail pages) wait for the server
+ * before they can render, and without a loading boundary the old page just
+ * sits frozen for 1–2s, which reads as a dead click. This skeleton renders
  * immediately on navigation — and, in Next 15, lets <Link> prefetch
  * dynamic routes up to this boundary, so a hovered or already-visited
- * link can swap near-instantly.
+ * link can swap near-instantly. ISR pages (home, art, about, contact)
+ * prefetch in full and rarely show this at all.
  *
  * The shape mirrors PageHero (label rule, display title, description,
  * meta row) plus a card grid, so it reads as the page arriving rather

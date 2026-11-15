@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
 import { ThemeScript } from "@/components/site/theme-script";
@@ -12,13 +11,11 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminRootLayout({ children }: { children: React.ReactNode }) {
-  // Same per-request nonce the CSP expects; without it the inline theme
-  // bootstrap would be blocked once the policy is enforced.
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="vi" className={fontVariables} suppressHydrationWarning>
       <head>
-        <ThemeScript defaultTheme="light" nonce={nonce} />
+        {/* Static theme bootstrap (public/theme-init.js): no CSP nonce needed. */}
+        <ThemeScript defaultTheme="light" />
       </head>
       <body className="min-h-screen bg-background text-ink">{children}</body>
     </html>

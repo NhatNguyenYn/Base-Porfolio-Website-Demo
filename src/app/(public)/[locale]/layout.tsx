@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import "@/app/globals.css";
 import { fontVariables } from "@/app/fonts";
@@ -25,12 +24,28 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { ThemeScript } from "@/components/site/theme-script";
 import { BackToTop } from "@/components/site/back-to-top";
 
-// The GitHub Pages demo build rewrites this to "force-static"
-// (see .github/workflows/pages.yml); the full-stack build keeps it dynamic.
-export const dynamic = "force-dynamic";
-
-// Static-export build (GitHub Pages demo): enumerate the locales so every
-// public page under this layout can prerender. Ignored by the dynamic build.
+/**
+ * Public content pages (home, art, about, contact) are ISR (`revalidate =
+ * 60` on each page) instead of force-dynamic: the edge can serve them and
+ * <Link> prefetch caches the full RSC payload, so navigation from the
+ * homepage is instant. Admin edits purge the cache immediately through
+ * revalidatePath("/", "layout") in the server actions.
+ *
+ * ISR and the per-request CSP nonce do not mix: the nonce is handed to
+ * server components through headers(), and reading headers() forces dynamic
+ * rendering. So this layout never reads the nonce: the theme bootstrap is a
+ * static file (public/theme-init.js, allowed by `script-src 'self'` with no
+ * nonce) and the JSON-LD below is a data block, never executed as script —
+ * and the CSP itself is report-only, so nothing is blocked even while the
+ * header carries a fresh per-request nonce. Pages that still need the nonce
+ * (art/blog detail, collection, blog list) keep reading headers() and stay
+ * dynamic; search-driven and freshness-critical pages (blog list, booking)
+ * stay dynamic too. If the CSP is ever switched from report-only to
+ * enforced, the nonce-less scripts must be revisited first.
+ *
+ * The GitHub Pages demo build rewrites each page's `revalidate` export to
+ * "force-static" (see .github/workflows/pages.yml).
+ */
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -121,8 +136,6 @@ export default async function LocaleLayout({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const dict = getDictionary(locale);
-  // Set by middleware; used to allow our own inline scripts under the CSP.
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   const site = await loadSiteContext();
   if (site.status === "unavailable") {
@@ -169,12 +182,11 @@ export default async function LocaleLayout({
   return (
     <html lang={localeHtmlLang[locale]} className={fontVariables} suppressHydrationWarning>
       <head>
-        <ThemeScript defaultTheme={settings.defaultTheme} nonce={nonce} />
+        <ThemeScript defaultTheme={settings.defaultTheme} />
       </head>
       <body className="min-h-screen bg-background text-ink">
         <script
           type="application/ld+json"
-          nonce={nonce}
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
