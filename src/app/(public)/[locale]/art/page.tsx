@@ -1,1 +1,177 @@
-aW1wb3J0IEltYWdlIGZyb20gIm5leHQvaW1hZ2UiOwppbXBvcnQgTGluayBmcm9tICJuZXh0L2xpbmsiOwppbXBvcnQgdHlwZSB7IE1ldGFkYXRhIH0gZnJvbSAibmV4dCI7CmltcG9ydCB7IG5vdEZvdW5kIH0gZnJvbSAibmV4dC9uYXZpZ2F0aW9uIjsKaW1wb3J0IHsgZ2V0RGljdGlvbmFyeSB9IGZyb20gIkAvaTE4biI7CmltcG9ydCB7IGlzTG9jYWxlLCBsb2NhbGVIcmVmLCB0eXBlIExvY2FsZSB9IGZyb20gIkAvaTE4bi9jb25maWciOwppbXBvcnQgeyBjb3VudEFydHdvcmtzLCBsaXN0QXJ0d29ya3MsIGxpc3RBcnR3b3JrU2x1Z3MsIGxpc3RDb2xsZWN0aW9ucyB9IGZyb20gIkAvZGF0YS9hcnR3b3JrcyI7CmltcG9ydCB7IGdldFNldHRpbmdzIH0gZnJvbSAiQC9kYXRhL3NldHRpbmdzIjsKaW1wb3J0IHsgZ2V0U29jaWFsTGlua3MgfSBmcm9tICJAL2RhdGEvc29jaWFsIjsKaW1wb3J0IHsgYnVpbGRQYWdlTWV0YWRhdGEsIHhIYW5kbGVGcm9tU29jaWFscyB9IGZyb20gIkAvbGliL3NlbyI7CmltcG9ydCB7IGFzc2V0VXJsIH0gZnJvbSAiQC9saWIvYXNzZXQiOwppbXBvcnQgeyBhYnNvbHV0ZVVybCB9IGZyb20gIkAvbGliL3V0aWxzIjsKaW1wb3J0IHsgc2VyaWFsaXplSnNvbkxkIH0gZnJvbSAiQC9saWIvanNvbi1sZCI7CmltcG9ydCB7IGJ1aWxkQnJlYWRjcnVtYlNjaGVtYSwgYnVpbGRDb2xsZWN0aW9uUGFnZVNjaGVtYSwgYnVpbGRJdGVtTGlzdFNjaGVtYSB9IGZyb20gIkAvbGliL3N0cnVjdHVyZWQtZGF0YSI7CmltcG9ydCB7IEJyZWFkY3J1bWJzIH0gZnJvbSAiQC9jb21wb25lbnRzL3NpdGUvYnJlYWRjcnVtYnMiOwppbXBvcnQgeyBQYWdlSGVybyB9IGZyb20gIkAvY29tcG9uZW50cy9zaXRlL3BhZ2UtaGVybyI7CmltcG9ydCB7IEFydEdhbGxlcnkgfSBmcm9tICJAL2NvbXBvbmVudHMvc2l0ZS9hcnQtZ2FsbGVyeSI7CmltcG9ydCB7IEdBTExFUllfUEVSX1BBR0UgfSBmcm9tICJAL2RhdGEvZ2FsbGVyeSI7CmltcG9ydCB7IFJldmVhbCB9IGZyb20gIkAvY29tcG9uZW50cy91aS9yZXZlYWwiOwoKLy8gSVNSOiByZXZhbGlkYXRlcyBldmVyeSA2MHMgc28gdGhlIGVkZ2UgY2FuIHNlcnZlIHRoZSBwYWdlIGFuZCA8TGluaz4KLy8gcHJlZmV0Y2ggY2FjaGVzIHRoZSBmdWxsIFJTQyBwYXlsb2FkIChzZWUgdGhlIGxheW91dCBmb3IgdGhlIHJhdGlvbmFsZQovLyBhbmQgdGhlIENTUCBub25jZSBub3RlKS4gVGhlIEdpdEh1YiBQYWdlcyBkZW1vIGJ1aWxkIHJld3JpdGVzIHRoaXMgdG8KLy8gImZvcmNlLXN0YXRpYyIgKHNlZSAuZ2l0aHViL3dvcmtmbG93cy9wYWdlcy55bWwpLgpleHBvcnQgY29uc3QgcmV2YWxpZGF0ZSA9IDYwOwoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdlbmVyYXRlTWV0YWRhdGEoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBsb2NhbGU6IHN0cmluZyB9PiB9KTogUHJvbWlzZTxNZXRhZGF0YT4gewogIGNvbnN0IHsgbG9jYWxlOiByYXcgfSA9IGF3YWl0IHBhcmFtczsKICBpZiAoIWlzTG9jYWxlKHJhdykpIHJldHVybiB7fTsKICBjb25zdCBkaWN0ID0gZ2V0RGljdGlvbmFyeShyYXcpOwogIGNvbnN0IHNldHRpbmdzID0gYXdhaXQgZ2V0U2V0dGluZ3MoKTsKICBjb25zdCB4SGFuZGxlID0geEhhbmRsZUZyb21Tb2NpYWxzKGF3YWl0IGdldFNvY2lhbExpbmtzKCkpOwogIHJldHVybiBidWlsZFBhZ2VNZXRhZGF0YSh7CiAgICBsb2NhbGU6IHJhdywKICAgIHBhdGg6ICIvYXJ0IiwKICAgIHRpdGxlOiBkaWN0LmFydC50aXRsZSwKICAgIGRlc2NyaXB0aW9uOiBkaWN0LmFydC5kZXNjcmlwdGlvbiwKICAgIHNpdGVOYW1lOiBzZXR0aW5ncy5zaXRlTmFtZSwKICAgIHR3aXR0ZXJTaXRlOiB4SGFuZGxlLAogICAgdHdpdHRlckNyZWF0b3I6IHhIYW5kbGUsCiAgICBmYXZpY29uVXJsOiBzZXR0aW5ncy5mYXZpY29uPy51cmwsCiAgfSk7Cn0KCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIEFydFBhZ2UoeyBwYXJhbXMgfTogeyBwYXJhbXM6IFByb21pc2U8eyBsb2NhbGU6IHN0cmluZyB9PiB9KSB7CiAgY29uc3QgeyBsb2NhbGU6IHJhdyB9ID0gYXdhaXQgcGFyYW1zOwogIGlmICghaXNMb2NhbGUocmF3KSkgbm90Rm91bmQoKTsKICBjb25zdCBsb2NhbGU6IExvY2FsZSA9IHJhdzsKICBjb25zdCBkaWN0ID0gZ2V0RGljdGlvbmFyeShsb2NhbGUpOwoKICBjb25zdCBbYXJ0d29ya3MsIHRvdGFsLCBzbHVncywgY29sbGVjdGlvbnNdID0gYXdhaXQgUHJvbWlzZS5hbGwoWwogICAgbGlzdEFydHdvcmtzKGxvY2FsZSwgeyBsaW1pdDogR0FMTEVSWV9QRVJfUEFHRSB9KSwKICAgIGNvdW50QXJ0d29ya3MobG9jYWxlKSwKICAgIC8vIExpZ2h0IHNsdWcgbGlzdCBmb3IgdGhlIEpTT04tTEQgSXRlbUxpc3Q6IHRoZSBnYWxsZXJ5IG9ubHkgaG9sZHMgdGhlCiAgICAvLyBmaXJzdCBiYXRjaCwgYnV0IHRoZSBzdHJ1Y3R1cmVkIGRhdGEgc3RpbGwgZGVzY3JpYmVzIGV2ZXJ5IHdvcmsuCiAgICBsaXN0QXJ0d29ya1NsdWdzKGxvY2FsZSksCiAgICBsaXN0Q29sbGVjdGlvbnMobG9jYWxlKSwKICBdKTsKICBjb25zdCBhcnRIcmVmID0gbG9jYWxlSHJlZihsb2NhbGUsICIvYXJ0Iik7CiAgY29uc3QgY3J1bWJzID0gWwogICAgeyBuYW1lOiBkaWN0Lm5hdi5ob21lLCBocmVmOiBsb2NhbGVIcmVmKGxvY2FsZSwgIi8iKSB9LAogICAgeyBuYW1lOiBkaWN0LmFydC5sYWJlbCwgaHJlZjogYXJ0SHJlZiB9LAogIF07CiAgY29uc3QganNvbkxkID0gewogICAgIkBjb250ZXh0IjogImh0dHBzOi8vc2NoZW1hLm9yZyIsCiAgICAiQGdyYXBoIjogWwogICAgICBidWlsZEJyZWFkY3J1bWJTY2hlbWEoY3J1bWJzKSwKICAgICAgYnVpbGRDb2xsZWN0aW9uUGFnZVNjaGVtYSh7IHBhZ2VVcmw6IGFydEhyZWYsIG5hbWU6IGRpY3QuYXJ0LnRpdGxlLCBkZXNjcmlwdGlvbjogZGljdC5hcnQuZGVzY3JpcHRpb24gfSksCiAgICAgIGJ1aWxkSXRlbUxpc3RTY2hlbWEoewogICAgICAgIGlkOiBgJHthYnNvbHV0ZVVybChhcnRIcmVmKX0jYXJ0d29ya3NgLAogICAgICAgIGl0ZW1zOiBzbHVncy5tYXAoKGFydHdvcmspID0+ICh7IG5hbWU6IGFydHdvcmsudGl0bGUsIHVybDogYCR7YXJ0SHJlZn0vJHthcnR3b3JrLnNsdWd9YCB9KSksCiAgICAgIH0pLAogICAgXSwKICB9OwoKICByZXR1cm4gKAogICAgPD4KICAgICAgPHNjcmlwdAogICAgICAgIHR5cGU9ImFwcGxpY2F0aW9uL2xkK2pzb24iCiAgICAgICAgc3VwcHJlc3NIeWRyYXRpb25XYXJuaW5nCiAgICAgICAgZGFuZ2Vyb3VzbHlTZXRJbm5lckhUTUw9e3sgX19odG1sOiBzZXJpYWxpemVKc29uTGQoanNvbkxkKSB9fQogICAgICAvPgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyLXBhZ2UgcHQtOCI+CiAgICAgICAgPEJyZWFkY3J1bWJzIGl0ZW1zPXtjcnVtYnN9IGxhYmVsPXtkaWN0LmNvbW1vbi5icmVhZGNydW1ifSAvPgogICAgICA8L2Rpdj4KICAgICAgPFBhZ2VIZXJvCiAgICAgICAgbGFiZWw9e2RpY3QuYXJ0LmxhYmVsfQogICAgICAgIHRpdGxlPXtkaWN0LmFydC50aXRsZX0KICAgICAgICBkZXNjcmlwdGlvbj17ZGljdC5hcnQuZGVzY3JpcHRpb259CiAgICAgICAgbWV0YT17WwogICAgICAgICAgeyBsYWJlbDogZGljdC5hcnQuYWxsV29ya3MsIHZhbHVlOiBTdHJpbmcodG90YWwpLnBhZFN0YXJ0KDIsICIwIikgfSwKICAgICAgICAgIC4uLihjb2xsZWN0aW9ucy5sZW5ndGgKICAgICAgICAgICAgPyBbeyBsYWJlbDogZGljdC5hcnQuY29sbGVjdGlvbnMsIHZhbHVlOiBTdHJpbmcoY29sbGVjdGlvbnMubGVuZ3RoKS5wYWRTdGFydCgyLCAiMCIpIH1dCiAgICAgICAgICAgIDogW10pLAogICAgICAgIF19CiAgICAgIC8+CgogICAgICB7Y29sbGVjdGlvbnMubGVuZ3RoID4gMCAmJiAoCiAgICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPSJjb250YWluZXItcGFnZSBwYi0xNCI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBnYXAtNCBzbTpncmlkLWNvbHMtMiBsZzpncmlkLWNvbHMtMyI+CiAgICAgICAgICAgIHtjb2xsZWN0aW9ucy5zbGljZSgwLCAzKS5tYXAoKGNvbGxlY3Rpb24sIGluZGV4KSA9PiAoCiAgICAgICAgICAgICAgPFJldmVhbCBrZXk9e2NvbGxlY3Rpb24uaWR9IGRlbGF5PXtpbmRleCAqIDYwfT4KICAgICAgICAgICAgICAgIDxMaW5rCiAgICAgICAgICAgICAgICAgIGhyZWY9e2Ake2FydEhyZWZ9L2NvbGxlY3Rpb25zLyR7Y29sbGVjdGlvbi5zbHVnfWB9CiAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iZ3JvdXAgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTQgYm9yZGVyIGJvcmRlci1saW5lIGJnLXN1cmZhY2UgcC0zIgogICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icmVsYXRpdmUgaC0yMCB3LTI0IHNocmluay0wIG92ZXJmbG93LWhpZGRlbiBiZy1zdXJmYWNlLW11dGVkIj4KICAgICAgICAgICAgICAgICAgICB7Y29sbGVjdGlvbi5jb3ZlciA/ICgKICAgICAgICAgICAgICAgICAgICAgIDxJbWFnZQogICAgICAgICAgICAgICAgICAgICAgICBzcmM9e2Fzc2V0VXJsKGNvbGxlY3Rpb24uY292ZXIudXJsKX0KICAgICAgICAgICAgICAgICAgICAgICAgYWx0PXtjb2xsZWN0aW9uLmNvdmVyLmFsdCB8fCBjb2xsZWN0aW9uLm5hbWV9CiAgICAgICAgICAgICAgICAgICAgICAgIGZpbGwKICAgICAgICAgICAgICAgICAgICAgICAgc2l6ZXM9Ijk2cHgiCiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0ib2JqZWN0LWNvdmVyIHRyYW5zaXRpb24tdHJhbnNmb3JtIGR1cmF0aW9uLTcwMCBncm91cC1ob3ZlcjpzY2FsZS0xMDUiCiAgICAgICAgICAgICAgICAgICAgICAvPgogICAgICAgICAgICAgICAgICAgICkgOiAoCiAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImFic29sdXRlIGluc2V0LTAgZ3JpZCBwbGFjZS1pdGVtcy1jZW50ZXIgc2VyaWYtYWNjZW50IHRleHQtbXV0ZWQiPgogICAgICAgICAgICAgICAgICAgICAgICB7Y29sbGVjdGlvbi5uYW1lLnNsaWNlKDAsIDEpfQogICAgICAgICAgICAgICAgICAgICAgPC9zcGFuPgogICAgICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWluLXctMCI+CiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LVsxMHB4XSB1cHBlcmNhc2UgdHJhY2tpbmctWzAuMTZlbV0gdGV4dC1tdXRlZCI+CiAgICAgICAgICAgICAgICAgICAgICB7Y29sbGVjdGlvbi5jb3VudH0ge2RpY3QuYXJ0LmNvbGxlY3Rpb25Db3VudH0KICAgICAgICAgICAgICAgICAgICA8L3A+CiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJtdC0xIHRydW5jYXRlIHRleHQtWzE1cHhdIHRyYWNraW5nLXRpZ2h0Ij57Y29sbGVjdGlvbi5uYW1lfTwvcD4KICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9Im10LTEgbGluZS1jbGFtcC0yIHRleHQtWzEycHhdIGxlYWRpbmctcmVsYXhlZCB0ZXh0LW11dGVkIj4KICAgICAgICAgICAgICAgICAgICAgIHtjb2xsZWN0aW9uLmRlc2NyaXB0aW9ufQogICAgICAgICAgICAgICAgICAgIDwvcD4KICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgPC9SZXZlYWw+CiAgICAgICAgICAgICkpfQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9zZWN0aW9uPgogICAgICApfQoKICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPSJjb250YWluZXItcGFnZSBwYi0yNCI+CiAgICAgICAge2FydHdvcmtzLmxlbmd0aCA+IDAgPyAoCiAgICAgICAgICA8QXJ0R2FsbGVyeQogICAgICAgICAgICBhcnR3b3Jrcz17YXJ0d29ya3N9CiAgICAgICAgICAgIGNvbGxlY3Rpb25zPXtjb2xsZWN0aW9uc30KICAgICAgICAgICAgbG9jYWxlPXtsb2NhbGV9CiAgICAgICAgICAgIHRvdGFsPXt0b3RhbH0KICAgICAgICAgICAgcGVyUGFnZT17R0FMTEVSWV9QRVJfUEFHRX0KICAgICAgICAgICAgbGFiZWxzPXt7CiAgICAgICAgICAgICAgYWxsV29ya3M6IGRpY3QuYXJ0LmFsbFdvcmtzLAogICAgICAgICAgICAgIGFsbENvbGxlY3Rpb25zOiBkaWN0LmFydC5hbGxDb2xsZWN0aW9ucywKICAgICAgICAgICAgICBjb2xsZWN0aW9uczogZGljdC5hcnQuY29sbGVjdGlvbnMsCiAgICAgICAgICAgICAgdmlld0Z1bGxzY3JlZW46IGRpY3QuY29tbW9uLnZpZXdGdWxsc2NyZWVuLAogICAgICAgICAgICAgIGNsb3NlOiBkaWN0LmNvbW1vbi5jbG9zZUxhYmVsLAogICAgICAgICAgICAgIG5leHQ6IGRpY3QuY29tbW9uLm5leHRJbWFnZSwKICAgICAgICAgICAgICBwcmV2aW91czogZGljdC5jb21tb24ucHJldkltYWdlLAogICAgICAgICAgICAgIGRldGFpbHM6IGRpY3QuYXJ0LmRldGFpbHMsCiAgICAgICAgICAgICAgbWVkaXVtOiBkaWN0LmNvbW1vbi5tZWRpdW0sCiAgICAgICAgICAgICAgY3JlYXRlZDogZGljdC5jb21tb24uY3JlYXRlZCwKICAgICAgICAgICAgICBjb2xsZWN0aW9uOiBkaWN0LmNvbW1vbi5jb2xsZWN0aW9uLAogICAgICAgICAgICAgIGNhdGVnb3J5OiBkaWN0LmNvbW1vbi5jYXRlZ29yeSwKICAgICAgICAgICAgICB2aWV3QXJ0d29yazogZGljdC5jb21tb24udmlld0FydHdvcmssCiAgICAgICAgICAgICAgaW1hZ2VBbHQ6IGRpY3QuYXJ0LmltYWdlQWx0LAogICAgICAgICAgICAgIGNvdW50OiBkaWN0LmFydC5jb2xsZWN0aW9uQ291bnQsCiAgICAgICAgICAgICAgbG9hZGluZ01vcmU6IGRpY3QuYXJ0LmxvYWRpbmdNb3JlLAogICAgICAgICAgICAgIGxvYWRFcnJvcjogZGljdC5hcnQubG9hZEVycm9yLAogICAgICAgICAgICAgIHJldHJ5OiBkaWN0LmFydC5yZXRyeSwKICAgICAgICAgICAgICBzaG93aW5nQWxsOiBkaWN0LmFydC5zaG93aW5nQWxsLAogICAgICAgICAgICB9fQogICAgICAgICAgLz4KICAgICAgICApIDogKAogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImJvcmRlciBib3JkZXItZGFzaGVkIGJvcmRlci1saW5lIHB4LTYgcHktMjAgdGV4dC1jZW50ZXIiPgogICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtbGcgdHJhY2tpbmctdGlnaHQiPntkaWN0LmFydC5lbXB0eVRpdGxlfTwvcD4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJteC1hdXRvIG10LTIgbWF4LXctbWQgdGV4dC1zbSB0ZXh0LW11dGVkIj57ZGljdC5hcnQuZW1wdHlUZXh0fTwvcD4KICAgICAgICAgIDwvZGl2PgogICAgICAgICl9CiAgICAgIDwvc2VjdGlvbj4KICAgIDwvPgogICk7Cn0K
+import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getDictionary } from "@/i18n";
+import { isLocale, localeHref, type Locale } from "@/i18n/config";
+import { countArtworks, listArtworks, listArtworkSlugs, listCollections } from "@/data/artworks";
+import { getSettings } from "@/data/settings";
+import { getSocialLinks } from "@/data/social";
+import { buildPageMetadata, xHandleFromSocials } from "@/lib/seo";
+import { assetUrl } from "@/lib/asset";
+import { absoluteUrl } from "@/lib/utils";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { buildBreadcrumbSchema, buildCollectionPageSchema, buildItemListSchema } from "@/lib/structured-data";
+import { Breadcrumbs } from "@/components/site/breadcrumbs";
+import { PageHero } from "@/components/site/page-hero";
+import { ArtGallery } from "@/components/site/art-gallery";
+import { GALLERY_PER_PAGE } from "@/data/gallery";
+import { Reveal } from "@/components/ui/reveal";
+
+// ISR: revalidates every 60s so the edge can serve the page and <Link>
+// prefetch caches the full RSC payload (see the layout for the rationale
+// and the CSP nonce note). The GitHub Pages demo build rewrites this to
+// "force-static" (see .github/workflows/pages.yml).
+export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) return {};
+  const dict = getDictionary(raw);
+  const settings = await getSettings();
+  const xHandle = xHandleFromSocials(await getSocialLinks());
+  return buildPageMetadata({
+    locale: raw,
+    path: "/art",
+    title: dict.art.title,
+    description: dict.art.description,
+    siteName: settings.siteName,
+    twitterSite: xHandle,
+    twitterCreator: xHandle,
+    faviconUrl: settings.favicon?.url,
+  });
+}
+
+export default async function ArtPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale: Locale = raw;
+  const dict = getDictionary(locale);
+
+  const [artworks, total, slugs, collections] = await Promise.all([
+    listArtworks(locale, { limit: GALLERY_PER_PAGE }),
+    countArtworks(locale),
+    // Light slug list for the JSON-LD ItemList: the gallery only holds the
+    // first batch, but the structured data still describes every work.
+    listArtworkSlugs(locale),
+    listCollections(locale),
+  ]);
+  const artHref = localeHref(locale, "/art");
+  const crumbs = [
+    { name: dict.nav.home, href: localeHref(locale, "/") },
+    { name: dict.art.label, href: artHref },
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbSchema(crumbs),
+      buildCollectionPageSchema({ pageUrl: artHref, name: dict.art.title, description: dict.art.description }),
+      buildItemListSchema({
+        id: `${absoluteUrl(artHref)}#artworks`,
+        items: slugs.map((artwork) => ({ name: artwork.title, url: `${artHref}/${artwork.slug}` })),
+      }),
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
+      <div className="container-page pt-8">
+        <Breadcrumbs items={crumbs} label={dict.common.breadcrumb} />
+      </div>
+      <PageHero
+        label={dict.art.label}
+        title={dict.art.title}
+        description={dict.art.description}
+        meta={[
+          { label: dict.art.allWorks, value: String(total).padStart(2, "0") },
+          ...(collections.length
+            ? [{ label: dict.art.collections, value: String(collections.length).padStart(2, "0") }]
+            : []),
+        ]}
+      />
+
+      {collections.length > 0 && (
+        <section className="container-page pb-14">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {collections.slice(0, 3).map((collection, index) => (
+              <Reveal key={collection.id} delay={index * 60}>
+                <Link
+                  href={`${artHref}/collections/${collection.slug}`}
+                  className="group flex items-center gap-4 border border-line bg-surface p-3"
+                >
+                  <div className="relative h-20 w-24 shrink-0 overflow-hidden bg-surface-muted">
+                    {collection.cover ? (
+                      <Image
+                        src={assetUrl(collection.cover.url)}
+                        alt={collection.cover.alt || collection.name}
+                        fill
+                        sizes="96px"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <span className="absolute inset-0 grid place-items-center serif-accent text-muted">
+                        {collection.name.slice(0, 1)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-muted">
+                      {collection.count} {dict.art.collectionCount}
+                    </p>
+                    <p className="mt-1 truncate text-[15px] tracking-tight">{collection.name}</p>
+                    <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-muted">
+                      {collection.description}
+                    </p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="container-page pb-24">
+        {artworks.length > 0 ? (
+          <ArtGallery
+            artworks={artworks}
+            collections={collections}
+            locale={locale}
+            total={total}
+            perPage={GALLERY_PER_PAGE}
+            labels={{
+              allWorks: dict.art.allWorks,
+              allCollections: dict.art.allCollections,
+              collections: dict.art.collections,
+              viewFullscreen: dict.common.viewFullscreen,
+              close: dict.common.closeLabel,
+              next: dict.common.nextImage,
+              previous: dict.common.prevImage,
+              details: dict.art.details,
+              medium: dict.common.medium,
+              created: dict.common.created,
+              collection: dict.common.collection,
+              category: dict.common.category,
+              viewArtwork: dict.common.viewArtwork,
+              imageAlt: dict.art.imageAlt,
+              count: dict.art.collectionCount,
+              loadingMore: dict.art.loadingMore,
+              loadError: dict.art.loadError,
+              retry: dict.art.retry,
+              showingAll: dict.art.showingAll,
+            }}
+          />
+        ) : (
+          <div className="border border-dashed border-line px-6 py-20 text-center">
+            <p className="text-lg tracking-tight">{dict.art.emptyTitle}</p>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted">{dict.art.emptyText}</p>
+          </div>
+        )}
+      </section>
+    </>
+  );
+}
