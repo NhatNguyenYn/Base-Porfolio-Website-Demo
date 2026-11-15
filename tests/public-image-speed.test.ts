@@ -1,1 +1,202 @@
-aW1wb3J0IHsgYWZ0ZXJBbGwsIGJlZm9yZUFsbCwgZGVzY3JpYmUsIGV4cGVjdCwgaXQgfSBmcm9tICJ2aXRlc3QiOwppbXBvcnQgeyByZWFkRmlsZVN5bmMgfSBmcm9tICJub2RlOmZzIjsKaW1wb3J0IHBhdGggZnJvbSAibm9kZTpwYXRoIjsKaW1wb3J0IHsgcHJpc21hIH0gZnJvbSAiQC9zZXJ2ZXIvZGIiOwppbXBvcnQgeyBjb3VudEFydHdvcmtzLCBsaXN0QXJ0d29ya3MsIGxpc3RBcnR3b3JrU2x1Z3MgfSBmcm9tICJAL3NlcnZlci9xdWVyaWVzL2FydHdvcmtzIjsKaW1wb3J0IHsgR0VUIGFzIGdldEFydHdvcmtzIH0gZnJvbSAiQC9hcHAvYXBpL2FydHdvcmtzL3JvdXRlIjsKaW1wb3J0IHsgcmVzZXREYXRhYmFzZSwgc2VlZEZpeHR1cmVzIH0gZnJvbSAiLi9oZWxwZXJzL2RiIjsKCi8qKgogKiBQdWJsaWMtc2l0ZSBpbWFnZSBzcGVlZCAoU3RhZ2UgMyk6IERCLWxldmVsIHBhZ2luYXRpb24sIHNsaW0gY2FyZAogKiBwYXlsb2FkcyAobm8gYmx1ckRhdGFVcmwpLCBhbmQgSVNSIGZvciB0aGUgY29udGVudCBwYWdlcy4KICoKICogVGhlIGdhbGxlcnkgdXNlZCB0byBzaGlwIGFsbCAxMTcgYXJ0d29ya3MgaW4gb25lIFJTQyBwYXlsb2FkOyB0aGUKICogaG9tZXBhZ2UgZmV0Y2hlZCBhbGwgcm93cyB0byBzaG93IDYuIFRoZXNlIHRlc3RzIHBpbiB0aGUgbmV3IGJlaGF2aW91cjoKICogcGFnaW5hdGlvbiBoYXBwZW5zIGF0IHRoZSBkYXRhYmFzZSwgY2FyZCBpbWFnZXMgY2Fycnkgbm8gYmx1ciBkYXRhIFVSSSwKICogYW5kIHRoZSBjb250ZW50IHBhZ2VzIGFyZSBJU1IgKGByZXZhbGlkYXRlID0gNjBgKSBpbnN0ZWFkIG9mCiAqIGZvcmNlLWR5bmFtaWMuCiAqLwoKY29uc3QgRVhUUkEgPSAzMDsKCmJlZm9yZUFsbChhc3luYyAoKSA9PiB7CiAgYXdhaXQgcmVzZXREYXRhYmFzZSgpOwogIGNvbnN0IGZpeHR1cmVzID0gYXdhaXQgc2VlZEZpeHR1cmVzKCk7CiAgLy8gMzAgbW9yZSBwdWJsaWMgYXJ0d29ya3MgKGJvdGggbG9jYWxlcykgc28gcGFnaW5hdGlvbiBoYXMgcGFnZXMuCiAgZm9yIChsZXQgaSA9IDE7IGkgPD0gRVhUUkE7IGkrKykgewogICAgY29uc3QgbiA9IFN0cmluZyhpKS5wYWRTdGFydCgyLCAiMCIpOwogICAgYXdhaXQgcHJpc21hLmFydHdvcmsuY3JlYXRlKHsKICAgICAgZGF0YTogewogICAgICAgIHNsdWc6IGBzcGVlZC1hcnR3b3JrLSR7bn1gLAogICAgICAgIGltYWdlTWVkaWFJZDogZml4dHVyZXMubWVkaWEuaWQsCiAgICAgICAgY29sbGVjdGlvbklkOiBmaXh0dXJlcy5wdWJsaWNDb2xsZWN0aW9uLmlkLAogICAgICAgIHZpc2liaWxpdHk6ICJwdWJsaWMiLAogICAgICAgIGZlYXR1cmVkOiBmYWxzZSwKICAgICAgICBvcmRlcjogMTAgKyBpLAogICAgICAgIHRyYW5zbGF0aW9uczogewogICAgICAgICAgY3JlYXRlOiBbCiAgICAgICAgICAgIHsgbG9jYWxlOiAidmkiLCB0aXRsZTogYFTDoWMgcGjhuqltIHThu5FjIMSR4buZICR7bn1gLCBkZXNjcmlwdGlvbjogYE3DtCB04bqjICR7bn1gIH0sCiAgICAgICAgICAgIHsgbG9jYWxlOiAiZW4iLCB0aXRsZTogYFNwZWVkIGFydHdvcmsgJHtufWAsIGRlc2NyaXB0aW9uOiBgRGVzY3JpcHRpb24gJHtufWAgfSwKICAgICAgICAgIF0sCiAgICAgICAgfSwKICAgICAgfSwKICAgIH0pOwogIH0KfSk7CgphZnRlckFsbChhc3luYyAoKSA9PiB7CiAgYXdhaXQgcHJpc21hLiRkaXNjb25uZWN0KCk7Cn0pOwoKZGVzY3JpYmUoImFydHdvcmsgcGFnaW5hdGlvbiBhdCB0aGUgZGF0YWJhc2UiLCAoKSA9PiB7CiAgaXQoImNvdW50cyB2aXNpYmxlIGNhcmRzIHBlciBsb2NhbGUgKHVudHJhbnNsYXRlZCByb3dzIGV4Y2x1ZGVkKSIsIGFzeW5jICgpID0+IHsKICAgIC8vIEZpeHR1cmVzOiBhcnQtcHVibGljICh2aStlbiksIGFydC12aS1vbmx5ICh2aSBvbmx5LCBwdWJsaWMpLCBwbHVzIDMwIG5ldy4KICAgIGV4cGVjdChhd2FpdCBjb3VudEFydHdvcmtzKCJ2aSIpKS50b0JlKDMyKTsKICAgIGV4cGVjdChhd2FpdCBjb3VudEFydHdvcmtzKCJlbiIpKS50b0JlKDMxKTsKICB9KTsKCiAgaXQoInBhZ2VzIGFyZSBkaXNqb2ludCwgc3RhYmxlLCBhbmQgY292ZXIgdGhlIGZ1bGwgbGlzdCIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IGZ1bGwgPSBhd2FpdCBsaXN0QXJ0d29ya3MoInZpIik7CiAgICBleHBlY3QoZnVsbCkudG9IYXZlTGVuZ3RoKDMyKTsKICAgIGNvbnN0IHBhZ2UxID0gYXdhaXQgbGlzdEFydHdvcmtzKCJ2aSIsIHsgbGltaXQ6IDEwIH0pOwogICAgY29uc3QgcGFnZTIgPSBhd2FpdCBsaXN0QXJ0d29ya3MoInZpIiwgeyBsaW1pdDogMTAsIG9mZnNldDogMTAgfSk7CiAgICBjb25zdCBwYWdlMyA9IGF3YWl0IGxpc3RBcnR3b3JrcygidmkiLCB7IGxpbWl0OiAxMCwgb2Zmc2V0OiAyMCB9KTsKICAgIGNvbnN0IHBhZ2U0ID0gYXdhaXQgbGlzdEFydHdvcmtzKCJ2aSIsIHsgbGltaXQ6IDEwLCBvZmZzZXQ6IDMwIH0pOwogICAgZXhwZWN0KHBhZ2UxKS50b0hhdmVMZW5ndGgoMTApOwogICAgZXhwZWN0KHBhZ2UyKS50b0hhdmVMZW5ndGgoMTApOwogICAgZXhwZWN0KHBhZ2UzKS50b0hhdmVMZW5ndGgoMTApOwogICAgZXhwZWN0KHBhZ2U0KS50b0hhdmVMZW5ndGgoMik7CiAgICBleHBlY3QoWy4uLnBhZ2UxLCAuLi5wYWdlMiwgLi4ucGFnZTMsIC4uLnBhZ2U0XS5tYXAoKGl0ZW0pID0+IGl0ZW0uaWQpKS50b0VxdWFsKAogICAgICBmdWxsLm1hcCgoaXRlbSkgPT4gaXRlbS5pZCksCiAgICApOwogICAgLy8gU2FtZSBwYWdlIHR3aWNlIHJldHVybnMgdGhlIHNhbWUgY2FyZHMgaW4gdGhlIHNhbWUgb3JkZXIuCiAgICBjb25zdCBwYWdlMUFnYWluID0gYXdhaXQgbGlzdEFydHdvcmtzKCJ2aSIsIHsgbGltaXQ6IDEwIH0pOwogICAgZXhwZWN0KHBhZ2UxQWdhaW4ubWFwKChpdGVtKSA9PiBpdGVtLmlkKSkudG9FcXVhbChwYWdlMS5tYXAoKGl0ZW0pID0+IGl0ZW0uaWQpKTsKICB9KTsKCiAgaXQoImEgbGltaXQgb2YgNiBmZXRjaGVzIDYgcm93cyAoaG9tZXBhZ2UgcHJldmlldyksIG5vdCB0aGUgd2hvbGUgdGFibGUiLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCBwcmV2aWV3ID0gYXdhaXQgbGlzdEFydHdvcmtzKCJ2aSIsIHsgbGltaXQ6IDYgfSk7CiAgICBleHBlY3QocHJldmlldykudG9IYXZlTGVuZ3RoKDYpOwogICAgZXhwZWN0KGF3YWl0IGNvdW50QXJ0d29ya3MoInZpIikpLnRvQmUoMzIpOwogIH0pOwoKICBpdCgiY29sbGVjdGlvbiBmaWx0ZXIgcGFnaW5hdGVzIHdpdGhpbiB0aGF0IGNvbGxlY3Rpb24iLCBhc3luYyAoKSA9PiB7CiAgICBjb25zdCB0b3RhbCA9IGF3YWl0IGNvdW50QXJ0d29ya3MoInZpIiwgeyBjb2xsZWN0aW9uOiAicHVibGljLWNvbGxlY3Rpb24iIH0pOwogICAgZXhwZWN0KHRvdGFsKS50b0JlKDMxKTsKICAgIGNvbnN0IGZpcnN0ID0gYXdhaXQgbGlzdEFydHdvcmtzKCJ2aSIsIHsgY29sbGVjdGlvbjogInB1YmxpYy1jb2xsZWN0aW9uIiwgbGltaXQ6IDEwIH0pOwogICAgY29uc3QgcmVzdCA9IGF3YWl0IGxpc3RBcnR3b3JrcygidmkiLCB7IGNvbGxlY3Rpb246ICJwdWJsaWMtY29sbGVjdGlvbiIsIGxpbWl0OiAzMCwgb2Zmc2V0OiAxMCB9KTsKICAgIGV4cGVjdChmaXJzdCkudG9IYXZlTGVuZ3RoKDEwKTsKICAgIGV4cGVjdChyZXN0KS50b0hhdmVMZW5ndGgoMjEpOwogICAgZXhwZWN0KG5ldyBTZXQoWy4uLmZpcnN0LCAuLi5yZXN0XS5tYXAoKGl0ZW0pID0+IGl0ZW0uaWQpKS5zaXplKS50b0JlKDMxKTsKICB9KTsKfSk7CgpkZXNjcmliZSgic2xpbSBjYXJkIHBheWxvYWQiLCAoKSA9PiB7CiAgaXQoImNhcmQgaW1hZ2VzIGNhcnJ5IG5vIGJsdXJEYXRhVXJsLCBkZXNjcmlwdGlvbnMgc3RheSBmb3IgdGhlIGxpZ2h0Ym94IiwgYXN5bmMgKCkgPT4gewogICAgY29uc3QgY2FyZHMgPSBhd2FpdCBsaXN0QXJ0d29ya3MoInZpIiwgeyBsaW1pdDogNSB9KTsKICAgIGZvciAoY29uc3QgY2FyZCBvZiBjYXJkcykgewogICAgICBleHBlY3QoY2FyZC5pbWFnZSkubm90LnRvQmVOdWxsKCk7CiAgICAgIGV4cGVjdChjYXJkLmltYWdlKS5ub3QudG9IYXZlUHJvcGVydHkoImJsdXJEYXRhVXJsIik7CiAgICAgIC8vIERlc2NyaXB0aW9ucyBzdGF5IGluIHRoZSBwYXlsb2FkOiB0aGUgbGlnaHRib3ggcmVuZGVycyB0aGVtLgogICAgICBleHBlY3QodHlwZW9mIGNhcmQuZGVzY3JpcHRpb24pLnRvQmUoInN0cmluZyIpOwogICAgfQogICAgY29uc3QgcHViID0gY2FyZHMuZmluZCgoY2FyZCkgPT4gY2FyZC5zbHVnID09PSAiYXJ0LXB1YmxpYyIpOwogICAgZXhwZWN0KHB1Yj8uZGVzY3JpcHRpb24ubGVuZ3RoKS50b0JlR3JlYXRlclRoYW4oMCk7CiAgfSk7CgogIGl0KCJ0aGUgSlNPTi1MRCBzbHVnIGxpc3QgaXMgbGlnaHQgKHNsdWcgKyB0aXRsZSBvbmx5KSIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHNsdWdzID0gYXdhaXQgbGlzdEFydHdvcmtTbHVncygidmkiKTsKICAgIGV4cGVjdChzbHVncykudG9IYXZlTGVuZ3RoKDMyKTsKICAgIGZvciAoY29uc3QgaXRlbSBvZiBzbHVncykgewogICAgICBleHBlY3QoT2JqZWN0LmtleXMoaXRlbSkuc29ydCgpKS50b0VxdWFsKFsic2x1ZyIsICJ0aXRsZSJdKTsKICAgIH0KICB9KTsKfSk7CgpkZXNjcmliZSgicHVibGljIGFydHdvcmtzIEFQSSBwYWdpbmF0aW9uIiwgKCkgPT4gewogIGl0KCJyZXR1cm5zIHRoZSByZXF1ZXN0ZWQgcGFnZSB3aXRoIGEgcmVhbCB0b3RhbCIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZ2V0QXJ0d29ya3MoCiAgICAgIG5ldyBSZXF1ZXN0KCJodHRwOi8vbG9jYWxob3N0L2FwaS9hcnR3b3Jrcz9sb2NhbGU9dmkmcGFnZT0yJnBlclBhZ2U9MTAiKSwKICAgICk7CiAgICBleHBlY3QocmVzcG9uc2Uuc3RhdHVzKS50b0JlKDIwMCk7CiAgICBjb25zdCBib2R5ID0gYXdhaXQgcmVzcG9uc2UuanNvbigpOwogICAgZXhwZWN0KGJvZHkuc3VjY2VzcykudG9CZSh0cnVlKTsKICAgIGV4cGVjdChib2R5LmRhdGEpLnRvSGF2ZUxlbmd0aCgxMCk7CiAgICBleHBlY3QoYm9keS5tZXRhKS50b01hdGNoT2JqZWN0KHsgcGFnZTogMiwgcGVyUGFnZTogMTAsIHRvdGFsOiAzMiwgcGFnZXM6IDQsIGxvY2FsZTogInZpIiB9KTsKICAgIGZvciAoY29uc3QgaXRlbSBvZiBib2R5LmRhdGEpIHsKICAgICAgZXhwZWN0KGl0ZW0uaW1hZ2UgPz8gbnVsbCkubm90LnRvSGF2ZVByb3BlcnR5KCJibHVyRGF0YVVybCIpOwogICAgfQogIH0pOwoKICBpdCgiY2xhbXBzIGEgcGFnZSBwYXN0IHRoZSBlbmQgaW5zdGVhZCBvZiByZXR1cm5pbmcgYW4gZW1wdHkgcGFnZSIsIGFzeW5jICgpID0+IHsKICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZ2V0QXJ0d29ya3MoCiAgICAgIG5ldyBSZXF1ZXN0KCJodHRwOi8vbG9jYWxob3N0L2FwaS9hcnR3b3Jrcz9sb2NhbGU9dmkmcGFnZT05OSZwZXJQYWdlPTEwIiksCiAgICApOwogICAgY29uc3QgYm9keSA9IGF3YWl0IHJlc3BvbnNlLmpzb24oKTsKICAgIGV4cGVjdChib2R5Lm1ldGEpLnRvTWF0Y2hPYmplY3QoeyBwYWdlOiA0LCB0b3RhbDogMzIsIHBhZ2VzOiA0IH0pOwogICAgZXhwZWN0KGJvZHkuZGF0YSkudG9IYXZlTGVuZ3RoKDIpOwogIH0pOwp9KTsKCmRlc2NyaWJlKCJJU1IgY29uZmlndXJhdGlvbiBmb3IgY29udGVudCBwYWdlcyIsICgpID0+IHsKICBjb25zdCByb290ID0gcHJvY2Vzcy5jd2QoKTsKICBjb25zdCByZWFkID0gKHJlbDogc3RyaW5nKSA9PiByZWFkRmlsZVN5bmMocGF0aC5qb2luKHJvb3QsIHJlbCksICJ1dGY4Iik7CgogIGl0KCJob21lLCBhcnQsIGFib3V0IGFuZCBjb250YWN0IGFyZSBJU1IgKHJldmFsaWRhdGUgNjApLCBub3QgZm9yY2UtZHluYW1pYyIsICgpID0+IHsKICAgIGZvciAoY29uc3QgcmVsIG9mIFsKICAgICAgInNyYy9hcHAvKHB1YmxpYykvW2xvY2FsZV0vcGFnZS50c3giLAogICAgICAic3JjL2FwcC8ocHVibGljKS9bbG9jYWxlXS9hcnQvcGFnZS50c3giLAogICAgICAic3JjL2FwcC8ocHVibGljKS9bbG9jYWxlXS9hYm91dC9wYWdlLnRzeCIsCiAgICAgICJzcmMvYXBwLyhwdWJsaWMpL1tsb2NhbGVdL2NvbnRhY3QvcGFnZS50c3giLAogICAgXSkgewogICAgICBjb25zdCBzb3VyY2UgPSByZWFkKHJlbCk7CiAgICAgIGV4cGVjdChzb3VyY2UpLnRvQ29udGFpbigiZXhwb3J0IGNvbnN0IHJldmFsaWRhdGUgPSA2MDsiKTsKICAgICAgZXhwZWN0KHNvdXJjZSkubm90LnRvQ29udGFpbignZXhwb3J0IGNvbnN0IGR5bmFtaWMgPSAiZm9yY2UtZHluYW1pYyInKTsKICAgIH0KICB9KTsKCiAgaXQoInRoZSBwdWJsaWMgbGF5b3V0IG5vIGxvbmdlciByZWFkcyB0aGUgcGVyLXJlcXVlc3Qgbm9uY2UiLCAoKSA9PiB7CiAgICBjb25zdCBzb3VyY2UgPSByZWFkKCJzcmMvYXBwLyhwdWJsaWMpL1tsb2NhbGVdL2xheW91dC50c3giKTsKICAgIGV4cGVjdChzb3VyY2UpLm5vdC50b0NvbnRhaW4oIm5leHQvaGVhZGVycyIpOwogICAgZXhwZWN0KHNvdXJjZSkubm90LnRvQ29udGFpbignZXhwb3J0IGNvbnN0IGR5bmFtaWMgPSAiZm9yY2UtZHluYW1pYyInKTsKICAgIGV4cGVjdChzb3VyY2UpLnRvQ29udGFpbigidGhlbWUtaW5pdC5qcyIpOwogIH0pOwoKICBpdCgidGhlIHRoZW1lIGJvb3RzdHJhcCBpcyBhIHN0YXRpYyBmaWxlIHRoYXQgcmVhZHMgaXRzIGRlZmF1bHQgZnJvbSBhIGRhdGEgYXR0cmlidXRlIiwgKCkgPT4gewogICAgY29uc3Qgc2NyaXB0ID0gcmVhZCgicHVibGljL3RoZW1lLWluaXQuanMiKTsKICAgIGV4cGVjdChzY3JpcHQpLnRvQ29udGFpbigiZGF0YS1kZWZhdWx0LXRoZW1lIik7CiAgICBleHBlY3Qoc2NyaXB0KS50b0NvbnRhaW4oInBzLXRoZW1lIik7CiAgfSk7CgogIGl0KCJHQUxMRVJZX1BFUl9QQUdFIGxpdmVzIGluIGEgcGxhaW4gbW9kdWxlLCBub3QgdGhlIGNsaWVudCBnYWxsZXJ5IiwgKCkgPT4gewogICAgLy8gQSBzZXJ2ZXIgY29tcG9uZW50IHRoYXQgaW1wb3J0cyBhIHBsYWluIGNvbnN0IGZyb20gYSAidXNlIGNsaWVudCIKICAgIC8vIG1vZHVsZSBnZXRzIGEgY2xpZW50LXJlZmVyZW5jZSBmdW5jdGlvbiBpbnN0ZWFkIG9mIHRoZSBudW1iZXIg4oCUIHRoZQogICAgLy8gYnVpbGQgdGhlbiBmYWlscyBwcmVyZW5kZXJpbmcgd2l0aCBgdGFrZTogW29iamVjdCBGdW5jdGlvbl1gLgogICAgY29uc3Qgc2hhcmVkID0gcmVhZEZpbGVTeW5jKCJzcmMvZGF0YS9nYWxsZXJ5LnRzIiwgInV0ZjgiKTsKICAgIGV4cGVjdChzaGFyZWQpLnRvTWF0Y2goL2V4cG9ydCBjb25zdCBHQUxMRVJZX1BFUl9QQUdFID0gMjQvKTsKICAgIC8vIE5vICJ1c2UgY2xpZW50IiBESVJFQ1RJVkUgKHRoZSB3b3JkIGFwcGVhcnMgaW4gdGhlIGNvbW1lbnQsIHNvIHN0cmlwCiAgICAvLyBjb21tZW50cyBmaXJzdCBhbmQgY2hlY2sgdGhlIGZpcnN0IHJlYWwgc3RhdGVtZW50KS4KICAgIGNvbnN0IHdpdGhvdXRDb21tZW50cyA9IHNoYXJlZC5yZXBsYWNlKC9cL1wqW1xzXFNdKj9cKlwvL2csICIiKS50cmltU3RhcnQoKTsKICAgIGV4cGVjdCh3aXRob3V0Q29tbWVudHMpLm5vdC50b01hdGNoKC9eInVzZSBjbGllbnQiLyk7CiAgICBjb25zdCBnYWxsZXJ5ID0gcmVhZEZpbGVTeW5jKCJzcmMvY29tcG9uZW50cy9zaXRlL2FydC1nYWxsZXJ5LnRzeCIsICJ1dGY4Iik7CiAgICBleHBlY3QoZ2FsbGVyeSkubm90LnRvTWF0Y2goL2V4cG9ydCBjb25zdCBHQUxMRVJZX1BFUl9QQUdFLyk7CiAgICBleHBlY3QoZ2FsbGVyeSkudG9Db250YWluKCdmcm9tICJAL2RhdGEvZ2FsbGVyeSInKTsKICAgIGNvbnN0IGFydFBhZ2UgPSByZWFkRmlsZVN5bmMoInNyYy9hcHAvKHB1YmxpYykvW2xvY2FsZV0vYXJ0L3BhZ2UudHN4IiwgInV0ZjgiKTsKICAgIGV4cGVjdChhcnRQYWdlKS50b0NvbnRhaW4oJ2Zyb20gIkAvZGF0YS9nYWxsZXJ5IicpOwogIH0pOwoKICBpdCgidGhlIFBhZ2VzIGRlbW8gYnVpbGQgcmV3cml0ZXMgcmV2YWxpZGF0ZSBleHBvcnRzIHRvIGZvcmNlLXN0YXRpYyIsICgpID0+IHsKICAgIGNvbnN0IHdvcmtmbG93ID0gcmVhZCgiLmdpdGh1Yi93b3JrZmxvd3MvcGFnZXMueW1sIik7CiAgICBleHBlY3Qod29ya2Zsb3cpLnRvQ29udGFpbignZXhwb3J0IGNvbnN0IHJldmFsaWRhdGUgPSA2MDsnKTsKICAgIGV4cGVjdCh3b3JrZmxvdykudG9Db250YWluKCdleHBvcnQgY29uc3QgZHluYW1pYyA9ICJmb3JjZS1zdGF0aWMiJyk7CiAgfSk7CgogIGl0KCJzZWFyY2gtZHJpdmVuIGFuZCBmcmVzaG5lc3MtY3JpdGljYWwgcGFnZXMgc3RheSBkeW5hbWljIiwgKCkgPT4gewogICAgZm9yIChjb25zdCByZWwgb2YgWwogICAgICAic3JjL2FwcC8ocHVibGljKS9bbG9jYWxlXS9ibG9nL3BhZ2UudHN4IiwKICAgICAgInNyYy9hcHAvKHB1YmxpYykvW2xvY2FsZV0vZGF0LWxpY2gta2hhby1zYXQvcGFnZS50c3giLAogICAgXSkgewogICAgICBleHBlY3QocmVhZChyZWwpKS50b0NvbnRhaW4oJ2V4cG9ydCBjb25zdCBkeW5hbWljID0gImZvcmNlLWR5bmFtaWMiJyk7CiAgICB9CiAgfSk7Cn0pOwo=
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { prisma } from "@/server/db";
+import { countArtworks, listArtworks, listArtworkSlugs } from "@/server/queries/artworks";
+import { GET as getArtworks } from "@/app/api/artworks/route";
+import { resetDatabase, seedFixtures } from "./helpers/db";
+
+/**
+ * Public-site image speed (Stage 3): DB-level pagination, slim card
+ * payloads (no blurDataUrl), and ISR for the content pages.
+ *
+ * The gallery used to ship all 117 artworks in one RSC payload; the
+ * homepage fetched all rows to show 6. These tests pin the new behaviour:
+ * pagination happens at the database, card images carry no blur data URI,
+ * and the content pages are ISR (`revalidate = 60`) instead of
+ * force-dynamic.
+ */
+
+const EXTRA = 30;
+
+beforeAll(async () => {
+  await resetDatabase();
+  const fixtures = await seedFixtures();
+  // 30 more public artworks (both locales) so pagination has pages.
+  for (let i = 1; i <= EXTRA; i++) {
+    const n = String(i).padStart(2, "0");
+    await prisma.artwork.create({
+      data: {
+        slug: `speed-artwork-${n}`,
+        imageMediaId: fixtures.media.id,
+        collectionId: fixtures.publicCollection.id,
+        visibility: "public",
+        featured: false,
+        order: 10 + i,
+        translations: {
+          create: [
+            { locale: "vi", title: `Tác phẩm tốc độ ${n}`, description: `Mô tả ${n}` },
+            { locale: "en", title: `Speed artwork ${n}`, description: `Description ${n}` },
+          ],
+        },
+      },
+    });
+  }
+});
+
+afterAll(async () => {
+  await prisma.$disconnect();
+});
+
+describe("artwork pagination at the database", () => {
+  it("counts visible cards per locale (untranslated rows excluded)", async () => {
+    // Fixtures: art-public (vi+en), art-vi-only (vi only, public), plus 30 new.
+    expect(await countArtworks("vi")).toBe(32);
+    expect(await countArtworks("en")).toBe(31);
+  });
+
+  it("pages are disjoint, stable, and cover the full list", async () => {
+    const full = await listArtworks("vi");
+    expect(full).toHaveLength(32);
+    const page1 = await listArtworks("vi", { limit: 10 });
+    const page2 = await listArtworks("vi", { limit: 10, offset: 10 });
+    const page3 = await listArtworks("vi", { limit: 10, offset: 20 });
+    const page4 = await listArtworks("vi", { limit: 10, offset: 30 });
+    expect(page1).toHaveLength(10);
+    expect(page2).toHaveLength(10);
+    expect(page3).toHaveLength(10);
+    expect(page4).toHaveLength(2);
+    expect([...page1, ...page2, ...page3, ...page4].map((item) => item.id)).toEqual(
+      full.map((item) => item.id),
+    );
+    // Same page twice returns the same cards in the same order.
+    const page1Again = await listArtworks("vi", { limit: 10 });
+    expect(page1Again.map((item) => item.id)).toEqual(page1.map((item) => item.id));
+  });
+
+  it("a limit of 6 fetches 6 rows (homepage preview), not the whole table", async () => {
+    const preview = await listArtworks("vi", { limit: 6 });
+    expect(preview).toHaveLength(6);
+    expect(await countArtworks("vi")).toBe(32);
+  });
+
+  it("collection filter paginates within that collection", async () => {
+    const total = await countArtworks("vi", { collection: "public-collection" });
+    expect(total).toBe(31);
+    const first = await listArtworks("vi", { collection: "public-collection", limit: 10 });
+    const rest = await listArtworks("vi", { collection: "public-collection", limit: 30, offset: 10 });
+    expect(first).toHaveLength(10);
+    expect(rest).toHaveLength(21);
+    expect(new Set([...first, ...rest].map((item) => item.id)).size).toBe(31);
+  });
+});
+
+describe("slim card payload", () => {
+  it("card images carry no blurDataUrl, descriptions stay for the lightbox", async () => {
+    const cards = await listArtworks("vi", { limit: 5 });
+    for (const card of cards) {
+      expect(card.image).not.toBeNull();
+      expect(card.image).not.toHaveProperty("blurDataUrl");
+      // Descriptions stay in the payload: the lightbox renders them.
+      expect(typeof card.description).toBe("string");
+    }
+    const pub = cards.find((card) => card.slug === "art-public");
+    expect(pub?.description.length).toBeGreaterThan(0);
+  });
+
+  it("the JSON-LD slug list is light (slug + title only)", async () => {
+    const slugs = await listArtworkSlugs("vi");
+    expect(slugs).toHaveLength(32);
+    for (const item of slugs) {
+      expect(Object.keys(item).sort()).toEqual(["slug", "title"]);
+    }
+  });
+});
+
+describe("public artworks API pagination", () => {
+  it("returns the requested page with a real total", async () => {
+    const response = await getArtworks(
+      new Request("http://localhost/api/artworks?locale=vi&page=2&perPage=10"),
+    );
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    expect(body.data).toHaveLength(10);
+    expect(body.meta).toMatchObject({ page: 2, perPage: 10, total: 32, pages: 4, locale: "vi" });
+    for (const item of body.data) {
+      expect(item.image ?? null).not.toHaveProperty("blurDataUrl");
+    }
+  });
+
+  it("clamps a page past the end instead of returning an empty page", async () => {
+    const response = await getArtworks(
+      new Request("http://localhost/api/artworks?locale=vi&page=99&perPage=10"),
+    );
+    const body = await response.json();
+    expect(body.meta).toMatchObject({ page: 4, total: 32, pages: 4 });
+    expect(body.data).toHaveLength(2);
+  });
+});
+
+describe("ISR configuration for content pages", () => {
+  const root = process.cwd();
+  const read = (rel: string) => readFileSync(path.join(root, rel), "utf8");
+
+  it("home, art, about and contact are ISR (revalidate 60), not force-dynamic", () => {
+    for (const rel of [
+      "src/app/(public)/[locale]/page.tsx",
+      "src/app/(public)/[locale]/art/page.tsx",
+      "src/app/(public)/[locale]/about/page.tsx",
+      "src/app/(public)/[locale]/contact/page.tsx",
+    ]) {
+      const source = read(rel);
+      expect(source).toContain("export const revalidate = 60;");
+      expect(source).not.toContain('export const dynamic = "force-dynamic"');
+    }
+  });
+
+  it("the public layout no longer reads the per-request nonce", () => {
+    const source = read("src/app/(public)/[locale]/layout.tsx");
+    expect(source).not.toContain("next/headers");
+    expect(source).not.toContain('export const dynamic = "force-dynamic"');
+    expect(source).toContain("theme-init.js");
+  });
+
+  it("the theme bootstrap is a static file that reads its default from a data attribute", () => {
+    const script = read("public/theme-init.js");
+    expect(script).toContain("data-default-theme");
+    expect(script).toContain("ps-theme");
+  });
+
+  it("GALLERY_PER_PAGE lives in a plain module, not the client gallery", () => {
+    // A server component that imports a plain const from a "use client"
+    // module gets a client-reference function instead of the number — the
+    // build then fails prerendering with `take: [object Function]`.
+    const shared = readFileSync("src/data/gallery.ts", "utf8");
+    expect(shared).toMatch(/export const GALLERY_PER_PAGE = 24/);
+    // No "use client" DIRECTIVE (the word appears in the comment, so strip
+    // comments first and check the first real statement).
+    const withoutComments = shared.replace(/\/\*[\s\S]*?\*\//g, "").trimStart();
+    expect(withoutComments).not.toMatch(/^"use client"/);
+    const gallery = readFileSync("src/components/site/art-gallery.tsx", "utf8");
+    expect(gallery).not.toMatch(/export const GALLERY_PER_PAGE/);
+    expect(gallery).toContain('from "@/data/gallery"');
+    const artPage = readFileSync("src/app/(public)/[locale]/art/page.tsx", "utf8");
+    expect(artPage).toContain('from "@/data/gallery"');
+  });
+
+  it("the Pages demo build rewrites revalidate exports to force-static", () => {
+    const workflow = read(".github/workflows/pages.yml");
+    expect(workflow).toContain('export const revalidate = 60;');
+    expect(workflow).toContain('export const dynamic = "force-static"');
+  });
+
+  it("search-driven and freshness-critical pages stay dynamic", () => {
+    for (const rel of [
+      "src/app/(public)/[locale]/blog/page.tsx",
+      "src/app/(public)/[locale]/dat-lich-khao-sat/page.tsx",
+    ]) {
+      expect(read(rel)).toContain('export const dynamic = "force-dynamic"');
+    }
+  });
+});
