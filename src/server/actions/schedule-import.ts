@@ -27,6 +27,7 @@ import {
   previewScheduleImport,
   type ImportAction,
   type ImportSummary,
+  type SlotSyncAction,
 } from "../schedule-import/engine";
 import {
   createIntegrationConnection,
@@ -45,6 +46,9 @@ export type ImportPreviewItem = {
   status: string;
   action: ImportAction;
   error?: string;
+  /** Phase 12 slot sync outcome for this schedule. */
+  slot?: SlotSyncAction;
+  slotError?: string;
 };
 
 export type ManualImportResult = {
@@ -83,6 +87,8 @@ function joinPreviewItems(summary: ImportSummary, schedules: ValidatedSchedule[]
       status: schedule?.status ?? "",
       action: item.action,
       ...(item.error ? { error: item.error } : {}),
+      ...(item.slot ? { slot: item.slot } : {}),
+      ...(item.slotError ? { slotError: item.slotError } : {}),
     };
   });
 }
@@ -153,12 +159,12 @@ export async function applyManualImportAction(jsonText: string): Promise<ManualI
       action: "schedule_import.apply",
       entityType: "ScheduleImport",
       entityId: importId,
-      summary: `Manual import: ${summary.created} created, ${summary.updated} updated, ${summary.unchanged} unchanged, ${summary.cancelled} cancelled, ${summary.failed} failed (total ${summary.total})`,
+      summary: `Manual import: ${summary.created} created, ${summary.updated} updated, ${summary.unchanged} unchanged, ${summary.cancelled} cancelled, ${summary.failed} failed (total ${summary.total}); slots: ${summary.slots.created} created, ${summary.slots.moved} moved, ${summary.slots.updated} updated, ${summary.slots.removed} removed, ${summary.slots.kept} kept, ${summary.slots.failed} failed`,
     });
     revalidatePath("/admin/schedule-import");
     return {
       ok: true,
-      message: `Đã nhập lịch: ${summary.created} mới, ${summary.updated} thay đổi, ${summary.unchanged} không đổi, ${summary.cancelled} đã huỷ, ${summary.failed} lỗi.`,
+      message: `Đã nhập lịch: ${summary.created} mới, ${summary.updated} thay đổi, ${summary.unchanged} không đổi, ${summary.cancelled} đã huỷ, ${summary.failed} lỗi. Khung giờ đặt lịch: ${summary.slots.created} tạo mới, ${summary.slots.moved} di chuyển, ${summary.slots.removed} đã xóa, ${summary.slots.failed} lỗi.`,
       summary,
       importId,
       previewItems: joinPreviewItems(summary, parsed.schedules),
