@@ -1,1 +1,12 @@
-LyoqCiAqIENhcmRzIHBlciBpbmZpbml0ZS1zY3JvbGwgYmF0Y2gsIHNlcnZlciBhbmQgY2xpZW50IGFsaWtlLiAyNCBrZWVwcyB0aGUKICogZmlyc3QgcGFpbnQgc21hbGwgd2hpbGUgZmlsbGluZyBzZXZlcmFsIHNjcmVlbnMsIHNvIG1vc3QgdmlzaXRvcnMgbmV2ZXIKICogd2FpdCBmb3IgYSBzZWNvbmQgYmF0Y2guIFRoZSBwdWJsaWMgQVBJIGRlZmF1bHRzIHRvIHRoZSBzYW1lIHZhbHVlLgogKgogKiBUaGlzIGxpdmVzIGluIGl0cyBvd24gcGxhaW4gbW9kdWxlIG9uIHB1cnBvc2U6IHRoZSBnYWxsZXJ5IGNvbXBvbmVudCBpcwogKiBhICJ1c2UgY2xpZW50IiBtb2R1bGUsIGFuZCBhIHNlcnZlciBjb21wb25lbnQgdGhhdCBpbXBvcnRzIGEgcGxhaW4gY29uc3QKICogZnJvbSBhIGNsaWVudCBtb2R1bGUgZ2V0cyBhIGNsaWVudC1yZWZlcmVuY2UgZnVuY3Rpb24gaW5zdGVhZCBvZiB0aGUKICogdmFsdWUgKE5leHQgdHVybnMgZXZlcnkgbmFtZWQgZXhwb3J0IG9mIGEgY2xpZW50IG1vZHVsZSBpbnRvIGEgcmVmZXJlbmNlCiAqIOKAlCBQcmlzbWEgdGhlbiByZWplY3RzIGB0YWtlOiBbb2JqZWN0IEZ1bmN0aW9uXWAgYXQgYnVpbGQgdGltZSkuCiAqLwpleHBvcnQgY29uc3QgR0FMTEVSWV9QRVJfUEFHRSA9IDI0Owo=
+/**
+ * Cards per infinite-scroll batch, server and client alike. 24 keeps the
+ * first paint small while filling several screens, so most visitors never
+ * wait for a second batch. The public API defaults to the same value.
+ *
+ * This lives in its own plain module on purpose: the gallery component is
+ * a "use client" module, and a server component that imports a plain const
+ * from a client module gets a client-reference function instead of the
+ * value (Next turns every named export of a client module into a reference
+ * — Prisma then rejects `take: [object Function]` at build time).
+ */
+export const GALLERY_PER_PAGE = 24;
