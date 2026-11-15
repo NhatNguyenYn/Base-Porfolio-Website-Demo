@@ -7,6 +7,8 @@ export type MediaView = {
   height: number | null;
   alt: string;
   title: string;
+  /** 16px WebP placeholder (`data:image/webp;base64,…`) for next/image blur, or null. */
+  blurDataUrl: string | null;
 };
 
 export type LocalizedRow<T> = {

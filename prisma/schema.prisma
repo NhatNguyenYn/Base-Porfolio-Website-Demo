@@ -457,6 +457,15 @@ model Media {
   height     Int?
   alt        String?
   title      String?
+  // Image optimization (2026-11-15): the stored file is the optimized
+  // version; these columns keep the audit trail for the original upload.
+  // `originalSize` is null until the file has been through the optimizer
+  // (new uploads) or the legacy migration (old uploads).
+  originalSize       Int?
+  originalStorageKey String?
+  optimizedAt        DateTime?
+  // 16px WebP placeholder (`data:image/webp;base64,…`) for next/image blur.
+  blurDataUrl        String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

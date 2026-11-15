@@ -38,7 +38,7 @@ export function MediaUploader() {
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-[13px] font-medium">Tải ảnh lên thư viện</h2>
-          <p className="mt-0.5 text-[11px] text-muted">JPG, PNG, WebP, AVIF, GIF · tối đa 10 MB mỗi ảnh</p>
+          <p className="mt-0.5 text-[11px] text-muted">JPG, PNG, WebP, AVIF, GIF · tối đa 10 MB mỗi ảnh · ảnh được nén tự động</p>
         </div>
         <button type="submit" className="btn btn-primary btn-sm" disabled={pending}>
           {pending ? "Đang tải…" : "Tải lên"}

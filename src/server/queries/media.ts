@@ -10,6 +10,7 @@ export function toMediaView(media: Partial<Media> | null | undefined): MediaView
     height: media.height ?? null,
     alt: media.alt ?? "",
     title: media.title ?? media.filename ?? "",
+    blurDataUrl: media.blurDataUrl ?? null,
   };
 }
 

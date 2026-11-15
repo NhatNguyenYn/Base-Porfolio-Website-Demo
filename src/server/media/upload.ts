@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { prisma } from "../db";
 import { getStorage } from "../storage";
 import type { MediaView } from "../queries/types";
+import { optimizeImage, OptimizeError, normalizeFormat } from "./optimize";
 
 /** SVG is deliberately not accepted: it can execute script when served inline. */
 const ALLOWED_TYPES: Record<string, { extension: string; format: string }> = {
@@ -29,8 +30,11 @@ export function maxUploadBytes(): number {
 }
 
 /**
- * Validates an uploaded image and stores it: declared MIME type, real decoded
- * format (sharp), size cap, random storage key and an immutable original.
+ * Validates an uploaded image, optimizes it (resize + recompress, see
+ * ./optimize.ts) and stores the optimized version: declared MIME type, real
+ * decoded format (sharp), size cap, random storage key and an immutable
+ * optimized file. The original upload bytes are never stored; the original
+ * size is recorded on the media row for the compression audit trail.
  */
 export async function storeImage(file: File, alt: string): Promise<MediaView> {
   const declared = ALLOWED_TYPES[file.type];
@@ -43,6 +47,7 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  const originalBytes = buffer.byteLength;
 
   let width: number | null = null;
   let height: number | null = null;
@@ -51,8 +56,9 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
     // (decompression bomb) during metadata reads and later variant generation.
     const metadata = await sharp(buffer, { limitInputPixels: 100_000_000 }).metadata();
     // The bytes must actually decode to the declared format; a .png full of
-    // HTML is rejected here rather than stored and served.
-    if (metadata.format !== declared.format) {
+    // HTML is rejected here rather than stored and served. (Sharp reports
+    // AVIF as "heif"; normalizeFormat maps it back to "avif".)
+    if (normalizeFormat(metadata.format) !== declared.format) {
       throw new UploadError("TYPE", `${file.name}: file content does not match its declared type.`);
     }
     width = metadata.width ?? null;
@@ -62,11 +68,24 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
     throw new UploadError("CORRUPT", `${file.name} is not a readable image.`);
   }
 
+  // Optimize: resize to at most 1600px on the longest edge and recompress.
+  // Already-optimized files come back unchanged (idempotent), so re-uploads
+  // and the compressed batches are stored byte-identical.
+  let optimized;
+  try {
+    optimized = await optimizeImage(buffer, file.type);
+  } catch (error) {
+    if (error instanceof OptimizeError) {
+      throw new UploadError("CORRUPT", `${file.name} is not a readable image.`);
+    }
+    throw error;
+  }
+
   const now = new Date();
   const prefix = `uploads/${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}`;
   // Client filenames are never used for storage keys.
-  const key = `${prefix}/${randomUUID()}.${declared.extension}`;
-  const stored = await getStorage().put(key, buffer, file.type);
+  const key = `${prefix}/${randomUUID()}.${optimized.extension}`;
+  const stored = await getStorage().put(key, optimized.buffer, optimized.mimeType);
 
   const title = file.name.replace(/\.[^.]+$/, "").slice(0, 200);
   const media = await prisma.media.create({
@@ -74,12 +93,15 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
       storageKey: stored.key,
       url: stored.url,
       filename: file.name.slice(0, 200),
-      mimeType: file.type,
-      size: file.size,
-      width,
-      height,
+      mimeType: optimized.mimeType,
+      size: optimized.optimizedBytes,
+      width: optimized.width ?? width,
+      height: optimized.height ?? height,
       alt: alt || title,
       title,
+      originalSize: originalBytes,
+      optimizedAt: now,
+      blurDataUrl: optimized.blurDataUrl,
     },
   });
 
@@ -90,5 +112,6 @@ export async function storeImage(file: File, alt: string): Promise<MediaView> {
     height: media.height,
     alt: media.alt ?? "",
     title: media.title ?? "",
+    blurDataUrl: media.blurDataUrl ?? null,
   };
 }

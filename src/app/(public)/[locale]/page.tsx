@@ -150,6 +150,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       fill
                       priority
                       sizes="(min-width: 1024px) 38vw, 92vw"
+                      placeholder={profile.avatar.blurDataUrl ? "blur" : "empty"}
+                      blurDataURL={profile.avatar.blurDataUrl ?? undefined}
                       className="object-cover"
                     />
                   ) : (
