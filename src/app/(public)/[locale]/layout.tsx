@@ -35,13 +35,14 @@ import { BackToTop } from "@/components/site/back-to-top";
  * server components through headers(), and reading headers() forces dynamic
  * rendering. So this layout never reads the nonce: the theme bootstrap is a
  * static file (public/theme-init.js, allowed by `script-src 'self'` with no
- * nonce) and the JSON-LD below is a data block, never executed as script —
- * and the CSP itself is report-only, so nothing is blocked even while the
- * header carries a fresh per-request nonce. Pages that still need the nonce
- * (art/blog detail, collection, blog list) keep reading headers() and stay
- * dynamic; search-driven and freshness-critical pages (blog list, booking)
- * stay dynamic too. If the CSP is ever switched from report-only to
- * enforced, the nonce-less scripts must be revisited first.
+ * nonce) and the JSON-LD below is a data block, never executed as script.
+ * The enforced CSP therefore allows inline scripts (`script-src 'self'
+ * 'unsafe-inline'`, see src/lib/csp.ts) instead of a nonce policy — a
+ * nonce policy broke production on 16/11/2026 (PR #12): it blocked the
+ * site's own inline RSC/hydration scripts and every ISR page stayed on its
+ * loading skeleton. Pages that still need the nonce (art/blog detail,
+ * collection, blog list) keep reading headers() and stay dynamic; search-driven
+ * and freshness-critical pages (blog list, booking) stay dynamic too.
  *
  * The GitHub Pages demo build rewrites each page's `revalidate` export to
  * "force-static" (see .github/workflows/pages.yml).

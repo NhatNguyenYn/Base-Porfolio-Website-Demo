@@ -4,17 +4,31 @@ export const CSP_NONCE_HEADER = "x-nonce";
 /**
  * Content-Security-Policy for this app.
  *
- * `script-src` is nonce based (Next reads the header and stamps its own
- * scripts); `style-src` still allows inline styles because the React tree and
- * Tailwind emit style attributes. No `unsafe-inline` is granted to scripts.
+ * `script-src` allows `'self'` plus `'unsafe-inline'` — deliberately, not by
+ * accident. The public pages (home, art, about, contact) are ISR
+ * (`revalidate = 60`): their HTML is prerendered once and served from the
+ * edge, so it can never carry a per-request nonce. A nonce-based policy
+ * (`'nonce-…'` + `'strict-dynamic'`) blocks the site's own inline scripts —
+ * the RSC stream and hydration scripts — and the page stays on its loading
+ * skeleton forever. That is exactly what happened on 16/11/2026 when PR #12
+ * enforced the nonce policy: production broke until it was rolled back.
+ * Dynamic pages (art/blog detail, admin) still read the per-request nonce
+ * from `x-nonce` for their own inline theme/JSON-LD scripts, but the
+ * enforced policy itself must stay nonce-free so the ISR pages keep working.
+ *
+ * The XSS defence therefore stays where it already was: input sanitization
+ * (`sanitize-html` on rendered markdown/rich text) plus React escaping —
+ * never user-controlled scripts. What this policy still enforces: no
+ * external scripts, no plugins (`object-src 'none'`), no framing
+ * (`frame-ancestors 'self'`), no base/form hijacking.
+ *
  * Enforced since the 16/11 security review (it used to ship as
  * `Content-Security-Policy-Report-Only`, which browsers never block on).
  */
-export function buildContentSecurityPolicy(nonce: string, options: { dev: boolean }): string {
+export function buildContentSecurityPolicy(options: { dev: boolean }): string {
   const scriptSrc = [
     "'self'",
-    `'nonce-${nonce}'`,
-    "'strict-dynamic'",
+    "'unsafe-inline'",
     ...(options.dev ? ["'unsafe-eval'"] : []),
   ].join(" ");
 
