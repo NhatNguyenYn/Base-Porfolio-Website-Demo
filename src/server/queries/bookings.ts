@@ -284,15 +284,21 @@ export type BookingFilters = {
   serviceId?: string;
   from?: string;
   to?: string;
+  /** Maximum rows to return; applied at the database, not after fetching. */
+  limit?: number;
+  /** Rows to skip (page-1 × limit); only meaningful together with `limit`. */
+  offset?: number;
 };
 
-/** Admin bookings list, filtered by status / service / slot date (VN calendar day). */
-export async function listBookingsForAdmin(filters: BookingFilters = {}): Promise<BookingListItem[]> {
-  const where: {
-    status?: string;
-    serviceId?: string;
-    slot?: { startsAt: { gte?: Date; lte?: Date } };
-  } = {};
+type BookingWhere = {
+  status?: string;
+  serviceId?: string;
+  slot?: { startsAt: { gte?: Date; lte?: Date } };
+};
+
+/** Shared filters for the admin bookings list, applied at the database. */
+function bookingWhere(filters: BookingFilters): BookingWhere {
+  const where: BookingWhere = {};
   if (filters.status) where.status = filters.status;
   if (filters.serviceId) where.serviceId = filters.serviceId;
   if (filters.from || filters.to) {
@@ -301,15 +307,26 @@ export async function listBookingsForAdmin(filters: BookingFilters = {}): Promis
     if (filters.to) range.lte = new Date(`${filters.to}T23:59:59.999Z`);
     where.slot = { startsAt: range };
   }
+  return where;
+}
 
+/**
+ * Admin bookings list, filtered by status / service / slot date (VN calendar day).
+ * Paginated at the database: the page asks for one batch at a time instead
+ * of all rows (the list used to fetch up to 500 rows to show 20, which
+ * kept the slowest admin tab — 5.6s measured live 16/11 — slow as bookings
+ * grow). `id` breaks createdAt ties so a row never jumps pages.
+ */
+export async function listBookingsForAdmin(filters: BookingFilters = {}): Promise<BookingListItem[]> {
   const rows = await prisma.booking.findMany({
-    where,
+    where: bookingWhere(filters),
     include: {
       service: { select: { slug: true, translations: { where: { locale: "vi" }, select: { name: true } } } },
       slot: { select: { startsAt: true, endsAt: true } },
     },
-    orderBy: { createdAt: "desc" },
-    take: 500,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    ...(filters.offset ? { skip: filters.offset } : {}),
+    ...(filters.limit ? { take: filters.limit } : {}),
   });
   return rows.map((row) => ({
     id: row.id,
@@ -327,6 +344,11 @@ export async function listBookingsForAdmin(filters: BookingFilters = {}): Promis
     endsAt: row.slot.endsAt,
     createdAt: row.createdAt,
   }));
+}
+
+/** Total bookings for the same filters — the bookings page's page count. */
+export async function countBookingsForAdmin(filters: BookingFilters = {}): Promise<number> {
+  return prisma.booking.count({ where: bookingWhere(filters) });
 }
 
 /** How many of the 30 flowers are currently held by active bookings. */

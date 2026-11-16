@@ -342,16 +342,68 @@ export async function getCollectionForAdmin(id: string) {
   });
 }
 
-export async function listArtworksForAdmin() {
-  return prisma.artwork.findMany({
+/**
+ * One row of the admin artworks table: only what the table renders
+ * (thumbnail URL, titles, collection name, order / featured / visibility).
+ * Deliberately WITHOUT the full translations (descriptions), the full
+ * image record (blurDataUrl) and the full collection — the old version
+ * returned all of that for all 117 artworks to show 20 rows, which kept
+ * the slowest admin tabs slow (Art 3.1s measured live 16/11).
+ */
+export type AdminArtworkRow = {
+  id: string;
+  slug: string;
+  order: number;
+  featured: boolean;
+  visibility: string;
+  imageUrl: string;
+  viTitle: string;
+  enTitle: string;
+  collectionName: string;
+};
+
+/**
+ * Admin artworks table, paginated at the database: the page asks for one
+ * batch at a time instead of all rows. `id` breaks createdAt ties so a
+ * row never jumps pages when its order changes.
+ */
+export async function listArtworksForAdmin(page: { limit?: number; offset?: number } = {}): Promise<AdminArtworkRow[]> {
+  const rows = await prisma.artwork.findMany({
     where: { deletedAt: null },
-    include: {
-      imageMedia: true,
-      translations: true,
-      collection: { include: { translations: true } },
+    select: {
+      id: true,
+      slug: true,
+      order: true,
+      featured: true,
+      visibility: true,
+      imageMedia: { select: { url: true } },
+      translations: { select: { locale: true, title: true } },
+      collection: { select: { translations: { where: { locale: "vi" }, select: { name: true } } } },
     },
-    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+    orderBy: [{ order: "asc" }, { createdAt: "desc" }, { id: "asc" }],
+    ...(page.offset ? { skip: page.offset } : {}),
+    ...(page.limit ? { take: page.limit } : {}),
   });
+  return rows.map((row) => {
+    const vi = row.translations.find((item) => item.locale === "vi");
+    const en = row.translations.find((item) => item.locale === "en");
+    return {
+      id: row.id,
+      slug: row.slug,
+      order: row.order,
+      featured: row.featured,
+      visibility: row.visibility,
+      imageUrl: row.imageMedia?.url ?? "",
+      viTitle: vi?.title ?? "",
+      enTitle: en?.title ?? "",
+      collectionName: row.collection?.translations[0]?.name ?? "",
+    };
+  });
+}
+
+/** Total artworks for the admin table — its page count. */
+export async function countArtworksForAdmin(): Promise<number> {
+  return prisma.artwork.count({ where: { deletedAt: null } });
 }
 
 export async function getArtworkForAdmin(id: string) {

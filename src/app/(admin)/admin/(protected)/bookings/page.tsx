@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { listBookingsForAdmin, countActiveFlowerUsage, flowerPoolSize, listServicesForAdmin } from "@/server/queries/bookings";
+import { listBookingsForAdmin, countBookingsForAdmin, countActiveFlowerUsage, flowerPoolSize, listServicesForAdmin } from "@/server/queries/bookings";
 import { PageHeader } from "@/components/admin/page-header";
 import { DataTable } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Flash } from "@/components/admin/flash";
 import { Pagination } from "@/components/site/pagination";
 import { formatVnDateTime } from "@/lib/booking-time";
-import { paginate, totalPages } from "@/lib/utils";
+import { totalPages } from "@/lib/utils";
 
 const STATUS_LABELS: Record<string, string> = {
   pending: "Chờ xác nhận",
@@ -29,20 +29,28 @@ export default async function AdminBookingsPage({
   searchParams: Promise<{ status?: string; serviceId?: string; from?: string; to?: string; page?: string; saved?: string }>;
 }) {
   const query = await searchParams;
-  const [bookings, activeFlowers, services] = await Promise.all([
-    listBookingsForAdmin({
-      status: query.status || undefined,
-      serviceId: query.serviceId || undefined,
-      from: query.from || undefined,
-      to: query.to || undefined,
-    }),
+  const page = Math.max(1, Number.parseInt(query.page ?? "1", 10) || 1);
+  const perPage = 20;
+  const filters = {
+    status: query.status || undefined,
+    serviceId: query.serviceId || undefined,
+    from: query.from || undefined,
+    to: query.to || undefined,
+  };
+  const [total, activeFlowers, services] = await Promise.all([
+    countBookingsForAdmin(filters),
     countActiveFlowerUsage(),
     listServicesForAdmin(),
   ]);
-
-  const page = Math.max(1, Number.parseInt(query.page ?? "1", 10) || 1);
-  const pages = totalPages(bookings.length, 20);
-  const items = paginate(bookings, Math.min(page, pages), 20);
+  const pages = totalPages(total, perPage);
+  const safePage = Math.min(page, pages);
+  // Paginate at the database: one batch at a time instead of all rows.
+  const bookings = await listBookingsForAdmin({
+    ...filters,
+    limit: perPage,
+    offset: (safePage - 1) * perPage,
+  });
+  const items = bookings;
   const poolSize = flowerPoolSize();
 
   return (
@@ -144,7 +152,7 @@ export default async function AdminBookingsPage({
       />
 
       <Pagination
-        page={Math.min(page, pages)}
+        page={safePage}
         pages={pages}
         basePath="/admin/bookings"
         params={{

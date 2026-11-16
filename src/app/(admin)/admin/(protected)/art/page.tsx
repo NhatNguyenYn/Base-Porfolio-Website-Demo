@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, Plus } from "lucide-react";
-import { listArtworksForAdmin } from "@/server/queries/artworks";
+import { listArtworksForAdmin, countArtworksForAdmin } from "@/server/queries/artworks";
 import {
   deleteArtworkAction,
   moveArtworkAction,
@@ -14,7 +14,7 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
 import { Flash } from "@/components/admin/flash";
 import { Pagination } from "@/components/site/pagination";
-import { paginate, totalPages } from "@/lib/utils";
+import { totalPages } from "@/lib/utils";
 
 export default async function AdminArtPage({
   searchParams,
@@ -22,10 +22,14 @@ export default async function AdminArtPage({
   searchParams: Promise<{ page?: string; saved?: string; deleted?: string }>;
 }) {
   const query = await searchParams;
-  const artworks = await listArtworksForAdmin();
   const page = Math.max(1, Number.parseInt(query.page ?? "1", 10) || 1);
-  const pages = totalPages(artworks.length, 20);
-  const items = paginate(artworks, Math.min(page, pages), 20);
+  const perPage = 20;
+  const total = await countArtworksForAdmin();
+  const pages = totalPages(total, perPage);
+  const safePage = Math.min(page, pages);
+  // Paginate at the database, slim rows only: one batch at a time instead
+  // of all artworks with their full translations and blur data.
+  const items = await listArtworksForAdmin({ limit: perPage, offset: (safePage - 1) * perPage });
 
   return (
     <>
@@ -58,26 +62,23 @@ export default async function AdminArtPage({
           { key: "actions", label: "", className: "text-right" },
         ]}
         rows={items.map((artwork) => {
-          const vi = artwork.translations.find((item) => item.locale === "vi");
-          const en = artwork.translations.find((item) => item.locale === "en");
-          const collection = artwork.collection?.translations.find((item) => item.locale === "vi")?.name;
           return {
             id: artwork.id,
             cells: {
               artwork: (
                 <div className="flex items-center gap-3">
                   <div className="relative h-14 w-11 shrink-0 overflow-hidden border border-line bg-surface-muted">
-                    <Image src={assetUrl(artwork.imageMedia.url)} alt="" fill sizes="44px" className="object-cover" />
+                    <Image src={assetUrl(artwork.imageUrl)} alt="" fill sizes="44px" className="object-cover" />
                   </div>
                   <div className="min-w-0">
                     <Link href={`/admin/art/${artwork.id}`} className="block truncate text-[12.5px] hover:underline">
-                      {vi?.title ?? en?.title ?? artwork.slug}
+                      {artwork.viTitle || artwork.enTitle || artwork.slug}
                     </Link>
                     <p className="truncate font-mono text-[10px] text-muted">/{artwork.slug}</p>
                   </div>
                 </div>
               ),
-              collection: <span className="text-[11.5px] text-muted">{collection ?? "—"}</span>,
+              collection: <span className="text-[11.5px] text-muted">{artwork.collectionName || "—"}</span>,
               order: (
                 <div className="flex items-center gap-1">
                   <form action={moveArtworkAction}>
@@ -127,7 +128,7 @@ export default async function AdminArtPage({
                   <form action={deleteArtworkAction}>
                     <input type="hidden" name="id" value={artwork.id} />
                     <ConfirmSubmit
-                      title={`Xoá tác phẩm “${vi?.title ?? en?.title ?? artwork.slug}”?`}
+                      title={`Xoá tác phẩm “${artwork.viTitle || artwork.enTitle || artwork.slug}”?`}
                       description="Tác phẩm sẽ bị ẩn khỏi góc nghệ thuật số (xoá mềm). Ảnh gốc vẫn còn trong thư viện."
                       triggerLabel="Xoá"
                       confirmLabel="Xoá tác phẩm"
@@ -142,7 +143,7 @@ export default async function AdminArtPage({
       />
 
       <Pagination
-        page={Math.min(page, pages)}
+        page={safePage}
         pages={pages}
         basePath="/admin/art"
         params={{}}
