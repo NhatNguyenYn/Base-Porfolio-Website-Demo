@@ -7,8 +7,8 @@ export const CSP_NONCE_HEADER = "x-nonce";
  * `script-src` is nonce based (Next reads the header and stamps its own
  * scripts); `style-src` still allows inline styles because the React tree and
  * Tailwind emit style attributes. No `unsafe-inline` is granted to scripts.
- * Enforced since the 16/11 security review (it used to ship as
- * `Content-Security-Policy-Report-Only`, which browsers never block on).
+ * Shipped as `Content-Security-Policy-Report-Only` first so violations can be
+ * observed before enforcement.
  */
 export function buildContentSecurityPolicy(nonce: string, options: { dev: boolean }): string {
   const scriptSrc = [
