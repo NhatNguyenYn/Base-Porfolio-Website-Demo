@@ -20,14 +20,18 @@ export function resolveBareLocaleRedirect(pathname: string): string | null {
 
 export function middleware(request: NextRequest) {
   // Web Crypto is available in the middleware runtime.
+  // The nonce is handed to server components through `x-nonce` (dynamic
+  // pages still use it for their inline theme/JSON-LD scripts). It is NOT
+  // part of the enforced policy: ISR pages prerender their HTML once and
+  // can never carry a per-request nonce, so a nonce-based policy would block
+  // the site's own inline scripts (16/11/2026, PR #12). See src/lib/csp.ts.
   const nonce = crypto.randomUUID();
   const requestId = crypto.randomUUID();
-  const csp = buildContentSecurityPolicy(nonce, { dev: process.env.NODE_ENV !== "production" });
+  const csp = buildContentSecurityPolicy({ dev: process.env.NODE_ENV !== "production" });
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(CSP_NONCE_HEADER, nonce);
   requestHeaders.set("x-request-id", requestId);
-  // Next reads the CSP request header to stamp the nonce onto its own scripts.
   requestHeaders.set("Content-Security-Policy", csp);
 
   const bareTarget = resolveBareLocaleRedirect(request.nextUrl.pathname);
