@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { NextRequest } from "next/server";
 import { buildContentSecurityPolicy } from "@/lib/csp";
+import { middleware } from "@/middleware";
 
 function directive(csp: string, name: string): string {
   return csp.split("; ").find((entry) => entry.startsWith(`${name} `)) ?? "";
@@ -37,5 +39,15 @@ describe("Content Security Policy", () => {
     expect(directive(dev, "script-src")).toContain("'unsafe-eval'");
     expect(directive(dev, "connect-src")).toContain("ws:");
     expect(directive(csp, "connect-src")).not.toContain("ws:");
+  });
+});
+
+describe("CSP enforcement in middleware", () => {
+  it("sends the policy enforced, never report-only", async () => {
+    const response = middleware(new NextRequest("http://localhost:3000/vi"));
+    const enforced = response.headers.get("content-security-policy");
+    expect(enforced).toContain("script-src");
+    expect(enforced).toContain("'nonce-");
+    expect(response.headers.get("content-security-policy-report-only")).toBeNull();
   });
 });
