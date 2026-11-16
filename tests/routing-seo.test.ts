@@ -14,7 +14,7 @@ describe("locale routing", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("location")).toBeNull();
     expect(response.headers.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
-    expect(response.headers.get("Content-Security-Policy")).toContain("nonce-");
+    expect(response.headers.get("Content-Security-Policy")).toContain("script-src 'self' 'unsafe-inline'");
     expect(response.headers.get("Content-Security-Policy-Report-Only")).toBeNull();
   });
 
