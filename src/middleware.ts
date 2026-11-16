@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
   requestHeaders.set(CSP_NONCE_HEADER, nonce);
   requestHeaders.set("x-request-id", requestId);
   // Next reads the CSP request header to stamp the nonce onto its own scripts.
-  requestHeaders.set("Content-Security-Policy", csp);
+  requestHeaders.set("Content-Security-Policy-Report-Only", csp);
 
   const bareTarget = resolveBareLocaleRedirect(request.nextUrl.pathname);
   const response =
@@ -38,7 +38,7 @@ export function middleware(request: NextRequest) {
         ? NextResponse.redirect(new URL(`${bareTarget}${request.nextUrl.search}`, request.url))
         : NextResponse.next({ request: { headers: requestHeaders } });
 
-  response.headers.set("Content-Security-Policy", csp);
+  response.headers.set("Content-Security-Policy-Report-Only", csp);
   response.headers.set("x-request-id", requestId);
   return response;
 }
