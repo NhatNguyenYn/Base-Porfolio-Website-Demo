@@ -7,6 +7,7 @@ import { uploadMediaAction, type UploadState } from "@/server/actions/media";
 import { assetUrl } from "@/lib/asset";
 import { useFocusTrap } from "@/lib/focus-trap";
 import { compressImageForUpload } from "@/lib/client-image";
+import { filterMediaItems } from "@/lib/media-search";
 import { validateUploadFiles } from "@/lib/upload-validation";
 import type { MediaView } from "@/server/queries/types";
 
@@ -36,6 +37,12 @@ export function MediaPicker({
   const [selected, setSelected] = useState<MediaView[]>(initial);
   const [items, setItems] = useState<MediaView[]>(library);
   const [open, setOpen] = useState(false);
+  // Search inside the dialog (picker limit fix, 24/11): the library passed
+  // 120 images, so scrolling alone could no longer reach an older image —
+  // "Logo 1" sat at position 139. The query filters by title/alt, accents
+  // ignored, and is cleared whenever the dialog closes.
+  const [query, setQuery] = useState("");
+  const visibleItems = filterMediaItems(items, query);
   const [uploadState, uploadAction, uploading] = useActionState(uploadMediaAction, {
     ok: false,
     message: "",
@@ -115,6 +122,10 @@ export function MediaPicker({
     return () => {
       document.body.style.overflow = previous;
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) setQuery("");
   }, [open]);
 
   function choose(item: MediaView) {
@@ -321,11 +332,31 @@ export function MediaPicker({
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <label htmlFor={`media-search-${name}`} className="sr-only">
+                  Tìm kiếm ảnh
+                </label>
+                <input
+                  id={`media-search-${name}`}
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Tìm theo tên ảnh…"
+                  className="field w-full"
+                />
+                <span className="shrink-0 text-[10.5px] text-muted">
+                  Hiển thị {visibleItems.length} / {items.length} ảnh
+                </span>
+              </div>
               {items.length === 0 ? (
                 <p className="py-10 text-center text-[12px] text-muted">Thư viện chưa có ảnh. Hãy tải lên ảnh đầu tiên.</p>
+              ) : visibleItems.length === 0 ? (
+                <p className="py-10 text-center text-[12px] text-muted">
+                  Không tìm thấy ảnh nào khớp với “{query}”.
+                </p>
               ) : (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-                  {items.map((item) => {
+                  {visibleItems.map((item) => {
                     const active = selected.some((entry) => entry.id === item.id);
                     return (
                       <button
