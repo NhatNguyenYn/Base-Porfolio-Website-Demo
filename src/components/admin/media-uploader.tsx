@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadCloud } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
+import { compressImageForUpload } from "@/lib/client-image";
+import { validateUploadFiles } from "@/lib/upload-validation";
 
 export function MediaUploader() {
   const [state, action, pending] = useActionState(uploadMediaAction, {
@@ -14,13 +16,46 @@ export function MediaUploader() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragging, setDragging] = useState(false);
   const [names, setNames] = useState<string[]>([]);
+  const [localError, setLocalError] = useState("");
+  const [preparing, setPreparing] = useState(false);
 
   useEffect(() => {
     if (state.ok) {
       router.refresh();
       setNames([]);
+      if (inputRef.current) inputRef.current.value = "";
     }
   }, [state, router]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const files = Array.from(inputRef.current?.files ?? []);
+    if (files.length === 0) {
+      setLocalError("Hãy chọn ít nhất một ảnh.");
+      return;
+    }
+    // Same browser-side compression as the picker: large photos are shrunk
+    // (max 1600px, JPEG q82) before dispatch, because Vercel rejects any
+    // request body over 4.5 MB before the Server Action ever runs.
+    setPreparing(true);
+    let prepared: File[];
+    try {
+      prepared = await Promise.all(files.map((file) => compressImageForUpload(file)));
+    } finally {
+      setPreparing(false);
+    }
+    const problem = validateUploadFiles(prepared);
+    if (problem) {
+      setLocalError(problem);
+      return;
+    }
+    setLocalError("");
+    const formData = new FormData();
+    for (const file of prepared) formData.append("files", file);
+    startTransition(() => {
+      action(formData);
+    });
+  }
 
   function handleDrop(event: React.DragEvent<HTMLLabelElement>) {
     event.preventDefault();
@@ -34,14 +69,14 @@ export function MediaUploader() {
   }
 
   return (
-    <form action={action} className="border border-line bg-surface p-5">
+    <form onSubmit={handleSubmit} className="border border-line bg-surface p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-[13px] font-medium">Tải ảnh lên thư viện</h2>
-          <p className="mt-0.5 text-[11px] text-muted">JPG, PNG, WebP, AVIF, GIF · tối đa 10 MB mỗi ảnh · ảnh được nén tự động</p>
+          <p className="mt-0.5 text-[11px] text-muted">JPG, PNG, WebP, AVIF, GIF · ảnh được nén tự động · tối đa 4 MB mỗi lần tải lên</p>
         </div>
-        <button type="submit" className="btn btn-primary btn-sm" disabled={pending}>
-          {pending ? "Đang tải…" : "Tải lên"}
+        <button type="submit" className="btn btn-primary btn-sm" disabled={pending || preparing}>
+          {preparing ? "Đang nén ảnh…" : pending ? "Đang tải…" : "Tải lên"}
         </button>
       </div>
 
@@ -78,6 +113,11 @@ export function MediaUploader() {
       {state.message && (
         <p className={`mt-3 text-[11.5px] ${state.ok ? "text-success" : "text-danger"}`} role="status">
           {state.message}
+        </p>
+      )}
+      {!pending && localError && (
+        <p role="alert" className="mt-3 text-[11.5px] text-danger">
+          {localError}
         </p>
       )}
     </form>

@@ -6,6 +6,7 @@ import { ImagePlus, Loader2, Upload, X } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
 import { assetUrl } from "@/lib/asset";
 import { useFocusTrap } from "@/lib/focus-trap";
+import { compressImageForUpload } from "@/lib/client-image";
 import { validateUploadFiles } from "@/lib/upload-validation";
 import type { MediaView } from "@/server/queries/types";
 
@@ -46,22 +47,37 @@ export function MediaPicker({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [hasFile, setHasFile] = useState(false);
   const [localError, setLocalError] = useState("");
+  const [preparing, setPreparing] = useState(false);
   const processedRef = useRef("");
   const dialogRef = useRef<HTMLDivElement | null>(null);
 
-  function handleUpload() {
+  async function handleUpload() {
     const files = Array.from(inputRef.current?.files ?? []);
-    // Client-side check first (same rules as the server): a file over the
-    // action body limit never reaches the action — the dispatch rejects and
-    // the whole page crashes — so it must be stopped here, with a message.
-    const problem = validateUploadFiles(files);
+    if (files.length === 0) {
+      setLocalError("Hãy chọn ít nhất một ảnh.");
+      return;
+    }
+    // Large photos are compressed in the browser first (same rules as the
+    // server pipeline: max 1600px, JPEG q82): a 1600×1600 PNG photo is
+    // often 6+ MB, over Vercel's 4.5 MB request cap, so sending it as-is
+    // gets the POST rejected before the action ever runs. The server still
+    // re-optimizes the compressed bytes idempotently.
+    setPreparing(true);
+    let prepared: File[];
+    try {
+      prepared = await Promise.all(files.map((file) => compressImageForUpload(file)));
+    } finally {
+      setPreparing(false);
+    }
+    // Validate the prepared files: their sizes are what actually travels.
+    const problem = validateUploadFiles(prepared);
     if (problem) {
       setLocalError(problem);
       return;
     }
     setLocalError("");
     const formData = new FormData();
-    for (const file of files) formData.append("files", file);
+    for (const file of prepared) formData.append("files", file);
     // The dispatch must run inside a transition, otherwise useActionState's
     // pending flag never flips and the button shows no "uploading" state.
     startTransition(() => {
@@ -273,14 +289,14 @@ export function MediaPicker({
                   type="button"
                   onClick={handleUpload}
                   className="btn btn-primary btn-sm"
-                  disabled={uploading || !hasFile}
+                  disabled={uploading || preparing || !hasFile}
                 >
-                  {uploading ? (
+                  {uploading || preparing ? (
                     <Loader2 size={12} aria-hidden="true" className="animate-spin" />
                   ) : (
                     <Upload size={12} aria-hidden="true" />
                   )}
-                  {uploading ? "Đang tải ảnh lên…" : "Tải lên"}
+                  {preparing ? "Đang nén ảnh…" : uploading ? "Đang tải ảnh lên…" : "Tải lên"}
                 </button>
               </div>
               {uploading && (

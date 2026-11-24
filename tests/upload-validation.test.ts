@@ -57,4 +57,22 @@ describe("validateUploadFiles", () => {
     ]);
     expect(result).toContain("anh-to.png");
   });
+
+  it("rejects a batch whose total exceeds the 4 MB request cap", () => {
+    const files = Array.from({ length: 3 }, (_, index) => ({
+      ...good,
+      name: `anh-${index}.jpg`,
+      size: 1_500_000,
+    }));
+    const result = validateUploadFiles(files);
+    expect(result).toContain("vượt quá giới hạn 4 MB");
+  });
+
+  it("accepts a batch whose total fits the 4 MB request cap", () => {
+    const files = [
+      { ...good, size: 1_500_000 },
+      { ...good, name: "anh-2.jpg", size: 1_500_000 },
+    ];
+    expect(validateUploadFiles(files)).toBeNull();
+  });
 });
