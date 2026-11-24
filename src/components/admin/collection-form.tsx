@@ -3,6 +3,7 @@
 import { saveCollectionAction } from "@/server/actions/artworks";
 import type { MediaView } from "@/server/queries/types";
 import { ActionForm } from "./action-form";
+import { ErrorBoundary } from "./error-boundary";
 import { LocaleTabs } from "./locale-tabs";
 import { MediaPicker } from "./media-picker";
 
@@ -91,13 +92,15 @@ export function CollectionForm({
 
         <div className="space-y-5">
           <div className="border border-line bg-surface p-4">
-            <MediaPicker
-              name="coverMediaId"
-              label="Ảnh bìa bộ sưu tập"
-              initial={initial.cover ? [initial.cover] : []}
-              library={library}
-              maxHeight="aspect-[16/10]"
-            />
+            <ErrorBoundary message="Không tải được ảnh bìa. Trang vẫn dùng được — hãy bấm “Thử lại”. Bộ sưu tập chưa bị thay đổi.">
+              <MediaPicker
+                name="coverMediaId"
+                label="Ảnh bìa bộ sưu tập"
+                initial={initial.cover ? [initial.cover] : []}
+                library={library}
+                maxHeight="aspect-square"
+              />
+            </ErrorBoundary>
           </div>
           <div className="border border-line bg-surface p-4">
             <div className="space-y-4">

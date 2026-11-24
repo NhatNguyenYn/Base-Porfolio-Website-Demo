@@ -6,6 +6,7 @@ import { ImagePlus, Loader2, Upload, X } from "lucide-react";
 import { uploadMediaAction, type UploadState } from "@/server/actions/media";
 import { assetUrl } from "@/lib/asset";
 import { useFocusTrap } from "@/lib/focus-trap";
+import { validateUploadFiles } from "@/lib/upload-validation";
 import type { MediaView } from "@/server/queries/types";
 
 /**
@@ -50,8 +51,12 @@ export function MediaPicker({
 
   function handleUpload() {
     const files = Array.from(inputRef.current?.files ?? []);
-    if (files.length === 0) {
-      setLocalError("Hãy chọn ít nhất một ảnh.");
+    // Client-side check first (same rules as the server): a file over the
+    // action body limit never reaches the action — the dispatch rejects and
+    // the whole page crashes — so it must be stopped here, with a message.
+    const problem = validateUploadFiles(files);
+    if (problem) {
+      setLocalError(problem);
       return;
     }
     setLocalError("");
@@ -136,7 +141,9 @@ export function MediaPicker({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex w-full flex-col items-center justify-center gap-2 border border-dashed border-line-strong bg-surface px-4 py-10 text-muted transition-colors hover:border-accent hover:text-ink"
+          className={`flex w-full flex-col items-center justify-center gap-2 border border-dashed border-line-strong bg-surface px-4 text-muted transition-colors hover:border-accent hover:text-ink ${
+            multiple ? "py-10" : `max-w-xs ${maxHeight}`
+          }`}
         >
           <ImagePlus size={20} strokeWidth={1.4} />
           <span className="text-[12px]">Chọn ảnh từ thư viện</span>
